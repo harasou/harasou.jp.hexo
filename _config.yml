@@ -41,3 +41,7 @@ theme: tranquilpeak
 deploy:
   type: git
   repo: 'git@github.com:harasou/harasou.jp.git'
+feed:
+  path: atom.xml
+  type: atom
+  limit: 20
