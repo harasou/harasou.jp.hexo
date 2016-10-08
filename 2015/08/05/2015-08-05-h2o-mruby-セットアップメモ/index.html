@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>h2o + mruby セットアップメモ - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="最近、h2o で mruby がサポートされたので、まずはコンパイルしてみた。
+https://github.com/h2o/h2o
+h2o は、@kazuho さんが作成されている HTTP/2 ＆ HTTP/1.x 対応の高速な WEBサーバです。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="h2o + mruby セットアップメモ">
+<meta property="og:url" content="http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="最近、h2o で mruby がサポートされたので、まずはコンパイルしてみた。
+https://github.com/h2o/h2o
+h2o は、@kazuho さんが作成されている HTTP/2 ＆ HTTP/1.x 対応の高速な WEBサーバです。">
+<meta property="og:image" content="http://harasou.jp/h2o.png">
+<meta property="og:updated_time" content="2016-10-04T17:30:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="h2o + mruby セットアップメモ">
+<meta name="twitter:description" content="最近、h2o で mruby がサポートされたので、まずはコンパイルしてみた。
+https://github.com/h2o/h2o
+h2o は、@kazuho さんが作成されている HTTP/2 ＆ HTTP/1.x 対応の高速な WEBサーバです。">
+<meta name="twitter:image" content="http://harasou.jp/h2o.png">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+        <meta property="og:image" content="http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/h2o.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/h2o.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            h2o + mruby セットアップメモ
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-08-05T04:49:54+09:00">
+	
+		    2015/08/05
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>最近、h2o で mruby がサポートされたので、まずはコンパイルしてみた。</p>
+<p><a href="https://h2o.examp1e.net/index.html" target="_blank" rel="external"><img src="h2o.png" alt=""></a><br><a href="https://github.com/h2o/h2o" target="_blank" rel="external">https://github.com/h2o/h2o</a></p>
+<p>h2o は、@kazuho さんが作成されている HTTP/2 ＆ HTTP/1.x 対応の高速な WEBサーバです。</p>
+<a id="more"></a>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>いつものごとく vagrant で。</p>
+<ul>
+<li>CentOS 7.1 (3.10.0-229.el7.x86_64)</li>
+<li>h2o 1.4.2</li>
+<li>mruby 1.1.0</li>
+</ul>
+<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><p>現状 h2o で mruby を利用する場合は、h2o と mruby のコンパイルを、別々に行わなければいけない(mod_mruby とかだとそのなかで mruby をビルドしてくれる)。</p>
+<p>流れとしてはまず、libmruby.a を作成し、h2o コンパイル時にそれをリンクする感じ。</p>
+<ol>
+<li><p>作業ディレクトリの作成</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir work</div><div class="line">cd $_</div></pre></td></tr></table></figure>
+<p> vagrant の共有フォルダ上は NG。vboxfs はハードリンクの作成ができないので h2o のビルドに失敗する。</p>
+</li>
+<li><p>mruby と h2o のコンパイルに必要なパッケージのインストール</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y git gcc bison ruby cmake openssl-devel</div></pre></td></tr></table></figure>
+</li>
+<li><p>libmruby.a の作成（mruby のコンパイル）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/mruby/mruby.git</div><div class="line">cd mruby</div><div class="line">./minirake</div></pre></td></tr></table></figure>
+<p> 追加で利用したい mrbgems がある場合は、ここで設定しておく。</p>
+</li>
+<li><p>libmruby.pc の作成</p>
+<p> h2o コンパイル時に、作成した libmruby.a 等を参照できるよう <code>libmruby.pc</code> (pkg-config 用の設定ファイル)を作成し、環境変数<code>PKG_CONFIG_PATH</code> に登録しておく。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">cat &lt;&lt;EOD&gt;build/host/lib/libmruby.pc</div><div class="line">prefix=$PWD</div><div class="line">libdir=\$&#123;prefix&#125;/build/host/lib/</div><div class="line">includedir=\$&#123;prefix&#125;/include</div><div class="line"></div><div class="line">Name: libmruby</div><div class="line">Description: mruby libraries</div><div class="line">Version: 1.1.0</div><div class="line">Libs: -L\$&#123;libdir&#125; -lmruby</div><div class="line">Cflags: -I\$&#123;includedir&#125;</div><div class="line">EOD</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">export PKG_CONFIG_PATH=&quot;$PWD/build/host/lib/&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>h2o のコンパイル</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd ..  # work 直下に移動</div><div class="line">git clone https://github.com/h2o/h2o.git</div><div class="line">cd h2o</div><div class="line">git submodule update --init --recursive</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">$ cmake -DWITH_MRUBY=ON .</div><div class="line">-- The C compiler identification is GNU 4.8.3</div><div class="line">-- Check for working C compiler: /usr/bin/cc</div><div class="line">-- Check for working C compiler: /usr/bin/cc -- works</div><div class="line">-- Detecting C compiler ABI info</div><div class="line">-- Detecting C compiler ABI info - done</div><div class="line">-- Found PkgConfig: /usr/bin/pkg-config (found version &quot;0.27.1&quot;)</div><div class="line">-- Looking for include file pthread.h</div><div class="line">-- Looking for include file pthread.h - found</div><div class="line">-- Looking for pthread_create</div><div class="line">-- Looking for pthread_create - not found</div><div class="line">-- Looking for pthread_create in pthreads</div><div class="line">-- Looking for pthread_create in pthreads - not found</div><div class="line">-- Looking for pthread_create in pthread</div><div class="line">-- Looking for pthread_create in pthread - found</div><div class="line">-- Found Threads: TRUE</div><div class="line">-- Found OpenSSL: /usr/lib64/libssl.so;/usr/lib64/libcrypto.so (found version &quot;1.0.1e&quot;)</div><div class="line">-- checking for module &apos;libuv&gt;=1.0.0&apos;</div><div class="line">--   package &apos;libuv&gt;=1.0.0&apos; not found</div><div class="line">-- Could NOT find LIBUV (missing:  LIBUV_LIBRARIES LIBUV_INCLUDE_DIR)</div><div class="line">-- checking for module &apos;libwslay&apos;</div><div class="line">--   package &apos;libwslay&apos; not found</div><div class="line">-- Could NOT find WSLAY (missing:  WSLAY_LIBRARIES WSLAY_INCLUDE_DIR)</div><div class="line">-- checking for module &apos;libmruby&apos;</div><div class="line">--   found libmruby, version 1.1.0</div><div class="line">-- Configuring done</div><div class="line">-- Generating done</div><div class="line">-- Build files have been written to: /home/vagrant/work/h2o</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ make h2o</div><div class="line"> :</div><div class="line">Linking C executable h2o</div><div class="line">[100%] Built target h2o</div><div class="line"></div><div class="line">$ ls -l h2o</div><div class="line">-rwxrwxr-x 1 vagrant vagrant 11680735  8月  4 22:39 h2o</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>サンプルの conf で起動。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ ./h2o -c ./examples/h2o_mruby/h2o.conf</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/server.crt</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/server.crt</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/alternate.crt</div><div class="line">[INFO] raised RLIMIT_NOFILE to 4096</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/alternate.crt</div><div class="line">h2o server (pid:27481) is ready to serve requests</div></pre></td></tr></table></figure>
+<p>curl でアクセス</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># curl http://localhost:8080/</div><div class="line">hello from h2o_mruby. User-Agent:curl/7.29.0 New User-Agent:new-curl/7.29.0-h2o_mruby path:/ host:localhost method:GET query: remote_ip:::1</div></pre></td></tr></table></figure>
+<p>hello 。</p>
+<h2 id="examples-h2o-mruby"><a href="#examples-h2o-mruby" class="headerlink" title="examples/h2o_mruby"></a>examples/h2o_mruby</h2><p>ちなみに examples の conf 等はこんな感じだった。</p>
+<figure class="highlight yaml"><figcaption><span>examples/h2o_mruby/h2o.conf</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># to find out the configuration commands, run: h2o --help</span></div><div class="line"><span class="attr">listen:</span> <span class="number">8080</span></div><div class="line"><span class="attr">listen:</span></div><div class="line"><span class="attr">  port:</span> <span class="number">8081</span></div><div class="line"><span class="attr">  ssl:</span></div><div class="line"><span class="attr">    certificate-file:</span> examples/h2o/server.crt</div><div class="line"><span class="attr">    key-file:</span> examples/h2o/server.key</div><div class="line"><span class="attr">hosts:</span></div><div class="line">  <span class="string">"127.0.0.1.xip.io:8080"</span>:</div><div class="line"><span class="attr">    paths:</span></div><div class="line">      /:</div><div class="line">        file.dir: examples/doc_root</div><div class="line">        mruby.handler_path: examples/h2o_mruby/hello.rb</div><div class="line"><span class="attr">    access-log:</span> /dev/stdout</div><div class="line">  <span class="string">"alternate.127.0.0.1.xip.io:8081"</span>:</div><div class="line"><span class="attr">    listen:</span></div><div class="line"><span class="attr">      port:</span> <span class="number">8081</span></div><div class="line"><span class="attr">      ssl:</span></div><div class="line"><span class="attr">        certificate-file:</span> examples/h2o/alternate.crt</div><div class="line"><span class="attr">        key-file:</span> examples/h2o/alternate.key</div><div class="line"><span class="attr">    paths:</span></div><div class="line">      /:</div><div class="line">        file.dir: examples/doc_root.alternate</div><div class="line"><span class="attr">    access-log:</span> /dev/stdout</div></pre></td></tr></table></figure>
+<figure class="highlight rb"><figcaption><span>examples/h2o_mruby/hello.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># paths:</span></div><div class="line"><span class="comment">#   /:</span></div><div class="line"><span class="comment">#     file.dir: examples/doc_root</span></div><div class="line"><span class="comment">#     mruby.handler_path: /path/to/hello.rb</span></div><div class="line"></div><div class="line">r = H2O::Request.new</div><div class="line"></div><div class="line">h = <span class="string">"hello"</span></div><div class="line">m =  <span class="string">"from h2o_mruby"</span></div><div class="line"></div><div class="line">ua = r.headers_in[<span class="string">"User-Agent"</span>].to_s</div><div class="line">new_ua = r.headers_in[<span class="string">"User-Agent"</span>] = <span class="string">"new-<span class="subst">#&#123;ua&#125;</span>-h2o_mruby"</span></div><div class="line">uri = r.uri</div><div class="line">host = r.hostname</div><div class="line">method = r.method</div><div class="line">query = r.query</div><div class="line"></div><div class="line">msg = <span class="string">"<span class="subst">#&#123;h&#125;</span> <span class="subst">#&#123;m&#125;</span>. User-Agent:<span class="subst">#&#123;ua&#125;</span> New User-Agent:<span class="subst">#&#123;new_ua&#125;</span> path:<span class="subst">#&#123;uri&#125;</span> host:<span class="subst">#&#123;host&#125;</span> method:<span class="subst">#&#123;method&#125;</span> query:<span class="subst">#&#123;query&#125;</span> remote_ip:<span class="subst">#&#123;H2O::Connection.new.remote_ip&#125;</span>"</span></div><div class="line"></div><div class="line">r.log_error msg</div><div class="line"></div><div class="line">H2O.<span class="keyword">return</span> <span class="number">200</span>, <span class="string">"OK"</span>, msg + <span class="string">"\n"</span></div></pre></td></tr></table></figure>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/h2o/">h2o</a> <a class="tag tag--primary tag--small t-link" href="/tags/mruby/">mruby</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/10/09/hello-world/"  data-tooltip="Hello World">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F08%2F05%2F2015-08-05-h2o-mruby-%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%83%A1%E3%83%A2%2F&title=h2o + mruby セットアップメモ">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=h2o%20%2B%20mruby%20%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%83%A1%E3%83%A2&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F08%2F05%2F2015-08-05-h2o-mruby-%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%83%A1%E3%83%A2%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2016/10/09/hello-world/"  data-tooltip="Hello World">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F08%2F05%2F2015-08-05-h2o-mruby-%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%83%A1%E3%83%A2%2F&title=h2o + mruby セットアップメモ">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=h2o%20%2B%20mruby%20%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%83%A1%E3%83%A2&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F08%2F05%2F2015-08-05-h2o-mruby-%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%83%A1%E3%83%A2%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>SOGO Haraguchi</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://harasou.jp/2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/';
+                 
+                    this.page.identifier = '2015/08/05/2015-08-05-h2o-mruby-セットアップメモ/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>
