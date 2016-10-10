@@ -29,6 +29,16 @@
                 <i class="fa fa-share-alt"></i>
             </a>
         </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=<%= urlEncode(post.permalink) %>&title=<%= post.title %>">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=<%= post.permalink %>">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
         <li class="post-action hide-xs">
             <a class="post-action-btn btn btn--default" target="new" href="<%= 'https://plus.google.com/share?url=' + post.permalink %>">
                 <i class="fa fa-google-plus"></i>
