@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>5分でつくる mrbgems - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="先日の関西Ruby会議の帰りの飛行機の中、着陸５分前ぐらいの出来事。
+harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」
+おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）というわけで、その時のことを簡単にご紹介。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="5分でつくる mrbgems">
+<meta property="og:url" content="http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="先日の関西Ruby会議の帰りの飛行機の中、着陸５分前ぐらいの出来事。
+harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」
+おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）というわけで、その時のことを簡単にご紹介。">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="5分でつくる mrbgems">
+<meta name="twitter:description" content="先日の関西Ruby会議の帰りの飛行機の中、着陸５分前ぐらいの出来事。
+harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」
+おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）というわけで、その時のことを簡単にご紹介。">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            5分でつくる mrbgems
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-07-26T21:32:19+09:00">
+	
+		    2015/07/26
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>先日の関西Ruby会議の帰りの飛行機の中、着陸５分前ぐらいの出来事。</p>
+<p>harasou: 「松本さん、mrbgems の作り方教えてくださいよ」<br>matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」</p>
+<p>おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）<br>というわけで、その時のことを簡単にご紹介。</p>
+<a id="more"></a>
+<h2 id="そもそも-mrbgems-とは"><a href="#そもそも-mrbgems-とは" class="headerlink" title="そもそも mrbgems とは"></a>そもそも mrbgems とは</h2><p>mrbgems は、CRuby の gem みたいなもので、mruby コアに色々な機能(ライブラリ)を追加する仕組み。ただ、CRuby のように動的にロードできるわけでなく、mruby コンパイル時に明示的に組み込んでおく必要がある。</p>
+<p>この mrbgems は、mruby スクリプトだけで作成することもできるし、C言語だけ、あるいは、C言語 + mruby といった組み合わせたもので作成することもできる。</p>
+<ul>
+<li>mruby だけで実装</li>
+<li>C言語だけで実装</li>
+<li>C言語 + mruby で実装</li>
+</ul>
+<p>飛行機では、一番簡単な mruby だけの実装をやった。</p>
+<h2 id="mrbgems-はじめの一歩"><a href="#mrbgems-はじめの一歩" class="headerlink" title="mrbgems はじめの一歩"></a>mrbgems はじめの一歩</h2><p>ここでは、設定した名前を返すだけの <code>yourname</code>メソッドを実装した <code>mruby-yourname</code> をつくった。 </p>
+<ol>
+<li><p>mrbgems 用のディレクトリ作成</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p work/mruby-yourname/mrblib/</div><div class="line">cd work</div></pre></td></tr></table></figure>
+</li>
+<li><p>Yourname クラスの作成</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim mruby-yourname/mrblib/yourname.rb</div></pre></td></tr></table></figure>
+ <figure class="highlight rb"><figcaption><span>mruby-yourname/mrblib/yourname.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Yourname</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span> <span class="title">name</span></span></div><div class="line">    @name = name</div><div class="line">  <span class="keyword">end</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">yourname</span></span></div><div class="line">    puts @name</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>mrbgem.rake の作成</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim mruby-yourname/mrbgem.rake</div></pre></td></tr></table></figure>
+ <figure class="highlight rb"><figcaption><span>mruby-yourname/mrbgem.rake</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">MRuby::Gem::Specification.new(<span class="string">'mruby-yourname'</span>) <span class="keyword">do</span> <span class="params">|spec|</span></div><div class="line">  spec.license= <span class="string">'MIT'</span></div><div class="line">  spec.authors= <span class="string">'harasou'</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>mruby を取得し、build_config.rb に mruby-yourname を追加</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/mruby/mruby.git</div><div class="line">vim mruby/build_config.rb</div></pre></td></tr></table></figure>
+ <figure class="highlight diff"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">--- mruby/build_config.rb.orig  2015-07-26 21:07:38.000000000 +0900</span></div><div class="line"><span class="comment">+++ mruby/build_config.rb   2015-07-26 21:08:09.000000000 +0900</span></div><div class="line"><span class="meta">@@ -18,6 +18,7 @@</span></div><div class="line">   # conf.gem 'examples/mrbgems/c_and_ruby_extension_example'</div><div class="line">   # conf.gem :github =&gt; 'masuidrive/mrbgems-example', :checksum_hash =&gt; '76518e8aecd131d047378448ac8055fa29d974a9'</div><div class="line">   # conf.gem :git =&gt; 'git@github.com:masuidrive/mrbgems-example.git', :branch =&gt; 'master', :options =&gt; '-v'</div><div class="line"><span class="addition">+  conf.gem '../mruby-yourname'</span></div><div class="line"></div><div class="line">   # include the default GEMs</div><div class="line">   conf.gembox 'default'</div></pre></td></tr></table></figure>
+</li>
+<li><p>mruby のビルド</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cd mruby</div><div class="line">./minirake</div><div class="line">ls -l bin/</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>事前に mruby は落としていたので、ここまで所要時間は 5分ぐらい。</p>
+<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>mruby のシェル「mirb」で動作確認。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/mirb</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mirb - Embeddable Interactive Ruby Shell</div><div class="line"></div><div class="line">&gt; y = Yourname.new(&quot;harasou&quot;)</div><div class="line"> =&gt; #&lt;Yourname:0x1425d70 @name=&quot;harasou&quot;&gt;</div><div class="line">&gt;</div><div class="line">&gt; y.yourname</div><div class="line">harasou</div><div class="line"> =&gt; nil</div></pre></td></tr></table></figure>
+<p>できた。</p>
+<p>実際は、実装をC言語で、インタフェースを mruby で書くことが多いと思うが、こんな簡単に自分の mrbgems を実装することができる。ぱちぱちぱち。</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/mruby/">mruby</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/28/2015-07-28-libreboard/"  data-tooltip="trello クローンの Libreboard を動かしてみた">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/15/2015-07-15-kansai-ruby-kaigi/" data-tooltip="関西Ruby会議06 に登壇させてもらった">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F26%2F2015-07-26-5-minutes-mrbgems%2F&title=5分でつくる mrbgems">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=5%E5%88%86%E3%81%A7%E3%81%A4%E3%81%8F%E3%82%8B%20mrbgems&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F26%2F2015-07-26-5-minutes-mrbgems%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/28/2015-07-28-libreboard/"  data-tooltip="trello クローンの Libreboard を動かしてみた">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/15/2015-07-15-kansai-ruby-kaigi/" data-tooltip="関西Ruby会議06 に登壇させてもらった">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F26%2F2015-07-26-5-minutes-mrbgems%2F&title=5分でつくる mrbgems">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=5%E5%88%86%E3%81%A7%E3%81%A4%E3%81%8F%E3%82%8B%20mrbgems&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F26%2F2015-07-26-5-minutes-mrbgems%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://harasou.jp/2015/07/26/2015-07-26-5-minutes-mrbgems/';
+                 
+                    this.page.identifier = '2015/07/26/2015-07-26-5-minutes-mrbgems/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

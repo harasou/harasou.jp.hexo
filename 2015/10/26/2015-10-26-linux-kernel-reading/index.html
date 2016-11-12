@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>Linux kernel を読むための準備 - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="仕事で kernel のソースが見る機会が度々ありそうなので、MAC上でソースをいつでも追えるように準備しておく。準備といっても大したものではなく、
+
+kernel ソースのダウンロード
+tag の作成
+vim の設定
+
+ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Linux kernel を読むための準備">
+<meta property="og:url" content="http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="仕事で kernel のソースが見る機会が度々ありそうなので、MAC上でソースをいつでも追えるように準備しておく。準備といっても大したものではなく、
+
+kernel ソースのダウンロード
+tag の作成
+vim の設定
+
+ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux kernel を読むための準備">
+<meta name="twitter:description" content="仕事で kernel のソースが見る機会が度々ありそうなので、MAC上でソースをいつでも追えるように準備しておく。準備といっても大したものではなく、
+
+kernel ソースのダウンロード
+tag の作成
+vim の設定
+
+ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            Linux kernel を読むための準備
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-10-26T05:06:59+09:00">
+	
+		    2015/10/26
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>仕事で kernel のソースが見る機会が度々ありそうなので、MAC上でソースをいつでも追えるように準備しておく。<br>準備といっても大したものではなく、</p>
+<ul>
+<li>kernel ソースのダウンロード</li>
+<li>tag の作成</li>
+<li>vim の設定</li>
+</ul>
+<p>ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。</p>
+<a id="more"></a>
+<h2 id="kernel-source-の取得"><a href="#kernel-source-の取得" class="headerlink" title="kernel source の取得"></a>kernel source の取得</h2><p>github ではなく tar ball からの取得。複数のリリースを取得するにはこちらの方が簡単そうだったので。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p ~/src/kernel</div><div class="line">curl https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.2.4.tar.xz | tar zx -C ~/src/kernel/</div></pre></td></tr></table></figure>
+<h2 id="tag-の作成"><a href="#tag-の作成" class="headerlink" title="tag の作成"></a>tag の作成</h2><p>linux kernel の Makefile には、tag を作成するターゲットがあるので、make するだけで tag の作成ができる。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/src/kernel/linux-4.2.4</div><div class="line">make tags</div></pre></td></tr></table></figure>
+<h2 id="vim-の設定"><a href="#vim-の設定" class="headerlink" title="vim の設定"></a>vim の設定</h2><p>ctags は、もともと vim の機能だったものが独立したらしいので、特に設定しなくても vim から使える。</p>
+<p>使いそうなコマンド。</p>
+<ul>
+<li>ノーマルモード<ul>
+<li><code>&lt;C-[&gt;</code> ：カーソル位置の単語にマッチする最初のタグにジャンプ</li>
+<li><code>g&lt;C-[&gt;</code>：カーソル位置に単語が複数マッチする場合、選択するようにユーザーにプロンプトを表示する。マッチが 1 つだけの場合、プロンプトを表示せずにジャンプする</li>
+<li><code>&lt;C-t&gt;</code> ：履歴をさかのぼる</li>
+</ul>
+</li>
+<li>コマンドラインモード<ul>
+<li><code>:tag {keyword}</code>：keyword に最初にマッチするタグにジャンプ</li>
+<li><code>:tselect</code>：タグマッチリストから選択してジャンプする</li>
+<li><code>:tag</code>：タグ履歴をたどる</li>
+<li><code>:pop</code>：タグ履歴をさかのぼる</li>
+</ul>
+</li>
+</ul>
+<p>少しだけカスタマイズ。やるのは、現在のところ２つだけ。</p>
+<figure class="highlight vim"><figcaption><span>.vimrc</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">nnoremap</span>  &lt;C-]&gt;    g&lt;C-]&gt;</div><div class="line"><span class="keyword">nnoremap</span>  v&lt;C-]&gt;   :vsp +:exec(<span class="string">"tag\ "</span>.<span class="built_in">expand</span>(<span class="string">"&lt;cword&gt;"</span>))<span class="symbol">&lt;CR&gt;</span></div><div class="line"><span class="keyword">set</span> splitright     <span class="comment">"新しいウィンドウを右にひらく</span></div></pre></td></tr></table></figure>
+<h2 id="kernel-source-を眺め方"><a href="#kernel-source-を眺め方" class="headerlink" title="kernel source を眺め方"></a>kernel source を眺め方</h2><p>kernel のソースは以下のようなディレクトリ構成になっていて、機能ごとに分かれているので、割と分かりやすい。ソースの大半はドライバのコードになっている(左の数値はduの結果)。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ du -sh *</div><div class="line"> 20K    COPYING</div><div class="line"> 96K    CREDITS</div><div class="line"> 30M    Documentation/</div><div class="line">4.0K    Kbuild</div><div class="line">4.0K    Kconfig</div><div class="line">316K    MAINTAINERS</div><div class="line"> 56K    Makefile</div><div class="line"> 20K    README</div><div class="line">8.0K    REPORTING-BUGS</div><div class="line">128M    arch/             <span class="comment">#アーキテクチャ固有のカーネルコード</span></div><div class="line">1.1M    block/</div><div class="line">3.0M    crypto//</div><div class="line">358M    drivers/</div><div class="line">5.9M    firmware/</div><div class="line"> 36M    fs/</div><div class="line"> 32M    include/          <span class="comment">#カーネルコードをビルドするのに必要なインクルードファイル</span></div><div class="line">184K    init/             <span class="comment">#カーネルの初期化(initialization)コード</span></div><div class="line">244K    ipc/              <span class="comment">#カーネルのプロセス間通信(inter-process communications)に関するコード</span></div><div class="line">6.8M    kernel/           <span class="comment">#カーネルの初期化コード</span></div><div class="line">3.4M    lib/              </div><div class="line">3.0M    mm/               <span class="comment">#メモリ管理(memory management)コード</span></div><div class="line"> 26M    net/              <span class="comment">#ネットワーク(network)関係のコード</span></div><div class="line">384K    samples/</div><div class="line">3.0M    scripts/</div><div class="line">2.2M    security/</div><div class="line"> 29M    sound/</div><div class="line"> 43M    tags              <span class="comment">#先ほど作成したタグ</span></div><div class="line"> 43M    tags<span class="_">-e</span></div><div class="line">8.9M    tools/</div><div class="line"> 32K    usr/</div><div class="line">300K    virt/</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ du -sh .</div><div class="line">763M    .                  <span class="comment">#全体(763M)の半分はドライバ周りのコード(358M)</span></div></pre></td></tr></table></figure>
+<p>例えば、「 kmalloc()って、slab からメモリ確保してるんだっけ？」って時は、</p>
+<ol>
+<li><p>tag を生成したディレクトリに移動して、ソースを開く</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/src/kernel/linux-4.2.4</div><div class="line">vim .</div></pre></td></tr></table></figure>
+</li>
+<li><p>kmalloc の定義にジャンプ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">:tag kmalloc</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>&lt;C-]&gt;</code> で辿っていく</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kmalloc()</div><div class="line">  -&gt; __kmalloc()</div><div class="line">    -&gt; __do_kmalloc()</div><div class="line">      -&gt; slab_alloc()</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>って感じで「ああ、やっぱり slab 使ってんだ」というのが、すぐ確認できる。ソース見る習慣はやっぱ重要。</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/kernel/">kernel</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/03/2015-11-02-loadable-kernel-module/"  data-tooltip="カーネルモジュールで Hello World !">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/09/09/2015-09-09-Alfred-iTerm2/" data-tooltip="Alfred をバージョンアップすると iTerm2 でのコマンド実行ができなくなった">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F10%2F26%2F2015-10-26-linux-kernel-reading%2F&title=Linux kernel を読むための準備">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=Linux%20kernel%20%E3%82%92%E8%AA%AD%E3%82%80%E3%81%9F%E3%82%81%E3%81%AE%E6%BA%96%E5%82%99&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F10%2F26%2F2015-10-26-linux-kernel-reading%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/03/2015-11-02-loadable-kernel-module/"  data-tooltip="カーネルモジュールで Hello World !">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/09/09/2015-09-09-Alfred-iTerm2/" data-tooltip="Alfred をバージョンアップすると iTerm2 でのコマンド実行ができなくなった">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F10%2F26%2F2015-10-26-linux-kernel-reading%2F&title=Linux kernel を読むための準備">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=Linux%20kernel%20%E3%82%92%E8%AA%AD%E3%82%80%E3%81%9F%E3%82%81%E3%81%AE%E6%BA%96%E5%82%99&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F10%2F26%2F2015-10-26-linux-kernel-reading%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://harasou.jp/2015/10/26/2015-10-26-linux-kernel-reading/';
+                 
+                    this.page.identifier = '2015/10/26/2015-10-26-linux-kernel-reading/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

@@ -1,0 +1,497 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>第2回ペパボテックカンファレンスで mruby について発表 - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="ブログ書くまでがペパボテックカンファレンス！というプレシャーをうけたので、一昨日(7/4)、福岡天神で開催された「第２回ペパボテックカンファレンス」について記録。
+５時間超におよぶカンファレンスに参加してくださったみなさま、本当にお疲れ様でした。
+
+connpass : http://pepabo.connpass.com/event/16457/
+youtube : https://www.yo">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="第2回ペパボテックカンファレンスで mruby について発表">
+<meta property="og:url" content="http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="ブログ書くまでがペパボテックカンファレンス！というプレシャーをうけたので、一昨日(7/4)、福岡天神で開催された「第２回ペパボテックカンファレンス」について記録。
+５時間超におよぶカンファレンスに参加してくださったみなさま、本当にお疲れ様でした。
+
+connpass : http://pepabo.connpass.com/event/16457/
+youtube : https://www.yo">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第2回ペパボテックカンファレンスで mruby について発表">
+<meta name="twitter:description" content="ブログ書くまでがペパボテックカンファレンス！というプレシャーをうけたので、一昨日(7/4)、福岡天神で開催された「第２回ペパボテックカンファレンス」について記録。
+５時間超におよぶカンファレンスに参加してくださったみなさま、本当にお疲れ様でした。
+
+connpass : http://pepabo.connpass.com/event/16457/
+youtube : https://www.yo">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            第2回ペパボテックカンファレンスで mruby について発表
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-07-06T01:44:39+09:00">
+	
+		    2015/07/06
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>ブログ書くまでがペパボテックカンファレンス！というプレシャーをうけたので、一昨日(7/4)、福岡天神で開催された「第２回ペパボテックカンファレンス」について記録。</p>
+<p>５時間超におよぶカンファレンスに参加してくださったみなさま、本当にお疲れ様でした。</p>
+<ul>
+<li>connpass : <a href="http://pepabo.connpass.com/event/16457/" target="_blank" rel="external">http://pepabo.connpass.com/event/16457/</a></li>
+<li>youtube : <a href="https://www.youtube.com/watch?v=SUuaugJ4p7o" target="_blank" rel="external">https://www.youtube.com/watch?v=SUuaugJ4p7o</a></li>
+<li>twitter : <a href="http://togetter.com/li/842661" target="_blank" rel="external">http://togetter.com/li/842661</a></li>
+<li>slides : <a href="http://kimromi.hatenablog.jp/entry/2015/07/04/211334" target="_blank" rel="external">http://kimromi.hatenablog.jp/entry/2015/07/04/211334</a></li>
+</ul>
+<p>@takesi_yosimura さんが、twitter をまとめてくださっていました。ありがとうございます！また、@kimroi さんは発表スライドをまとめてくれていました。ありがとうございます！</p>
+<a id="more"></a>
+<h2 id="発表内容について"><a href="#発表内容について" class="headerlink" title="発表内容について"></a>発表内容について</h2><p>最近ペパボで積極的に投入している mruby についての事例紹介をしています。</p>
+<p>WEBアクセス時に実行される各プロセスのリソース(CPU)を、動的にコントールする方法について。また、それ以外の用途で利用している mruby の事例について。</p>
+<div style="width: 65%"><br><script async class="speakerdeck-embed" data-slide="1" data-id="8f4290b61a4e47bf85364194023ecdaa" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script><br></div>
+
+
+<h2 id="訂正と感謝と感想"><a href="#訂正と感謝と感想" class="headerlink" title="訂正と感謝と感想"></a>訂正と感謝と感想</h2><h3 id="cgroup-利用時の性能劣化"><a href="#cgroup-利用時の性能劣化" class="headerlink" title="cgroup 利用時の性能劣化"></a>cgroup 利用時の性能劣化</h3><p>発表後に、以下のような質問があって回答させていただいたですが、前提の話が足りてなくて正しい回答とは言えなかったので、この場で訂正させていただきます。</p>
+<p>質問「リクエストごとに、それぞれのユーザの cgroup にアタッチすると性能が劣化しないか？」</p>
+<p>回答「mruby が速いのと、スクリプトもキャッシュするので、それほど劣化はないです」</p>
+<p>正しくは、</p>
+<p>回答「cgroup へのアタッチは、cgi にのみしか行っていないので、cgi の fork や処理のコストに比べると問題なるような性能劣化はないです」</p>
+<p>CGI を対象にしているという前提を説明していませんでした。申し訳ありません…</p>
+<h3 id="vm-swappiness-0-の問題"><a href="#vm-swappiness-0-の問題" class="headerlink" title="vm.swappiness=0 の問題"></a>vm.swappiness=0 の問題</h3><p>また、@rrreeeyyy さんより vm.swappiness の情報をいただきました。ありがとうございます。こういった知見はほんとありがたい。</p>
+<p><blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr">vm.swappiness はカーネルのバージョンによって挙動が違うので 0 に設定したほうがいい時と 10 ぐらいにしておいたほうがいい(0 にするとヤバイ)時がある <a href="https://twitter.com/hashtag/pbtech?src=hash" target="_blank" rel="external">#pbtech</a></p>&mdash; れい (Yoshikawa Ryota) (@rrreeeyyy) <a href="https://twitter.com/rrreeeyyy/status/617192261781032960" target="_blank" rel="external">2015, 7月 4</a></blockquote></p>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr">これです / “OOM relation to vm.swappiness=0 in new kernel; kills MySQL server process” <a href="http://t.co/KCH9JRJiRp" target="_blank" rel="external">http://t.co/KCH9JRJiRp</a></p>&mdash; れい (Yoshikawa Ryota) (@rrreeeyyy) <a href="https://twitter.com/rrreeeyyy/status/617193176932036608" target="_blank" rel="external">2015, 7月 4</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h3 id="懇親会"><a href="#懇親会" class="headerlink" title="懇親会"></a>懇親会</h3><p>普段 blog で見てた人と実際にあえたり、上司に振り回されている若者の話を聞けたり、楽しい懇親会でした。</p>
+<p>ただ懇親会中、仕事があるのを失念してしまってチームメンバーに迷惑をかけたので、猛烈に反省しています。</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/mruby/">mruby</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/15/2015-07-15-kansai-ruby-kaigi/"  data-tooltip="関西Ruby会議06 に登壇させてもらった">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/06/28/2015-06-28-hexo-goodby-404/" data-tooltip="hexo の 404 File not found さようなら">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F06%2F2015-07-06-pepabo-tech-conference%2F&title=第2回ペパボテックカンファレンスで mruby について発表">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=%E7%AC%AC2%E5%9B%9E%E3%83%9A%E3%83%91%E3%83%9C%E3%83%86%E3%83%83%E3%82%AF%E3%82%AB%E3%83%B3%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%A7%20mruby%20%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%99%BA%E8%A1%A8&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F06%2F2015-07-06-pepabo-tech-conference%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/15/2015-07-15-kansai-ruby-kaigi/"  data-tooltip="関西Ruby会議06 に登壇させてもらった">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/06/28/2015-06-28-hexo-goodby-404/" data-tooltip="hexo の 404 File not found さようなら">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F06%2F2015-07-06-pepabo-tech-conference%2F&title=第2回ペパボテックカンファレンスで mruby について発表">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=%E7%AC%AC2%E5%9B%9E%E3%83%9A%E3%83%91%E3%83%9C%E3%83%86%E3%83%83%E3%82%AF%E3%82%AB%E3%83%B3%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%A7%20mruby%20%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%99%BA%E8%A1%A8&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F06%2F2015-07-06-pepabo-tech-conference%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://harasou.jp/2015/07/06/2015-07-06-pepabo-tech-conference/';
+                 
+                    this.page.identifier = '2015/07/06/2015-07-06-pepabo-tech-conference/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>trello クローンの Libreboard を動かしてみた - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="trello クローンの Libreboard を動かしてみた">
+<meta property="og:url" content="http://harasou.jp/2015/07/28/2015-07-28-libreboard/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
+<meta property="og:image" content="http://harasou.jp/libreboard-1.png">
+<meta property="og:image" content="http://harasou.jp/portfowarding.png">
+<meta property="og:image" content="http://harasou.jp/libreboard-2.png">
+<meta property="og:image" content="http://harasou.jp/libreboard-3.png">
+<meta property="og:image" content="http://harasou.jp/libreboard-4.png">
+<meta property="og:image" content="http://harasou.jp/libreboard-5.png">
+<meta property="og:updated_time" content="2016-11-12T03:40:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="trello クローンの Libreboard を動かしてみた">
+<meta name="twitter:description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
+<meta name="twitter:image" content="http://harasou.jp/libreboard-1.png">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+        <meta property="og:image" content="http://harasou.jp/2015/07/28/2015-07-28-libreboard/libreboard-1.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="http://harasou.jp/2015/07/28/2015-07-28-libreboard/libreboard-1.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            trello クローンの Libreboard を動かしてみた
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-07-28T01:47:46+09:00">
+	
+		    2015/07/28
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>社内で便利に活用しているかんばんソフト<a href="https://trello.com/" target="_blank" rel="external">trello</a> 。このクローンである <a href="https://github.com/libreboard/libreboard/wiki" target="_blank" rel="external">Libreboard</a> を boot2docker で動かしてみた。</p>
+<p><img src="libreboard-1.png" alt=""></p>
+<a id="more"></a>
+<h2 id="Libreboard-とは"><a href="#Libreboard-とは" class="headerlink" title="Libreboard とは"></a>Libreboard とは</h2><p>Libreboard は、node.js のフレームワークである meteor(メテオ) 、DB として MongoDB が使われている trello のクローン。<br>github に公開されているリポジトリには、Dockerfile が含まれているので、Mac 上の boot2docker で動かしてみる。</p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<li>MacOSX Yosemite 10.10.4 </li>
+<li>boot2docker v1.7.1</li>
+</ul>
+<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><ol>
+<li><p>boot2docker を最新化</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew upgrade boot2docker</div><div class="line">boot2docker update</div><div class="line">$(boot2docker shellinit)</div></pre></td></tr></table></figure>
+</li>
+<li><p>Libreboard のリポジトリを clone</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git clone git@github.com:libreboard/libreboard.git</div><div class="line">cd libreboard</div></pre></td></tr></table></figure>
+</li>
+<li><p>Libreboard の docker image を build</p>
+<p> <code>docker build</code> してみるとエラーになった。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ docker build -t libreboard/libreboard .</div><div class="line"> :</div><div class="line">Meteor 1.1.0.2 has been installed in your home directory (~/.meteor).</div><div class="line">Writing a launcher script to /usr/local/bin/meteor for your convenience.</div><div class="line"></div><div class="line">To get started fast:</div><div class="line"></div><div class="line">  $ meteor create ~/my_cool_app</div><div class="line">  $ cd ~/my_cool_app</div><div class="line">  $ meteor</div><div class="line"></div><div class="line">Or see the docs at:</div><div class="line"></div><div class="line">  docs.meteor.com</div><div class="line"></div><div class="line">Bower:  &#123; [Error: Package autosize not found] stack: [Getter] &#125;</div><div class="line">Bower:  &#123; [Error: git is not installed or not in the PATH] stack: [Getter] &#125;</div><div class="line">Bower:  &#123; [Error: git is not installed or not in the PATH] stack: [Getter] &#125;</div><div class="line">Bower:  &#123; [Error: git is not installed or not in the PATH] stack: [Getter] &#125;</div><div class="line">Errors prevented bundling:</div><div class="line">While building the application:</div><div class="line">packages/bower/plugin/handler.js:191:1: Cannot read property &apos;name&apos; of</div><div class="line">undefined (compiling bower.json)</div><div class="line">at getDependencies (packages/bower/plugin/handler.js:191:1)</div><div class="line">at packages/bower/plugin/handler.js:203:1</div><div class="line">at Function._.each._.forEach (packages/underscore/underscore.js:113:1)</div><div class="line">at getDependencies (packages/bower/plugin/handler.js:202:1)</div><div class="line">at bowerHandler (packages/bower/plugin/handler.js:65:1)</div><div class="line">at Package (packages/bower/plugin/handler.js:229:1)</div><div class="line"></div><div class="line"></div><div class="line">The command &apos;/bin/sh -c bash $METEORD_DIR/on_build.sh&apos; returned a non-zero code: 1</div></pre></td></tr></table></figure>
+<p> git がない模様。とりあえず、失敗したコンテナとイメージを削除しておく。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">docker ps -a</div><div class="line">docker rm &lt;コンテナID&gt;</div><div class="line">docker images</div><div class="line">docker rmi &lt;イメージID&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>meteorhacks/meteord の再作成</p>
+<p> Libreboard の Dockerfile を見ると <code>meteorhacks/meteord:onbuild</code> の image を参照している。タグを含めると docker の image は以下のような階層になっている。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">libreboard/libreboard</div><div class="line">  └  meteorhacks/meteord:onbuild</div><div class="line">    └  meteorhacks/meteord:base</div><div class="line">      └  debian:wheezy</div></pre></td></tr></table></figure>
+<p> Bower 実行時に git がないことが原因のようなので、<code>meteorhacks/meteord:base</code> のイメージに git を含めてやる。</p>
+</li>
+<li><p>git を組み込んだ meteorhacks/meteord:onbuild を作成</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/meteorhacks/meteord.git</div><div class="line">cd meteord/base/</div><div class="line">vim scripts/lib/install_base.sh</div></pre></td></tr></table></figure>
+ <figure class="highlight diff"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">--- a/scripts/lib/install_base.sh</span></div><div class="line"><span class="comment">+++ b/scripts/lib/install_base.sh</span></div><div class="line"><span class="meta">@@ -1,4 +1,4 @@</span></div><div class="line"> #!/bin/bash</div><div class="line"> set -e</div><div class="line"> apt-get update -y</div><div class="line"><span class="deletion">-apt-get install -y curl bzip2 build-essential python</span></div><div class="line">\ No newline at end of file</div><div class="line"><span class="addition">+apt-get install -y curl bzip2 build-essential python git</span></div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker build -t meteorhacks/meteord:base .</div><div class="line">cd ../onbuild/</div><div class="line">docker build -t meteorhacks/meteord:onbuild .</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker images</div><div class="line">REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE</div><div class="line">meteorhacks/meteord     onbuild             4878b6e24949        About an hour ago   328.8 MB</div><div class="line">meteorhacks/meteord     base                b76d66c56aee        About an hour ago   328.8 MB</div></pre></td></tr></table></figure>
+<p> 作成した image はこんな感じ。</p>
+</li>
+<li><p>再度 Libreboard の docker image を build</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">$ docker build -t libreboard/libreboard .</div><div class="line"> :</div><div class="line">Bower:  &#123; [Error: Package autosize not found] stack: [Getter] &#125;</div><div class="line">Bower:  autosize v3.0.6 successfully installed</div><div class="line">Bower:  perfect-scrollbar v0.6.2 successfully installed</div><div class="line">npm WARN package.json meteor-dev-bundle@0.0.0 No description</div><div class="line">npm WARN package.json meteor-dev-bundle@0.0.0 No repository field.</div><div class="line">npm WARN package.json meteor-dev-bundle@0.0.0 No README data</div><div class="line"></div><div class="line">&gt; fibers@1.0.5 install /tmp/bundle-dir/bundle/programs/server/node_modules/fibers</div><div class="line">&gt; node ./build.js</div><div class="line"></div><div class="line">`linux-x64-v8-3.14` exists; testing</div><div class="line">Binary is fine; exiting</div><div class="line">underscore@1.5.2 node_modules/underscore</div><div class="line"></div><div class="line">semver@4.1.0 node_modules/semver</div><div class="line"></div><div class="line">fibers@1.0.5 node_modules/fibers</div><div class="line"></div><div class="line">chalk@0.5.1 node_modules/chalk</div><div class="line">├── ansi-styles@1.1.0</div><div class="line">├── escape-string-regexp@1.0.3</div><div class="line">├── supports-color@0.2.0</div><div class="line">├── has-ansi@0.1.0 (ansi-regex@0.2.1)</div><div class="line">└── strip-ansi@0.3.0 (ansi-regex@0.2.1)</div><div class="line"></div><div class="line">eachline@2.3.3 node_modules/eachline</div><div class="line">└── type-of@2.0.1</div><div class="line"></div><div class="line">source-map-support@0.2.8 node_modules/source-map-support</div><div class="line">└── source-map@0.1.32 (amdefine@0.1.0)</div><div class="line"> ---&gt; 62cc7d9b8cf4</div><div class="line">Removing intermediate container b32b995a9f68</div><div class="line">Removing intermediate container 248acfcb67b9</div><div class="line">Step 1 : MAINTAINER Maxime Quandalle &lt;maxime@quandalle.com&gt;</div><div class="line"> ---&gt; Running in 55215a871ca7</div><div class="line"> ---&gt; 0c5dc1c69d71</div><div class="line">Removing intermediate container 55215a871ca7</div><div class="line">Successfully built 0c5dc1c69d71</div></pre></td></tr></table></figure>
+<p> npm の WARN は出ているが、とりあえず build 完了。</p>
+</li>
+</ol>
+<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><ol>
+<li><p>コンテナの起動</p>
+<p> Libreboard の Dockerfile に書かれている通り、コンテナを 2つ起動する。<br> なお、２つ目のコンテナが使用するイメージは、先ほど build したタグ<code>libreboard/libreboard</code>を指定。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker run -d --name libreboard-db mongo</div><div class="line">docker run -d --link &quot;libreboard-db:db&quot; -e &quot;MONGO_URL=mongodb://db&quot; \</div><div class="line">  -e &quot;ROOT_URL=http://example.com&quot; -p 8080:80 libreboard/libreboard</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker ps</div><div class="line">CONTAINER ID        IMAGE                   COMMAND                CREATED              STATUS              PORTS                  NAMES</div><div class="line">e97fcb032d48        libreboard/libreboard   &quot;/bin/sh -c &apos;bash $M   6 seconds ago        Up 5 seconds        0.0.0.0:8080-&gt;80/tcp   cranky_wilson</div><div class="line">45bcc5b47ffc        mongo                   &quot;/entrypoint.sh mong   About a minute ago   Up About a minute   27017/tcp              libreboard-db</div></pre></td></tr></table></figure>
+</li>
+<li><p>VirtualBox でポートフォワーディング</p>
+<p> boot2docker 上では、8080 でアクセスすることができるが、Mac 上からはアクセスできない。このため、VirtualBox でポートフォワーディングの設定を行う。</p>
+<p> <img src="portfowarding.png" alt=""></p>
+</li>
+<li><p>ブラウザからアクセス</p>
+<p> <a href="http://localhost:8080/" target="_blank" rel="external">http://localhost:8080/</a> 適当にアカウント作ってログインして、カード作ってみた。</p>
+<p> ログイン画面。<br> <img src="libreboard-2.png" alt=""><br> ボードの追加。<br> <img src="libreboard-3.png" alt=""><br> 言語とプロファイルを設定。<br> <img src="libreboard-4.png" alt=""><br> カードの追加。Markdown もいけるっぽい。<br> <img src="libreboard-5.png" alt=""></p>
+</li>
+</ol>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/others/">others</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/05/2015-08-05-h2o-mruby/"  data-tooltip="h2o + mruby セットアップメモ">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/26/2015-07-26-5-minutes-mrbgems/" data-tooltip="5分でつくる mrbgems">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F28%2F2015-07-28-libreboard%2F&title=trello クローンの Libreboard を動かしてみた">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=trello%20%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%B3%E3%81%AE%20Libreboard%20%E3%82%92%E5%8B%95%E3%81%8B%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F28%2F2015-07-28-libreboard%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/08/05/2015-08-05-h2o-mruby/"  data-tooltip="h2o + mruby セットアップメモ">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/07/26/2015-07-26-5-minutes-mrbgems/" data-tooltip="5分でつくる mrbgems">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F28%2F2015-07-28-libreboard%2F&title=trello クローンの Libreboard を動かしてみた">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=trello%20%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%B3%E3%81%AE%20Libreboard%20%E3%82%92%E5%8B%95%E3%81%8B%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F07%2F28%2F2015-07-28-libreboard%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/07/28/2015-07-28-libreboard/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://harasou.jp/2015/07/28/2015-07-28-libreboard/';
+                 
+                    this.page.identifier = '2015/07/28/2015-07-28-libreboard/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>CentOS 用に LXC の rpm を作成する - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。
+環境
+LXC: 1.1.2
+OS:
+CentOS6.6 (2.6.32-504.16.2.el6.x86_64)
+CentOS7.1 (3.10.0-229.el7.x86_64)">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="CentOS 用に LXC の rpm を作成する">
+<meta property="og:url" content="http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。
+環境
+LXC: 1.1.2
+OS:
+CentOS6.6 (2.6.32-504.16.2.el6.x86_64)
+CentOS7.1 (3.10.0-229.el7.x86_64)">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS 用に LXC の rpm を作成する">
+<meta name="twitter:description" content="Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。
+環境
+LXC: 1.1.2
+OS:
+CentOS6.6 (2.6.32-504.16.2.el6.x86_64)
+CentOS7.1 (3.10.0-229.el7.x86_64)">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            CentOS 用に LXC の rpm を作成する
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-05-25T02:40:46+09:00">
+	
+		    2015/05/25
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。</p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<li>LXC: 1.1.2</li>
+<li>OS:<ul>
+<li>CentOS6.6 (2.6.32-504.16.2.el6.x86_64)</li>
+<li>CentOS7.1 (3.10.0-229.el7.x86_64)</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="LXC-の-rpm-を作成"><a href="#LXC-の-rpm-を作成" class="headerlink" title="LXC の rpm を作成"></a>LXC の rpm を作成</h2><p>本家のサイトに、specfile 付きの tarball が公開されているのでそれをビルドするだけ。</p>
+<p><a href="https://linuxcontainers.org/ja/lxc/downloads/" target="_blank" rel="external">https://linuxcontainers.org/ja/lxc/downloads/</a></p>
+<ol>
+<li><p>rpmbuild 用の環境を準備</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y rpmdevtools epel-release</div><div class="line">rpmdev-setuptree</div></pre></td></tr></table></figure>
+<ul>
+<li>rpmdevtools に含まれる <code>rpmdev-setuptree</code>コマンドは、<code>rpmbuild</code>実行時に必要なディレクトリを~/rpmbuild 配下に作ってくる。</li>
+</ul>
+</li>
+<li><p>ビルドに必要なパッケージのインストール</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum --enablerepo=epel install -y libcap-devel docbook2X graphviz libxslt</div></pre></td></tr></table></figure>
+</li>
+<li><p>LXC の tarball をダウンロード</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/rpmbuild/SOURCES/</div><div class="line">wget https://linuxcontainers.org/downloads/lxc//lxc-1.1.2.tar.gz</div></pre></td></tr></table></figure>
+</li>
+<li><p>rpm の作成</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpmbuild -ta lxc-1.1.2.tar.gz</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[vagrant@localhost SOURCES]$ cd ../RPMS/x86_64/ &amp;&amp; ll</div><div class="line">合計 904</div><div class="line">-rw-rw-r-- 1 vagrant vagrant 313302  5月 25 02:25 2015 lxc-1.1.2-1.el6.x86_64.rpm</div><div class="line">-rw-rw-r-- 1 vagrant vagrant  12304  5月 25 02:25 2015 lxc-devel-1.1.2-1.el6.x86_64.rpm</div><div class="line">-rw-rw-r-- 1 vagrant vagrant 591964  5月 25 02:25 2015 lxc-libs-1.1.2-1.el6.x86_64.rpm</div></pre></td></tr></table></figure>
+<ul>
+<li>rpmbuild の -t オプションは specfile ではなく、tarball から作成できる。</li>
+</ul>
+</li>
+</ol>
+<h2 id="LXC-のインストール"><a href="#LXC-のインストール" class="headerlink" title="LXC のインストール"></a>LXC のインストール</h2><p>rpm コマンドでインストールするだけだが、OS によって依存で必要なパッケージが違っていた。</p>
+<ul>
+<li><p>CentOS 6</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y dnsmasq libcgroup</div><div class="line">rpm -ivh lxc-* lxc-ilbs-*</div></pre></td></tr></table></figure>
+</li>
+<li><p>CentOS 7</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y bridge-utils libcgroup</div><div class="line">rpm -ivh lxc-* lxc-ilbs-*</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/lxc/">lxc</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/06/02/2015-06-02-cgroup-cpu-cpushare/"  data-tooltip="cgroup の cpu.shares を検証した">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/20/2015-05-20-cgroup-eventfd/" data-tooltip="cgroup による oom-killer の状態を eventfd 経由で受け取る">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F05%2F25%2F2015-05-25-CentOS-lxc-rpm%2F&title=CentOS 用に LXC の rpm を作成する">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=CentOS%20%E7%94%A8%E3%81%AB%20LXC%20%E3%81%AE%20rpm%20%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F05%2F25%2F2015-05-25-CentOS-lxc-rpm%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2016 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/06/02/2015-06-02-cgroup-cpu-cpushare/"  data-tooltip="cgroup の cpu.shares を検証した">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/20/2015-05-20-cgroup-eventfd/" data-tooltip="cgroup による oom-killer の状態を eventfd 経由で受け取る">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F05%2F25%2F2015-05-25-CentOS-lxc-rpm%2F&title=CentOS 用に LXC の rpm を作成する">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=CentOS%20%E7%94%A8%E3%81%AB%20LXC%20%E3%81%AE%20rpm%20%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F05%2F25%2F2015-05-25-CentOS-lxc-rpm%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'http://harasou.jp/2015/05/25/2015-05-25-CentOS-lxc-rpm/';
+                 
+                    this.page.identifier = '2015/05/25/2015-05-25-CentOS-lxc-rpm/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>
