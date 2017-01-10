@@ -16,16 +16,16 @@
     <meta name="description" content="最近かなり流行っている「Linux プログラミングインタフェース」を読んでたら、lseek(2) の解説で Sparse File (スパースファイル) の話が出てきたので、実装が気になって調べてみた。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Sparse File (スパースファイル) の仕組み">
-<meta property="og:url" content="http://harasou.jp/2016/03/24/2016-03-24-sparse-file/index.html">
+<meta property="og:url" content="https://harasou.jp/2016/03/24/2016-03-24-sparse-file/index.html">
 <meta property="og:site_name" content="harasou.jp">
 <meta property="og:description" content="最近かなり流行っている「Linux プログラミングインタフェース」を読んでたら、lseek(2) の解説で Sparse File (スパースファイル) の話が出てきたので、実装が気になって調べてみた。">
-<meta property="og:image" content="http://harasou.jp/linux-programming-interface.png">
-<meta property="og:image" content="http://harasou.jp/inode.png">
+<meta property="og:image" content="https://harasou.jp/linux-programming-interface.png">
+<meta property="og:image" content="https://harasou.jp/inode.png">
 <meta property="og:updated_time" content="2016-11-12T04:13:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sparse File (スパースファイル) の仕組み">
 <meta name="twitter:description" content="最近かなり流行っている「Linux プログラミングインタフェース」を読んでたら、lseek(2) の解説で Sparse File (スパースファイル) の話が出てきたので、実装が気になって調べてみた。">
-<meta name="twitter:image" content="http://harasou.jp/linux-programming-interface.png">
+<meta name="twitter:image" content="https://harasou.jp/linux-programming-interface.png">
 <meta name="twitter:creator" content="@harasou5">
     
     
@@ -35,8 +35,8 @@
         <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
     
     
-        <meta property="og:image" content="http://harasou.jp/2016/03/24/2016-03-24-sparse-file/linux-programming-interface.png"/>
-        <meta class="swiftype" name="image" data-type="enum" content="http://harasou.jp/2016/03/24/2016-03-24-sparse-file/linux-programming-interface.png" />
+        <meta property="og:image" content="https://harasou.jp/2016/03/24/2016-03-24-sparse-file/linux-programming-interface.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://harasou.jp/2016/03/24/2016-03-24-sparse-file/linux-programming-interface.png" />
     
     
     
@@ -311,27 +311,27 @@
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F&title=Sparse File (スパースファイル) の仕組み">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F&title=Sparse File (スパースファイル) の仕組み">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=Sparse%20File%20(%E3%82%B9%E3%83%91%E3%83%BC%E3%82%B9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB)%20%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=Sparse%20File%20(%E3%82%B9%E3%83%91%E3%83%BC%E3%82%B9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB)%20%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -354,7 +354,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2016 harasou. All Rights Reserved.
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
     </span>
 </footer>
 
@@ -389,27 +389,27 @@
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F&title=Sparse File (スパースファイル) の仕組み">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F&title=Sparse File (スパースファイル) の仕組み">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=Sparse%20File%20(%E3%82%B9%E3%83%91%E3%83%BC%E3%82%B9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB)%20%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=Sparse%20File%20(%E3%82%B9%E3%83%91%E3%83%BC%E3%82%B9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB)%20%E3%81%AE%E4%BB%95%E7%B5%84%E3%81%BF&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2016%2F03%2F24%2F2016-03-24-sparse-file%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -422,17 +422,17 @@
                 <div id="share-options-bar" class="share-options-bar" data-behavior="3">
     <ul class="share-options">
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2016/03/24/2016-03-24-sparse-file/">
                 <i class="fa fa-twitter"></i><span>Twitterで共有</span>
             </a>
         </li>
@@ -487,7 +487,7 @@
     
         <script>
              var disqus_config = function () {
-                 this.page.url = 'http://harasou.jp/2016/03/24/2016-03-24-sparse-file/';
+                 this.page.url = 'https://harasou.jp/2016/03/24/2016-03-24-sparse-file/';
                  
                     this.page.identifier = '2016/03/24/2016-03-24-sparse-file/';
                                   

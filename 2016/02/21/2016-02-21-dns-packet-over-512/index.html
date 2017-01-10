@@ -17,22 +17,22 @@
 DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="512バイトを超える DNSパケット">
-<meta property="og:url" content="http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/index.html">
+<meta property="og:url" content="https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/index.html">
 <meta property="og:site_name" content="harasou.jp">
 <meta property="og:description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
 DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
-<meta property="og:image" content="http://harasou.jp/fallback-tcpdump1.jpg">
-<meta property="og:image" content="http://harasou.jp/fallback-tcpdump2.jpg">
-<meta property="og:image" content="http://harasou.jp/fallback-tcpdump3.jpg">
-<meta property="og:image" content="http://harasou.jp/edns0-tcpdump1.jpg">
-<meta property="og:image" content="http://harasou.jp/edns0-tcpdump2.jpg">
-<meta property="og:image" content="http://harasou.jp/edns0-tcpdump3.jpg">
+<meta property="og:image" content="https://harasou.jp/fallback-tcpdump1.jpg">
+<meta property="og:image" content="https://harasou.jp/fallback-tcpdump2.jpg">
+<meta property="og:image" content="https://harasou.jp/fallback-tcpdump3.jpg">
+<meta property="og:image" content="https://harasou.jp/edns0-tcpdump1.jpg">
+<meta property="og:image" content="https://harasou.jp/edns0-tcpdump2.jpg">
+<meta property="og:image" content="https://harasou.jp/edns0-tcpdump3.jpg">
 <meta property="og:updated_time" content="2016-11-12T13:03:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="512バイトを超える DNSパケット">
 <meta name="twitter:description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
 DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
-<meta name="twitter:image" content="http://harasou.jp/fallback-tcpdump1.jpg">
+<meta name="twitter:image" content="https://harasou.jp/fallback-tcpdump1.jpg">
 <meta name="twitter:creator" content="@harasou5">
     
     
@@ -377,27 +377,27 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F&title=512バイトを超える DNSパケット">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F&title=512バイトを超える DNSパケット">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=512%E3%83%90%E3%82%A4%E3%83%88%E3%82%92%E8%B6%85%E3%81%88%E3%82%8B%20DNS%E3%83%91%E3%82%B1%E3%83%83%E3%83%88&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=512%E3%83%90%E3%82%A4%E3%83%88%E3%82%92%E8%B6%85%E3%81%88%E3%82%8B%20DNS%E3%83%91%E3%82%B1%E3%83%83%E3%83%88&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -420,7 +420,7 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2016 harasou. All Rights Reserved.
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
     </span>
 </footer>
 
@@ -455,27 +455,27 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F&title=512バイトを超える DNSパケット">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F&title=512バイトを超える DNSパケット">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=512%E3%83%90%E3%82%A4%E3%83%88%E3%82%92%E8%B6%85%E3%81%88%E3%82%8B%20DNS%E3%83%91%E3%82%B1%E3%83%83%E3%83%88&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=512%E3%83%90%E3%82%A4%E3%83%88%E3%82%92%E8%B6%85%E3%81%88%E3%82%8B%20DNS%E3%83%91%E3%82%B1%E3%83%83%E3%83%88&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2016%2F02%2F21%2F2016-02-21-dns-packet-over-512%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -488,17 +488,17 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
                 <div id="share-options-bar" class="share-options-bar" data-behavior="3">
     <ul class="share-options">
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/">
                 <i class="fa fa-twitter"></i><span>Twitterで共有</span>
             </a>
         </li>
@@ -553,7 +553,7 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
     
         <script>
              var disqus_config = function () {
-                 this.page.url = 'http://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/';
+                 this.page.url = 'https://harasou.jp/2016/02/21/2016-02-21-dns-packet-over-512/';
                  
                     this.page.identifier = '2016/02/21/2016-02-21-dns-packet-over-512/';
                                   

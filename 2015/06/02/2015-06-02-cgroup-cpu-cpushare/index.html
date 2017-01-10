@@ -13,31 +13,25 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。
-cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU 時間の割合を変更することができる。
-具体的に言うと、A B２つのグループを作り、cpu.shares をそれぞれ1024 2048とした場合、B のグループにいるプロセスが、A のグル">
+    <meta name="description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="cgroup の cpu.shares を検証した">
-<meta property="og:url" content="http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/index.html">
+<meta property="og:url" content="https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/index.html">
 <meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。
-cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU 時間の割合を変更することができる。
-具体的に言うと、A B２つのグループを作り、cpu.shares をそれぞれ1024 2048とした場合、B のグループにいるプロセスが、A のグル">
-<meta property="og:image" content="http://harasou.jp/cgroup.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test1.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test2.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test3.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test4.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test5.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test6.png">
-<meta property="og:image" content="http://harasou.jp/cgroup_test7.png">
-<meta property="og:updated_time" content="2016-11-12T03:29:03.000Z">
+<meta property="og:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
+<meta property="og:image" content="https://harasou.jp/cgroup.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test1.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test2.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test3.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test4.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test5.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test6.png">
+<meta property="og:image" content="https://harasou.jp/cgroup_test7.png">
+<meta property="og:updated_time" content="2016-11-12T14:32:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cgroup の cpu.shares を検証した">
-<meta name="twitter:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。
-cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU 時間の割合を変更することができる。
-具体的に言うと、A B２つのグループを作り、cpu.shares をそれぞれ1024 2048とした場合、B のグループにいるプロセスが、A のグル">
-<meta name="twitter:image" content="http://harasou.jp/cgroup.png">
+<meta name="twitter:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
+<meta name="twitter:image" content="https://harasou.jp/cgroup.png">
 <meta name="twitter:creator" content="@harasou5">
     
     
@@ -233,9 +227,9 @@ cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
             <p>cgroup には複数のサブシステム（controller）があるが、その中の <code>cpu.shares</code> について検証してみた。</p>
+<a id="more"></a>
 <h2 id="cpu-shares-とは"><a href="#cpu-shares-とは" class="headerlink" title="cpu.shares とは"></a>cpu.shares とは</h2><p>cpu.shares を設定すると、タスクが使用できる CPU 時間の<code>割合</code>を変更することができる。</p>
 <p>具体的に言うと、<code>A</code> <code>B</code>２つのグループを作り、cpu.shares をそれぞれ<code>1024</code> <code>2048</code>とした場合、B のグループにいるプロセスが、A のグループにいるプロセスより 2倍 CPU を使えるようになる。以下、実行例。</p>
-<a id="more"></a>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mkdir /cgroup/&#123;A,B&#125;</span></div><div class="line"><span class="comment"># echo 1024 &gt; /cgroup/A/cpu.shares</span></div><div class="line"><span class="comment"># echo 2048 &gt; /cgroup/B/cpu.shares</span></div><div class="line"><span class="comment"># sh -c "while : ; do : ; done" &amp; echo $! &gt; /cgroup/A/tasks</span></div><div class="line">[1] 2835</div><div class="line"><span class="comment"># sh -c "while : ; do : ; done" &amp; echo $! &gt; /cgroup/B/tasks</span></div><div class="line">[2] 2836</div><div class="line"><span class="comment"># ps uf</span></div><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line">root      2816  0.0  0.5 175140  2656 pts/2    S    21:44   0:00 sudo <span class="_">-s</span></div><div class="line">root      2817  0.0  0.3 108300  1908 pts/2    S+   21:44   0:00  \_ /bin/bash</div><div class="line">root      2835 34.9  0.2 106056  1268 pts/2    R    21:47   0:56      \_ sh -c <span class="keyword">while</span> : ; <span class="keyword">do</span> : ; <span class="keyword">done</span></div><div class="line">root      2836 66.1  0.2 106056  1268 pts/2    R    21:47   1:43      \_ sh -c <span class="keyword">while</span> : ; <span class="keyword">do</span> : ; <span class="keyword">done</span></div></pre></td></tr></table></figure>
 <p>グループ B に登録した PID:2836 のプロセスが、グループ A に登録した PID:2835 の 2倍 CPU を使用している。</p>
 <h2 id="今回の疑問点"><a href="#今回の疑問点" class="headerlink" title="今回の疑問点"></a>今回の疑問点</h2><p>これだけなら、わかりやすいが、以下の点が不明だったので実際に検証してみた。</p>
@@ -361,27 +355,27 @@ cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F&title=cgroup の cpu.shares を検証した">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F&title=cgroup の cpu.shares を検証した">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=cgroup%20%E3%81%AE%20cpu.shares%20%E3%82%92%E6%A4%9C%E8%A8%BC%E3%81%97%E3%81%9F&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=cgroup%20%E3%81%AE%20cpu.shares%20%E3%82%92%E6%A4%9C%E8%A8%BC%E3%81%97%E3%81%9F&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -404,7 +398,7 @@ cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2016 harasou. All Rights Reserved.
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
     </span>
 </footer>
 
@@ -439,27 +433,27 @@ cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F&title=cgroup の cpu.shares を検証した">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F&title=cgroup の cpu.shares を検証した">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=cgroup%20%E3%81%AE%20cpu.shares%20%E3%82%92%E6%A4%9C%E8%A8%BC%E3%81%97%E3%81%9F&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=cgroup%20%E3%81%AE%20cpu.shares%20%E3%82%92%E6%A4%9C%E8%A8%BC%E3%81%97%E3%81%9F&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F02%2F2015-06-02-cgroup-cpu-cpushare%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -472,17 +466,17 @@ cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU
                 <div id="share-options-bar" class="share-options-bar" data-behavior="3">
     <ul class="share-options">
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/">
                 <i class="fa fa-twitter"></i><span>Twitterで共有</span>
             </a>
         </li>
@@ -537,7 +531,7 @@ cpu.shares とはcpu.shares を設定すると、タスクが使用できる CPU
     
         <script>
              var disqus_config = function () {
-                 this.page.url = 'http://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/';
+                 this.page.url = 'https://harasou.jp/2015/06/02/2015-06-02-cgroup-cpu-cpushare/';
                  
                     this.page.identifier = '2015/06/02/2015-06-02-cgroup-cpu-cpushare/';
                                   

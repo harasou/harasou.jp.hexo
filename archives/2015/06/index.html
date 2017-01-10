@@ -15,7 +15,7 @@
     
     <meta property="og:type" content="blog">
 <meta property="og:title" content="harasou.jp">
-<meta property="og:url" content="http://harasou.jp/archives/2015/06/index.html">
+<meta property="og:url" content="https://harasou.jp/archives/2015/06/index.html">
 <meta property="og:site_name" content="harasou.jp">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="harasou.jp">
@@ -258,15 +258,6 @@
             
                 <div class="postShorten-excerpt" itemprop="articleBody">
                     <p>先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。</p>
-<h2 id="MySQL-で外部コマンドを実行するには"><a href="#MySQL-で外部コマンドを実行するには" class="headerlink" title="MySQL で外部コマンドを実行するには"></a>MySQL で外部コマンドを実行するには</h2><p>mysql で外部コマンドを実行するには <code>system</code> が使える。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; system uname -a</div><div class="line">Linux cent6 2.6.32-504.16.2.el6.x86_64 #1 SMP Wed Apr 22 06:48:29 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</div></pre></td></tr></table></figure>
-<p>ただ、これはターミナル上からとかでないと使えない。</p>
-<p>調べてみると、mysql には UDF(User Defined Function) という仕組みがあって、自作関数を作成することができるらしい。これは、C や C++ で書いて共有ライブラリ(.so)を作成し、mysql の plugindir に放り込めば使えるようになる。</p>
-<ul>
-<li><a href="http://aoking.hatenablog.jp/entry/20120824/1345778096">MySQL で UDF を定義しよう</a></li>
-<li><a href="http://d.hatena.ne.jp/download_takeshi/20071124/1195915196">はじめてのUDF</a></li>
-<li><a href="http://zentoo.hatenablog.com/entry/20110925/1316961032">やったーJavaScriptの動くMySQLできたよー</a></li>
-</ul>
                     
                         <a href="/2015/06/07/2015-06-07-MySQL-trigger/" class="postShorten-excerpt_link link">
                             続きを読む
@@ -304,8 +295,6 @@
             
                 <div class="postShorten-excerpt" itemprop="articleBody">
                     <p>cgroup には複数のサブシステム（controller）があるが、その中の <code>cpu.shares</code> について検証してみた。</p>
-<h2 id="cpu-shares-とは"><a href="#cpu-shares-とは" class="headerlink" title="cpu.shares とは"></a>cpu.shares とは</h2><p>cpu.shares を設定すると、タスクが使用できる CPU 時間の<code>割合</code>を変更することができる。</p>
-<p>具体的に言うと、<code>A</code> <code>B</code>２つのグループを作り、cpu.shares をそれぞれ<code>1024</code> <code>2048</code>とした場合、B のグループにいるプロセスが、A のグループにいるプロセスより 2倍 CPU を使えるようになる。以下、実行例。</p>
                     
                         <a href="/2015/06/02/2015-06-02-cgroup-cpu-cpushare/" class="postShorten-excerpt_link link">
                             続きを読む
@@ -332,7 +321,7 @@
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2016 harasou. All Rights Reserved.
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
     </span>
 </footer>
 

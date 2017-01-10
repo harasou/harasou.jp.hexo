@@ -13,22 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。
-MySQL で外部コマンドを実行するにはmysql で外部コマンドを実行するには system が使える。
-12mysql&amp;gt; system uname -aLinux cent6 2.6.32-504.16.2.el6.x">
+    <meta name="description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="MySQL のトリガで mruby を実行する">
-<meta property="og:url" content="http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/index.html">
+<meta property="og:url" content="https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/index.html">
 <meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。
-MySQL で外部コマンドを実行するにはmysql で外部コマンドを実行するには system が使える。
-12mysql&amp;gt; system uname -aLinux cent6 2.6.32-504.16.2.el6.x">
-<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta property="og:description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。">
+<meta property="og:updated_time" content="2016-11-12T14:32:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL のトリガで mruby を実行する">
-<meta name="twitter:description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。
-MySQL で外部コマンドを実行するにはmysql で外部コマンドを実行するには system が使える。
-12mysql&amp;gt; system uname -aLinux cent6 2.6.32-504.16.2.el6.x">
+<meta name="twitter:description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。">
 <meta name="twitter:creator" content="@harasou5">
     
     
@@ -224,6 +218,7 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
             <p>先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。</p>
+<a id="more"></a>
 <h2 id="MySQL-で外部コマンドを実行するには"><a href="#MySQL-で外部コマンドを実行するには" class="headerlink" title="MySQL で外部コマンドを実行するには"></a>MySQL で外部コマンドを実行するには</h2><p>mysql で外部コマンドを実行するには <code>system</code> が使える。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; system uname -a</div><div class="line">Linux cent6 2.6.32-504.16.2.el6.x86_64 #1 SMP Wed Apr 22 06:48:29 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</div></pre></td></tr></table></figure>
 <p>ただ、これはターミナル上からとかでないと使えない。</p>
@@ -233,7 +228,6 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
 <li><a href="http://d.hatena.ne.jp/download_takeshi/20071124/1195915196" target="_blank" rel="external">はじめてのUDF</a></li>
 <li><a href="http://zentoo.hatenablog.com/entry/20110925/1316961032" target="_blank" rel="external">やったーJavaScriptの動くMySQLできたよー</a></li>
 </ul>
-<a id="more"></a>
 <p>結構情報はある。で、JavaScript が動くなら、golang とか mruby があるのでは？ってさがすとやはりあった。以下 mruby。</p>
 <ul>
 <li><a href="http://mattn.kaoriya.net/software/lang/ruby/20120531210311.htm" target="_blank" rel="external">2012/05/12 やったーmrubyの動くMySQLできたよーAdd Star</a></li>
@@ -345,27 +339,27 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F&title=MySQL のトリガで mruby を実行する">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F&title=MySQL のトリガで mruby を実行する">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=MySQL%20%E3%81%AE%E3%83%88%E3%83%AA%E3%82%AC%E3%81%A7%20mruby%20%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=MySQL%20%E3%81%AE%E3%83%88%E3%83%AA%E3%82%AC%E3%81%A7%20mruby%20%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -388,7 +382,7 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
 
                 <footer id="footer" class="main-content-wrap">
     <span class="copyrights">
-        Copyrights &copy; 2016 harasou. All Rights Reserved.
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
     </span>
 </footer>
 
@@ -423,27 +417,27 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
             </a>
         </li>
         <li class="post-action hide-xs pocket-btn-icon">
-            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F&title=MySQL のトリガで mruby を実行する">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F&title=MySQL のトリガで mruby を実行する">
                  <i class="icon-pocket"></i>
             </a>
         </li>
         <li class="post-action hide-xs hatebu-btn-icon">
-            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                  <i class="icon-hatebu hatena-bookmark-button"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-google-plus"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-facebook-official"></i>
             </a>
         </li>
         <li class="post-action hide-xs">
-            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=MySQL%20%E3%81%AE%E3%83%88%E3%83%AA%E3%82%AC%E3%81%A7%20mruby%20%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B&via=harasou5&url=http%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=MySQL%20%E3%81%AE%E3%83%88%E3%83%AA%E3%82%AC%E3%81%A7%20mruby%20%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F06%2F07%2F2015-06-07-MySQL-trigger%2F">
                 <i class="fa fa-twitter"></i>
             </a>
         </li>
@@ -456,17 +450,17 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
                 <div id="share-options-bar" class="share-options-bar" data-behavior="3">
     <ul class="share-options">
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
             </a>
         </li>
         <li class="share-option">
-            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/">
                 <i class="fa fa-twitter"></i><span>Twitterで共有</span>
             </a>
         </li>
@@ -521,7 +515,7 @@ MySQL で外部コマンドを実行するにはmysql で外部コマンドを�
     
         <script>
              var disqus_config = function () {
-                 this.page.url = 'http://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/';
+                 this.page.url = 'https://harasou.jp/2015/06/07/2015-06-07-MySQL-trigger/';
                  
                     this.page.identifier = '2015/06/07/2015-06-07-MySQL-trigger/';
                                   
