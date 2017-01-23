@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>mruby をさわってみた - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="mruby とは組込み向けに軽量化されたRuby。mruby 単体で実行するというよりは、組み込み機器や Cなどで書いたアプリのなかに、まるごとmrubyアプリケーション+実行環境を組み込んで利用する感じ。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="mruby をさわってみた">
+<meta property="og:url" content="https://harasou.jp/2015/05/02/mruby-faststep/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="mruby とは組込み向けに軽量化されたRuby。mruby 単体で実行するというよりは、組み込み機器や Cなどで書いたアプリのなかに、まるごとmrubyアプリケーション+実行環境を組み込んで利用する感じ。">
+<meta property="og:image" content="https://harasou.jp/mruby.gif">
+<meta property="og:updated_time" content="2016-11-12T03:23:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mruby をさわってみた">
+<meta name="twitter:description" content="mruby とは組込み向けに軽量化されたRuby。mruby 単体で実行するというよりは、組み込み機器や Cなどで書いたアプリのなかに、まるごとmrubyアプリケーション+実行環境を組み込んで利用する感じ。">
+<meta name="twitter:image" content="https://harasou.jp/mruby.gif">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            mruby をさわってみた
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-05-02T23:23:18+09:00">
+	
+		    2015/05/02
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h2 id="mruby-とは"><a href="#mruby-とは" class="headerlink" title="mruby とは"></a>mruby とは</h2><p>組込み向けに軽量化されたRuby。mruby 単体で実行するというよりは、組み込み機器や Cなどで書いたアプリのなかに、まるごと<code>mrubyアプリケーション+実行環境</code>を組み込んで利用する感じ。<br><img src="mruby.gif" alt="mruby"></p>
+<a id="more"></a>
+<h2 id="mruby-を-MacOSX-上でコンパイル"><a href="#mruby-を-MacOSX-上でコンパイル" class="headerlink" title="mruby を MacOSX 上でコンパイル"></a>mruby を MacOSX 上でコンパイル</h2><p>mruby をさわるため、まずソースからコンパイルする。コンパイルは拍子抜けするほど簡単。以下が必要だが、Command Line Tools をいれてれば足りる。</p>
+<h3 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h3><ul>
+<li>gcc</li>
+<li>ruby</li>
+<li>bision</li>
+</ul>
+<h3 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h3><ol>
+<li><p>ソースのダウンロード(<a href="https://github.com/mruby/mruby/tree/2fe556d9c039839c20965a2c90dff703f04e40ec" target="_blank" rel="external">2fe556d</a>)</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/mruby/mruby</div><div class="line"><span class="built_in">cd</span> mruby</div></pre></td></tr></table></figure>
+</li>
+<li><p>コンパイル(速い)</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ time ruby minirake</div><div class="line">(<span class="keyword">in</span> /Users/PMAC051S/src/github.com/mruby/mruby)</div><div class="line">CC    src/array.c -&gt; build/host/src/array.o</div><div class="line">CC    src/backtrace.c -&gt; build/host/src/backtrace.o</div><div class="line"> :</div><div class="line">real    0m14.238s</div><div class="line">user    0m8.442s</div><div class="line">sys 0m3.884s</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="コンパイルされたもの"><a href="#コンパイルされたもの" class="headerlink" title="コンパイルされたもの"></a>コンパイルされたもの</h2><p>こんなファイルが出来る。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ ls <span class="_">-l</span> bin/* build/host/lib/libmruby.a</div><div class="line">-rwxr-xr-x  1 harasou  staff   881116  5  2 18:27 bin/mirb*</div><div class="line">-rwxr-xr-x  1 harasou  staff   656568  5  2 18:27 bin/mrbc*</div><div class="line">-rwxr-xr-x  1 harasou  staff   920456  5  2 18:27 bin/mrdb*</div><div class="line">-rwxr-xr-x  1 harasou  staff   879992  5  2 18:27 bin/mruby*</div><div class="line">-rwxr-xr-x  1 harasou  staff   898124  5  2 18:27 bin/mruby-strip*</div><div class="line">-rw-r--r--  1 harasou  staff  2027736  5  2 18:27 build/host/lib/libmruby.a</div></pre></td></tr></table></figure>
+<ul>
+<li>mirb: mruby の irb</li>
+<li>mrbc: mruby スクリプトのコンパイラ。mrb 形式などを出力する。</li>
+<li>mrdb: mruby のデバッガ。</li>
+<li>mruby: mruby のインタプリンタ</li>
+<li>mruby-strip: ???</li>
+<li>libmruby.a: mruby のライブラリ</li>
+</ul>
+<h2 id="それぞれ使ってみた"><a href="#それぞれ使ってみた" class="headerlink" title="それぞれ使ってみた"></a>それぞれ使ってみた</h2><h3 id="mirb"><a href="#mirb" class="headerlink" title="mirb"></a>mirb</h3><p>irb の mruby 版</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ bin/mirb</div><div class="line">mirb - Embeddable Interactive Ruby Shell</div><div class="line"></div><div class="line">&gt; puts <span class="string">"Hello, World !"</span></div><div class="line">Hello World !</div><div class="line"> =&gt; <span class="literal">nil</span></div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<h3 id="mrbc"><a href="#mrbc" class="headerlink" title="mrbc"></a>mrbc</h3><p>mruby スクリプトをデフォルトだと mrb 形式にコンパイルする。<br>mrb 形式というのは、mruby の独自フォーマットでプラットフォーム非依存。mrb 形式については、いずれ調査したい。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ bin/mrbc --help</div><div class="line">Usage: bin/mrbc [switches] programfile</div><div class="line">  switches:</div><div class="line">  -c           check syntax only</div><div class="line">  -o&lt;outfile&gt;  place the output into &lt;outfile&gt;</div><div class="line">  -v           <span class="built_in">print</span> version number, <span class="keyword">then</span> turn on verbose mode</div><div class="line">  -g           produce debugging information</div><div class="line">  -B&lt;symbol&gt;   binary &lt;symbol&gt; output <span class="keyword">in</span> C language format</div><div class="line">  <span class="_">-e</span>           generate little endian iseq data</div><div class="line">  -E           generate big endian iseq data</div><div class="line">  --verbose    run at verbose mode</div><div class="line">  --version    <span class="built_in">print</span> the version</div><div class="line">  --copyright  <span class="built_in">print</span> the copyright</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>hello.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">puts <span class="string">"Hello, world!"</span></div></pre></td></tr></table></figure>
+<figure class="highlight sh"><figcaption><span>mrb形式</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">$ bin/mrbc hello.rb</div><div class="line">$ ls <span class="_">-l</span> hello.*</div><div class="line">-rw-r--r--  1 harasou  staff  103  5  2 23:37 hello.mrb</div><div class="line">-rw-r--r--  1 harasou  staff   22  5  2 23:37 hello.rb</div><div class="line">$ file hello.mrb</div><div class="line">hello.mrb: data</div><div class="line">$ od -tcx1 hello.mrb</div><div class="line">0000000    R   I   T   E   0   0   0   3 022 372  \0  \0  \0   g   M   A</div><div class="line">           52  49  54  45  30  30  30  33  12  fa  00  00  00  67  4d  41</div><div class="line">0000020    T   Z   0   0   0   0   I   R   E   P  \0  \0  \0   I   0   0</div><div class="line">           54  5a  30  30  30  30  49  52  45  50  00  00  00  49  30  30</div><div class="line">0000040    0   0  \0  \0  \0   A  \0 001  \0 004  \0  \0  \0  \0  \0 004</div><div class="line">           30  30  00  00  00  41  00  01  00  04  00  00  00  00  00  04</div><div class="line">0000060   \0 200  \0 006 001  \0  \0   =  \0 200  \0 240  \0  \0  \0   J</div><div class="line">           00  80  00  06  01  00  00  3d  00  80  00  a0  00  00  00  4a</div><div class="line">0000100   \0  \0  \0 001  \0  \0  \r   H   e   l   l   o   ,       w   o</div><div class="line">           00  00  00  01  00  00  0d  48  65  6c  6c  6f  2c  20  77  6f</div><div class="line">0000120    r   l   d   !  \0  \0  \0 001  \0 004   p   u   t   s  \0   E</div><div class="line">           72  6c  64  21  00  00  00  01  00  04  70  75  74  73  00  45</div><div class="line">0000140    N   D  \0  \0  \0  \0  \b</div><div class="line">           4e  44  00  00  00  00  08</div><div class="line">0000147</div></pre></td></tr></table></figure>
+<figure class="highlight c"><figcaption><span>C形式</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ bin/mrbc -Bhello hello.rb</div><div class="line">$ ll hello*</div><div class="line">-rw-r--r--  <span class="number">1</span> harasou  staff  <span class="number">752</span>  <span class="number">5</span>  <span class="number">3</span> <span class="number">00</span>:<span class="number">25</span> hello.c</div><div class="line">-rw-r--r--  <span class="number">1</span> harasou  staff  <span class="number">103</span>  <span class="number">5</span>  <span class="number">2</span> <span class="number">23</span>:<span class="number">37</span> hello.mrb</div><div class="line">-rw-r--r--  <span class="number">1</span> harasou  staff   <span class="number">22</span>  <span class="number">5</span>  <span class="number">2</span> <span class="number">23</span>:<span class="number">37</span> hello.rb</div><div class="line">$ cat hello.c</div><div class="line"><span class="comment">/* dumped in little endian order.</span></div><div class="line">   use `mrbc -E` option for big endian CPU. */</div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></div><div class="line"><span class="keyword">const</span> <span class="keyword">uint8_t</span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> defined __GNUC__</span></div><div class="line">__attribute__((aligned(<span class="number">4</span>)))</div><div class="line"><span class="meta">#<span class="meta-keyword">elif</span> defined _MSC_VER</span></div><div class="line">__declspec(align(<span class="number">4</span>))</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">hello[] = &#123;</div><div class="line"><span class="number">0x45</span>,<span class="number">0x54</span>,<span class="number">0x49</span>,<span class="number">0x52</span>,<span class="number">0x30</span>,<span class="number">0x30</span>,<span class="number">0x30</span>,<span class="number">0x33</span>,<span class="number">0x64</span>,<span class="number">0x92</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x67</span>,<span class="number">0x4d</span>,<span class="number">0x41</span>,</div><div class="line"><span class="number">0x54</span>,<span class="number">0x5a</span>,<span class="number">0x30</span>,<span class="number">0x30</span>,<span class="number">0x30</span>,<span class="number">0x30</span>,<span class="number">0x49</span>,<span class="number">0x52</span>,<span class="number">0x45</span>,<span class="number">0x50</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x49</span>,<span class="number">0x30</span>,<span class="number">0x30</span>,</div><div class="line"><span class="number">0x30</span>,<span class="number">0x30</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x41</span>,<span class="number">0x00</span>,<span class="number">0x01</span>,<span class="number">0x00</span>,<span class="number">0x04</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x04</span>,</div><div class="line"><span class="number">0x06</span>,<span class="number">0x00</span>,<span class="number">0x80</span>,<span class="number">0x00</span>,<span class="number">0x3d</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x01</span>,<span class="number">0xa0</span>,<span class="number">0x00</span>,<span class="number">0x80</span>,<span class="number">0x00</span>,<span class="number">0x4a</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,</div><div class="line"><span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x01</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x0d</span>,<span class="number">0x48</span>,<span class="number">0x65</span>,<span class="number">0x6c</span>,<span class="number">0x6c</span>,<span class="number">0x6f</span>,<span class="number">0x2c</span>,<span class="number">0x20</span>,<span class="number">0x77</span>,<span class="number">0x6f</span>,</div><div class="line"><span class="number">0x72</span>,<span class="number">0x6c</span>,<span class="number">0x64</span>,<span class="number">0x21</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x01</span>,<span class="number">0x00</span>,<span class="number">0x04</span>,<span class="number">0x70</span>,<span class="number">0x75</span>,<span class="number">0x74</span>,<span class="number">0x73</span>,<span class="number">0x00</span>,<span class="number">0x45</span>,</div><div class="line"><span class="number">0x4e</span>,<span class="number">0x44</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x08</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>C形式はどうやって使うのかも不明なので今度調べる。<code>mrb_read_irep(mrb, hello)</code> で読み込む？</p>
+<h3 id="mruby"><a href="#mruby" class="headerlink" title="mruby"></a>mruby</h3><p>mruby のインタプリンタ。mrb形式のファイルを渡す場合は、<code>-b</code> オプションで。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ bin/mruby -b hello.mrb</div><div class="line">Hello, world!</div></pre></td></tr></table></figure>
+<h3 id="libmruby-a"><a href="#libmruby-a" class="headerlink" title="libmruby.a"></a>libmruby.a</h3><p>Cから利用する際のライブラリ。</p>
+<figure class="highlight c"><figcaption><span>hello.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mruby.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mruby/compile.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">    mrb_state* mrb;</div><div class="line">    mrb = mrb_open();</div><div class="line">    mrb_load_string(mrb,<span class="string">"puts 'Hello World!'"</span>);</div><div class="line">    mrb_close(mrb);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ gcc -o hello -Iinclude hello.c build/host/lib/libmruby.a</div><div class="line">$ ./hello</div><div class="line">Hello World!</div></pre></td></tr></table></figure>
+<p>ちなみにアーカイブに入っていたオブジェクトファイルは以下のような感じだった。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line">$ ar t build/host/lib/libmruby.a</div><div class="line">__.SYMDEF SORTED</div><div class="line">array.o</div><div class="line">backtrace.o</div><div class="line">class.o</div><div class="line">codegen.o</div><div class="line">compar.o</div><div class="line">crc.o</div><div class="line">debug.o</div><div class="line">dump.o</div><div class="line">enum.o</div><div class="line">error.o</div><div class="line">etc.o</div><div class="line">fmt_fp.o</div><div class="line">gc.o</div><div class="line">hash.o</div><div class="line">init.o</div><div class="line">kernel.o</div><div class="line">load.o</div><div class="line">numeric.o</div><div class="line">object.o</div><div class="line">pool.o</div><div class="line">print.o</div><div class="line">proc.o</div><div class="line">range.o</div><div class="line">state.o</div><div class="line">string.o</div><div class="line">symbol.o</div><div class="line">variable.o</div><div class="line">version.o</div><div class="line">vm.o</div><div class="line">y.tab.o</div><div class="line">mrblib.o</div><div class="line">kernel.o</div><div class="line">sprintf.o</div><div class="line">gem_init.o</div><div class="line">print.o</div><div class="line">gem_init.o</div><div class="line">math.o</div><div class="line">gem_init.o</div><div class="line">time.o</div><div class="line">gem_init.o</div><div class="line">struct.o</div><div class="line">gem_init.o</div><div class="line">gem_init.o</div><div class="line">string.o</div><div class="line">gem_init.o</div><div class="line">numeric_ext.o</div><div class="line">gem_init.o</div><div class="line">array.o</div><div class="line">gem_init.o</div><div class="line"><span class="built_in">hash</span>-ext.o</div><div class="line">gem_init.o</div><div class="line">range.o</div><div class="line">gem_init.o</div><div class="line">proc.o</div><div class="line">gem_init.o</div><div class="line">symbol.o</div><div class="line">gem_init.o</div><div class="line">mt19937ar.o</div><div class="line">random.o</div><div class="line">gem_init.o</div><div class="line">object.o</div><div class="line">gem_init.o</div><div class="line">mruby_objectspace.o</div><div class="line">gem_init.o</div><div class="line">fiber.o</div><div class="line">gem_init.o</div><div class="line">gem_init.o</div><div class="line">gem_init.o</div><div class="line">gem_init.o</div><div class="line">kernel.o</div><div class="line">gem_init.o</div><div class="line">gem_init.o</div></pre></td></tr></table></figure></p>
+<h3 id="mrbd"><a href="#mrbd" class="headerlink" title="mrbd"></a>mrbd</h3><p>デバッガ。gdb と似たような感じ。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$ bin/mrdb hello.rb</div><div class="line">(hello.rb:1) help</div><div class="line">Commands</div><div class="line">  b[reak] -- Set breakpoint</div><div class="line">  c[ontinue] -- Continue program being debugged</div><div class="line">  d[elete] -- Delete some breakpoints</div><div class="line">  dis[able] -- Disable some breakpoints</div><div class="line">  en[able] -- Enable some breakpoints</div><div class="line">  ev[al] -- Evaluate expression</div><div class="line">  h[elp] -- Print this help</div><div class="line">  i[nfo] b[reakpoints] -- Status of breakpoints</div><div class="line">  l[ist] -- List specified line</div><div class="line">  p[rint] -- Print value of expression</div><div class="line">  q[uit] -- Exit mrdb</div><div class="line">  r[un] -- Start debugged program</div><div class="line">  s[tep] -- Step program until it reaches a different source line</div></pre></td></tr></table></figure>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/mruby/">mruby</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/03/mruby-memo/"  data-tooltip="mruby についてのメモ">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/04/28/hexo-setup/" data-tooltip="hexo セットアップメモ">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F02%2Fmruby-faststep%2F&title=mruby をさわってみた">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/05/02/mruby-faststep/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=mruby%20%E3%82%92%E3%81%95%E3%82%8F%E3%81%A3%E3%81%A6%E3%81%BF%E3%81%9F&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F02%2Fmruby-faststep%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/03/mruby-memo/"  data-tooltip="mruby についてのメモ">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/04/28/hexo-setup/" data-tooltip="hexo セットアップメモ">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F02%2Fmruby-faststep%2F&title=mruby をさわってみた">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/05/02/mruby-faststep/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=mruby%20%E3%82%92%E3%81%95%E3%82%8F%E3%81%A3%E3%81%A6%E3%81%BF%E3%81%9F&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F02%2Fmruby-faststep%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2015/05/02/mruby-faststep/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://harasou.jp/2015/05/02/mruby-faststep/';
+                 
+                    this.page.identifier = '2015/05/02/mruby-faststep/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

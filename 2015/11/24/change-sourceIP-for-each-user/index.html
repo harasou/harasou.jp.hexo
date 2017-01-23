@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>外部へ通信時のソースIP をユーザごとに変更する - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="「ユーザ単位で、通信時に使用するソースIP を指定できないか？」って話があって、cgroup や fwmark とか使えばできるんじゃない？って思ってたけど、iptables だけであっさりできたって話。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="外部へ通信時のソースIP をユーザごとに変更する">
+<meta property="og:url" content="https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="「ユーザ単位で、通信時に使用するソースIP を指定できないか？」って話があって、cgroup や fwmark とか使えばできるんじゃない？って思ってたけど、iptables だけであっさりできたって話。">
+<meta property="og:image" content="https://harasou.jp/processes.png">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="外部へ通信時のソースIP をユーザごとに変更する">
+<meta name="twitter:description" content="「ユーザ単位で、通信時に使用するソースIP を指定できないか？」って話があって、cgroup や fwmark とか使えばできるんじゃない？って思ってたけど、iptables だけであっさりできたって話。">
+<meta name="twitter:image" content="https://harasou.jp/processes.png">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+        <meta property="og:image" content="https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/processes.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/processes.png" />
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            外部へ通信時のソースIP をユーザごとに変更する
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-11-24T02:52:38+09:00">
+	
+		    2015/11/24
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>「ユーザ単位で、通信時に使用するソースIP を指定できないか？」って話があって、cgroup や fwmark とか使えばできるんじゃない？って思ってたけど、iptables だけであっさりできたって話。</p>
+<a id="more"></a>
+<p>こんな感じで、サーバ上のプロセスが外部へ通信を行う際に、ユーザごとに別々のソースIP になってほしいって要件。</p>
+<p><img src="processes.png" alt=""></p>
+<p>上の例ではプライベートIP を使用しているが、利用時の想定はグローバルIP (IPマスカレードされたら意味なし :-P)。</p>
+<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>いつものごとく vagrant で。</p>
+<ul>
+<li>CentOS 7.1 (3.10.0-229.el7.x86_64)</li>
+</ul>
+<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><p>いろいろ面倒くさそうな手順を考えていたが、よく考えると iptables だけであっさり対応できる。上記画像のような環境を構築する手順。</p>
+<ol>
+<li><p>ユーザを追加</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># useradd userA</span></div><div class="line"><span class="comment"># useradd userB</span></div><div class="line"><span class="comment"># useradd userC</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># tail -3 /etc/passwd</span></div><div class="line">userA:x:1001:1001::/home/userA:/bin/bash</div><div class="line">userB:x:1002:1002::/home/userB:/bin/bash</div><div class="line">userC:x:1003:1003::/home/userC:/bin/bash</div></pre></td></tr></table></figure>
+</li>
+<li><p>IP の追加<br> 指定するソースIP をサーバに追加。</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ip addr add 10.0.2.101/24 dev enp0s3</span></div><div class="line"><span class="comment"># ip addr add 10.0.2.102/24 dev enp0s3</span></div><div class="line"><span class="comment"># ip addr add 10.0.2.103/24 dev enp0s3</span></div><div class="line"><span class="comment"># </span></div><div class="line"><span class="comment"># ip a s enp0s3</span></div><div class="line">2: enp0s3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000</div><div class="line">    link/ether 08:00:27:ea:9b:b5 brd ff:ff:ff:ff:ff:ff</div><div class="line">    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic enp0s3</div><div class="line">       valid_lft 84388sec preferred_lft 84388sec</div><div class="line">    inet 10.0.2.101/24 scope global secondary enp0s3</div><div class="line">       valid_lft forever preferred_lft forever</div><div class="line">    inet 10.0.2.102/24 scope global secondary enp0s3</div><div class="line">       valid_lft forever preferred_lft forever</div><div class="line">    inet 10.0.2.103/24 scope global secondary enp0s3</div><div class="line">       valid_lft forever preferred_lft forever</div><div class="line">    inet6 fe80::a00:27ff:feea:9bb5/64 scope link</div><div class="line">       valid_lft forever preferred_lft forever</div></pre></td></tr></table></figure>
+</li>
+<li><p>SNAT の追加<br> owner モジュールを使用して、ユーザごとに SNAT (ソースIPの書き換え)を行う</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># iptables -t nat -A POSTROUTING -m owner --uid-owner userA -j SNAT --to-source 10.0.2.101</span></div><div class="line"><span class="comment"># iptables -t nat -A POSTROUTING -m owner --uid-owner userB -j SNAT --to-source 10.0.2.102</span></div><div class="line"><span class="comment"># iptables -t nat -A POSTROUTING -m owner --uid-owner userC -j SNAT --to-source 10.0.2.103</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># iptables -t nat -nvL</span></div><div class="line">Chain PREROUTING (policy ACCEPT 2 packets, 620 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line"></div><div class="line">Chain INPUT (policy ACCEPT 1 packets, 44 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line"></div><div class="line">Chain OUTPUT (policy ACCEPT 24 packets, 1805 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line"></div><div class="line">Chain POSTROUTING (policy ACCEPT 17 packets, 1262 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line">    0     0 SNAT       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1001 to:10.0.2.101</div><div class="line">    0     0 SNAT       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1002 to:10.0.2.102</div><div class="line">    0     0 SNAT       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1003 to:10.0.2.103</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="検証"><a href="#検証" class="headerlink" title="検証"></a>検証</h2><p><code>userB</code> で ping を打った際の tcpdump</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># sudo -u userB ping 8.8.8.8</span></div><div class="line">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.</div><div class="line">64 bytes from 8.8.8.8: icmp_seq=1 ttl=63 time=27.4 ms</div><div class="line">64 bytes from 8.8.8.8: icmp_seq=2 ttl=63 time=30.7 ms</div><div class="line">64 bytes from 8.8.8.8: icmp_seq=3 ttl=63 time=26.4 ms</div><div class="line"> :</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># tcpdump -n icmp</span></div><div class="line">tcpdump: verbose output suppressed, use -v or -vv <span class="keyword">for</span> full protocol decode</div><div class="line">listening on enp0s3, link-type EN10MB (Ethernet), capture size 65535 bytes</div><div class="line">08:09:53.760118 IP 10.0.2.102 &gt; 8.8.8.8: ICMP <span class="built_in">echo</span> request, id 20790, seq 1, length 64</div><div class="line">08:09:53.790121 IP 8.8.8.8 &gt; 10.0.2.102: ICMP <span class="built_in">echo</span> reply, id 20790, seq 1, length 64</div><div class="line">08:09:54.763025 IP 10.0.2.102 &gt; 8.8.8.8: ICMP <span class="built_in">echo</span> request, id 20790, seq 2, length 64</div><div class="line">08:09:54.797682 IP 8.8.8.8 &gt; 10.0.2.102: ICMP <span class="built_in">echo</span> reply, id 20790, seq 2, length 64</div><div class="line">08:09:55.766156 IP 10.0.2.102 &gt; 8.8.8.8: ICMP <span class="built_in">echo</span> request, id 20790, seq 3, length 64</div><div class="line"> :</div></pre></td></tr></table></figure>
+<p>ちゃんと userB のソースIP は <code>10.0.2.102</code> になっている。</p>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/iptables/">iptables</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/12/20/gfmarkdown-release/"  data-tooltip="markdown(GFM) を変換するコマンドを mruby-cli で作ってみた">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/04/kernel-module-modinfo/" data-tooltip="カーネルモジュールの modinfo について">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F11%2F24%2Fchange-sourceIP-for-each-user%2F&title=外部へ通信時のソースIP をユーザごとに変更する">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=%E5%A4%96%E9%83%A8%E3%81%B8%E9%80%9A%E4%BF%A1%E6%99%82%E3%81%AE%E3%82%BD%E3%83%BC%E3%82%B9IP%20%E3%82%92%E3%83%A6%E3%83%BC%E3%82%B6%E3%81%94%E3%81%A8%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F11%2F24%2Fchange-sourceIP-for-each-user%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/12/20/gfmarkdown-release/"  data-tooltip="markdown(GFM) を変換するコマンドを mruby-cli で作ってみた">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/11/04/kernel-module-modinfo/" data-tooltip="カーネルモジュールの modinfo について">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F11%2F24%2Fchange-sourceIP-for-each-user%2F&title=外部へ通信時のソースIP をユーザごとに変更する">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=%E5%A4%96%E9%83%A8%E3%81%B8%E9%80%9A%E4%BF%A1%E6%99%82%E3%81%AE%E3%82%BD%E3%83%BC%E3%82%B9IP%20%E3%82%92%E3%83%A6%E3%83%BC%E3%82%B6%E3%81%94%E3%81%A8%E3%81%AB%E5%A4%89%E6%9B%B4%E3%81%99%E3%82%8B&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F11%2F24%2Fchange-sourceIP-for-each-user%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://harasou.jp/2015/11/24/change-sourceIP-for-each-user/';
+                 
+                    this.page.identifier = '2015/11/24/change-sourceIP-for-each-user/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

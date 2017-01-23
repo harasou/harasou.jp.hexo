@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>mruby-cgroup に memory サブシテムを追加してみた - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="mruby-cgroup は、mruby から cgroup を利用するためのモジュールで、いわゆる libcgroup のバインディング。現在、mruby-cgroup 9cad17343 で対応しているサブシテムは以下のとおり。
+
+cpu
+cpu_set
+cpu_acct
+blkio
+
+他に、cgroup のサブシステムには以下のようなものがある(CentOS 6.4)123456789101">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="mruby-cgroup に memory サブシテムを追加してみた">
+<meta property="og:url" content="https://harasou.jp/2015/05/17/mruby-cgroup/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="mruby-cgroup は、mruby から cgroup を利用するためのモジュールで、いわゆる libcgroup のバインディング。現在、mruby-cgroup 9cad17343 で対応しているサブシテムは以下のとおり。
+
+cpu
+cpu_set
+cpu_acct
+blkio
+
+他に、cgroup のサブシステムには以下のようなものがある(CentOS 6.4)123456789101">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mruby-cgroup に memory サブシテムを追加してみた">
+<meta name="twitter:description" content="mruby-cgroup は、mruby から cgroup を利用するためのモジュールで、いわゆる libcgroup のバインディング。現在、mruby-cgroup 9cad17343 で対応しているサブシテムは以下のとおり。
+
+cpu
+cpu_set
+cpu_acct
+blkio
+
+他に、cgroup のサブシステムには以下のようなものがある(CentOS 6.4)123456789101">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            mruby-cgroup に memory サブシテムを追加してみた
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-05-17T18:38:33+09:00">
+	
+		    2015/05/17
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <p>mruby-cgroup は、mruby から cgroup を利用するためのモジュールで、いわゆる libcgroup のバインディング。現在、mruby-cgroup <a href="https://github.com/matsumoto-r/mruby-cgroup/blob/9cad17343cf60449c2cc1b7475daefb863086a13/src/mrb_cgroup.c#L45-L50" target="_blank" rel="external">9cad17343</a> で対応しているサブシテムは以下のとおり。</p>
+<ul>
+<li>cpu</li>
+<li>cpu_set</li>
+<li>cpu_acct</li>
+<li>blkio</li>
+</ul>
+<p>他に、cgroup のサブシステムには以下のようなものがある(CentOS 6.4)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># cat /proc/cgroups</div><div class="line">#subsys_name    hierarchy   num_cgroups enabled</div><div class="line">cpuset  10  1   1</div><div class="line">ns  0   1   1</div><div class="line">cpu 11  1   1</div><div class="line">cpuacct 12  1   1</div><div class="line">memory  13  1   1</div><div class="line">devices 14  1   1</div><div class="line">freezer 15  1   1</div><div class="line">net_cls 16  1   1</div><div class="line">blkio   17  1   1</div><div class="line">perf_event  0   1   1</div><div class="line">net_prio    0   1   1</div></pre></td></tr></table></figure></p>
+<p>この中から、簡単に使えそうな memory サブシステムを追加してみた。</p>
+<a id="more"></a>
+<h2 id="libcgroup-の構成"><a href="#libcgroup-の構成" class="headerlink" title="libcgroup の構成"></a>libcgroup の構成</h2><p>サブシテムを追加するには、libcgroup を知る必要がる。</p>
+<p>情報はこちら。<br><a href="http://libcg.sourceforge.net/html/main.html" target="_blank" rel="external">http://libcg.sourceforge.net/html/main.html</a></p>
+<p>libcgroup を利用する場合は以下のような流れ。</p>
+<ol>
+<li>cgroup の初期化(現在の状態をキャッシュする？) <code>cgroup_init()</code></li>
+<li>cgroup 管理用の構造体を作成 <code>cgroup_new_cgroup()</code></li>
+<li>作成した構造体にサブシステムを登録 <code>cgroup_add_controller()</code></li>
+<li>サブシステムに対応した制限を設定 <code>cgroup_add_value_int64()</code></li>
+<li>構造体を元に cgroup を作成 <code>cgroup_create_cgroup()</code></li>
+<li>タスクを cgroup に追加 <code>cgroup_attach_task()</code></li>
+</ol>
+<p>ソースにするとこんな感じ</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;libcgroup.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</div><div class="line"></div><div class="line">  cgroup_init();</div><div class="line"></div><div class="line">  <span class="keyword">struct</span> cgroup *foo = cgroup_new_cgroup(<span class="string">"foo"</span>);</div><div class="line">  <span class="keyword">struct</span> cgroup_controller * foo_cpu = cgroup_add_controller(foo, <span class="string">"cpu"</span>);</div><div class="line">  <span class="keyword">struct</span> cgroup_controller * foo_mem = cgroup_add_controller(foo, <span class="string">"memory"</span>);</div><div class="line"></div><div class="line">  cgroup_add_value_int64(foo_cpu, <span class="string">"cpu.shares"</span>, <span class="number">500</span>);</div><div class="line">  cgroup_add_value_int64(foo_mem, <span class="string">"memory.limit_in_bytes"</span>, <span class="number">1048576</span>);</div><div class="line"></div><div class="line">  cgroup_create_cgroup(foo, <span class="number">0</span>);</div><div class="line"></div><div class="line">  cgroup_attach_task(foo);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="mruby-cgroup-の実装"><a href="#mruby-cgroup-の実装" class="headerlink" title="mruby-cgroup の実装"></a>mruby-cgroup の実装</h2><p>上記のような libcgroup の流れを mruby-cgroup で以下のように実装している。</p>
+<ol>
+<li><p>cgroup の作成</p>
+<p> cgroup の作成については、各サブシテムで同じような処理になるので、以下のようなマクロで実装されていた。<br> <code>cgroup_init</code>-&gt;<code>cgroup_new_cgroup</code>-&gt;<code>cgroup_add_controller</code> の流れは同じ。</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SET_MRB_CGROUP_INIT_GROUP(gname) \</span></div><div class="line">static mrb_value mrb_cgroup_##gname##_init(mrb_state *mrb, mrb_value self)                                      \</div><div class="line">&#123;                                                                                                               \</div><div class="line">    mrb_cgroup_context *mrb_cg_cxt = (mrb_cgroup_context *)mrb_malloc(mrb, sizeof(mrb_cgroup_context));         \</div><div class="line">                                                                                                                \</div><div class="line">    mrb_cg_cxt-&gt;type = MRB_CGROUP_##gname;                                                                      \</div><div class="line">    <span class="meta-keyword">if</span> (cgroup_init()) &#123;                                                                                        \</div><div class="line">        mrb_raise(mrb, E_RUNTIME_ERROR, <span class="meta-string">"cgoup_init "</span> #gname <span class="meta-string">" failed"</span>);                                        \</div><div class="line">    &#125;                                                                                                           \</div><div class="line">    mrb_get_args(mrb, <span class="meta-string">"o"</span>, &amp;mrb_cg_cxt-&gt;group_name);                                                            \</div><div class="line">    mrb_cg_cxt-&gt;cg = cgroup_new_cgroup(RSTRING_PTR(mrb_cg_cxt-&gt;group_name));                                    \</div><div class="line">    <span class="meta-keyword">if</span> (mrb_cg_cxt-&gt;cg == NULL) &#123;                                                                               \</div><div class="line">        mrb_raise(mrb, E_RUNTIME_ERROR, <span class="meta-string">"cgoup_new_cgroup failed"</span>);                                             \</div><div class="line">    &#125;                                                                                                           \</div><div class="line">                                                                                                                \</div><div class="line">    <span class="meta-keyword">if</span> (cgroup_get_cgroup(mrb_cg_cxt-&gt;cg)) &#123;                                                                    \</div><div class="line">        mrb_cg_cxt-&gt;already_exist = 0;                                                                          \</div><div class="line">        mrb_cg_cxt-&gt;cgc = cgroup_add_controller(mrb_cg_cxt-&gt;cg, #gname);                                        \</div><div class="line">        <span class="meta-keyword">if</span> (mrb_cg_cxt-&gt;cgc == NULL) &#123;                                                                          \</div><div class="line">            mrb_raise(mrb, E_RUNTIME_ERROR, <span class="meta-string">"cgoup_add_controller "</span> #gname <span class="meta-string">" failed"</span>);                          \</div><div class="line">        &#125;                                                                                                       \</div><div class="line">    &#125; <span class="meta-keyword">else</span> &#123;                                                                                                    \</div><div class="line">        mrb_cg_cxt-&gt;already_exist = 1;                                                                          \</div><div class="line">        mrb_cg_cxt-&gt;cgc = cgroup_get_controller(mrb_cg_cxt-&gt;cg, #gname);                                        \</div><div class="line">        <span class="meta-keyword">if</span> (mrb_cg_cxt-&gt;cgc == NULL) &#123;                                                                          \</div><div class="line">            mrb_cg_cxt-&gt;cgc = cgroup_add_controller(mrb_cg_cxt-&gt;cg, #gname);                                    \</div><div class="line">            <span class="meta-keyword">if</span> (mrb_cg_cxt-&gt;cgc == NULL) &#123;                                                                      \</div><div class="line">                mrb_raise(mrb, E_RUNTIME_ERROR, <span class="meta-string">"get_cgroup success, but add_controller "</span>  #gname <span class="meta-string">" failed"</span>);   \</div><div class="line">            &#125;                                                                                                   \</div><div class="line">        &#125;                                                                                                       \</div><div class="line">    &#125;                                                                                                           \</div><div class="line">    mrb_iv_set(mrb                                                                                              \</div><div class="line">        , self                                                                                                  \</div><div class="line">        , mrb_intern_cstr(mrb, <span class="meta-string">"mrb_cgroup_context"</span>)                                                                 \</div><div class="line">        , mrb_obj_value(Data_Wrap_Struct(mrb                                                                    \</div><div class="line">            , mrb-&gt;object_class                                                                                 \</div><div class="line">            , &amp;mrb_cgroup_context_type                                                                          \</div><div class="line">            , (void *)mrb_cg_cxt)                                                                               \</div><div class="line">        )                                                                                                       \</div><div class="line">    );                                                                                                          \</div><div class="line">                                                                                                                \</div><div class="line">    return self;                                                                                                \</div><div class="line">&#125;</div><div class="line"></div><div class="line">SET_MRB_CGROUP_INIT_GROUP(cpu);</div><div class="line">SET_MRB_CGROUP_INIT_GROUP(cpuset);</div><div class="line">SET_MRB_CGROUP_INIT_GROUP(cpuacct);</div><div class="line">SET_MRB_CGROUP_INIT_GROUP(blkio);</div></pre></td></tr></table></figure>
+<p> ref: <a href="https://github.com/matsumoto-r/mruby-cgroup/blob/9cad17343cf60449c2cc1b7475daefb863086a13/src/mrb_cgroup.c#L240-L291" target="_blank" rel="external">mrb_cgroup.c#L240-L291</a></p>
+</li>
+<li><p>サブシステムにパラメータを設定 </p>
+<p> 設定には<code>cgroup_add_value_int64()</code>ではなく<code>cgroup_set_value_int64()</code>が使われていた。同じようにマクロ化されている。</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// cgroup_set_value_int64</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> SET_VALUE_INT64_MRB_CGROUP(gname, key) \</span></div><div class="line">static mrb_value mrb_cgroup_set_##gname##_##key(mrb_state *mrb, mrb_value self)                      \</div><div class="line">&#123;                                                                                             \</div><div class="line">    mrb_cgroup_context *mrb_cg_cxt = mrb_cgroup_get_context(mrb, self, <span class="meta-string">"mrb_cgroup_context"</span>); \</div><div class="line">    mrb_int val;                                                                              \</div><div class="line">    int code;                                                                                 \</div><div class="line">    mrb_get_args(mrb, <span class="meta-string">"i"</span>, &amp;val);                                                             \</div><div class="line">                                                                                              \</div><div class="line">    <span class="meta-keyword">if</span> ((code = cgroup_set_value_int64(mrb_cg_cxt-&gt;cgc, #gname <span class="meta-string">"."</span> #key, val))) &#123;                      \</div><div class="line">        mrb_raisef(mrb, E_RUNTIME_ERROR, <span class="meta-string">"cgroup_set_value_int64 "</span> #gname <span class="meta-string">"."</span> #key <span class="meta-string">" failed: %S"</span>, mrb_str_new_cstr(mrb, cgroup_strerror(code))); \</div><div class="line">    &#125;                                                                                         \</div><div class="line">    mrb_iv_set(mrb                                                                            \</div><div class="line">        , self                                                                                \</div><div class="line">        , mrb_intern_cstr(mrb, <span class="meta-string">"mrb_cgroup_context"</span>)                                               \</div><div class="line">        , mrb_obj_value(Data_Wrap_Struct(mrb                                                  \</div><div class="line">            , mrb-&gt;object_class                                                               \</div><div class="line">            , &amp;mrb_cgroup_context_type                                                        \</div><div class="line">            , (void *)mrb_cg_cxt)                                                             \</div><div class="line">        )                                                                                     \</div><div class="line">    );                                                                                        \</div><div class="line">                                                                                              \</div><div class="line">    return self;                                                                              \</div><div class="line">&#125;</div><div class="line"></div><div class="line">SET_VALUE_INT64_MRB_CGROUP(cpu, cfs_quota_us);</div><div class="line">SET_VALUE_INT64_MRB_CGROUP(cpu, cfs_period_us);</div><div class="line">SET_VALUE_INT64_MRB_CGROUP(cpu, rt_period_us);</div><div class="line">SET_VALUE_INT64_MRB_CGROUP(cpu, rt_runtime_us);</div><div class="line">SET_VALUE_INT64_MRB_CGROUP(cpu, shares);</div><div class="line">SET_VALUE_INT64_MRB_CGROUP(cpuacct, usage);</div></pre></td></tr></table></figure>
+<p> ref: <a href="https://github.com/matsumoto-r/mruby-cgroup/blob/9cad17343cf60449c2cc1b7475daefb863086a13/src/mrb_cgroup.c#L293-L325" target="_blank" rel="external">mrb_cgroup.c#L293-L325</a></p>
+</li>
+<li><p>cgroup にタスクを登録</p>
+<p> 自身を登録する場合(pid が nil)は<code>cgroup_attach_task()</code>、pid が指定された場合は<code>cgroup_attach_task_pid()</code> が呼ばれる。</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> mrb_value <span class="title">mrb_cgroup_attach</span><span class="params">(mrb_state *mrb, mrb_value self)</span></span></div><div class="line">&#123;</div><div class="line">    mrb_cgroup_context *mrb_cg_cxt = mrb_cgroup_get_context(mrb, self, <span class="string">"mrb_cgroup_context"</span>);</div><div class="line">    mrb_value pid = mrb_nil_value();</div><div class="line">    mrb_get_args(mrb, <span class="string">"|i"</span>, &amp;pid);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (mrb_nil_p(pid)) &#123;</div><div class="line">        cgroup_attach_task(mrb_cg_cxt-&gt;cg);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        cgroup_attach_task_pid(mrb_cg_cxt-&gt;cg, mrb_fixnum(pid));</div><div class="line">    &#125;</div><div class="line">    mrb_iv_set(mrb</div><div class="line">        , self</div><div class="line">        , mrb_intern_cstr(mrb, <span class="string">"mrb_cgroup_context"</span>)</div><div class="line">        , mrb_obj_value(Data_Wrap_Struct(mrb</div><div class="line">            , mrb-&gt;object_class</div><div class="line">            , &amp;mrb_cgroup_context_type</div><div class="line">            , (<span class="keyword">void</span> *)mrb_cg_cxt)</div><div class="line">        )</div><div class="line">    );</div><div class="line"></div><div class="line">    <span class="keyword">return</span> self;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> ref: <a href="https://github.com/matsumoto-r/mruby-cgroup/blob/9cad17343cf60449c2cc1b7475daefb863086a13/src/mrb_cgroup.c#L194-L220" target="_blank" rel="external">mrb_cgroup.c#L194-L220</a></p>
+</li>
+</ol>
+<h2 id="memory-サブシテムを試す"><a href="#memory-サブシテムを試す" class="headerlink" title="memory サブシテムを試す"></a>memory サブシテムを試す</h2><p>mruby-cgroup に memoroy サブシテム(今回はlimit_in_bytesのみ)を追加して動作を確認してみる。mruby-cgroup に以下のような修正を加えて、mruby を build。</p>
+<p>作りが良いので、簡単に機能追加できる。@matsumotory さすがです。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">diff --git a/src/mrb_cgroup.c b/src/mrb_cgroup.c</div><div class="line">index c63473c..c6dcde6 100644</div><div class="line"><span class="comment">--- a/src/mrb_cgroup.c</span></div><div class="line"><span class="comment">+++ b/src/mrb_cgroup.c</span></div><div class="line">@@ -46,7 +46,8 @@ typedef enum &#123;</div><div class="line">     MRB_CGROUP_cpu,</div><div class="line">     MRB_CGROUP_cpuset,</div><div class="line">     MRB_CGROUP_cpuacct,</div><div class="line"><span class="deletion">-    MRB_CGROUP_blkio</span></div><div class="line"><span class="addition">+    MRB_CGROUP_blkio,</span></div><div class="line"><span class="addition">+    MRB_CGROUP_memory</span></div><div class="line"> &#125; group_type_t;</div><div class="line"> typedef struct cgroup cgroup_t;</div><div class="line"> typedef struct cgroup_controller cgroup_controller_t;</div><div class="line">@@ -289,6 +290,7 @@ SET_MRB_CGROUP_INIT_GROUP(cpu);</div><div class="line"> SET_MRB_CGROUP_INIT_GROUP(cpuset);</div><div class="line"> SET_MRB_CGROUP_INIT_GROUP(cpuacct);</div><div class="line"> SET_MRB_CGROUP_INIT_GROUP(blkio);</div><div class="line"><span class="addition">+SET_MRB_CGROUP_INIT_GROUP(memory);</span></div><div class="line"></div><div class="line"> //</div><div class="line"> // cgroup_set_value_int64</div><div class="line">@@ -323,6 +325,7 @@ SET_VALUE_INT64_MRB_CGROUP(cpu, rt_period_us);</div><div class="line"> SET_VALUE_INT64_MRB_CGROUP(cpu, rt_runtime_us);</div><div class="line"> SET_VALUE_INT64_MRB_CGROUP(cpu, shares);</div><div class="line"> SET_VALUE_INT64_MRB_CGROUP(cpuacct, usage);</div><div class="line"><span class="addition">+SET_VALUE_INT64_MRB_CGROUP(memory, limit_in_bytes);</span></div><div class="line"></div><div class="line"> #define GET_VALUE_INT64_MRB_CGROUP(gname, key) \</div><div class="line"> static mrb_value mrb_cgroup_get_##gname##_##key(mrb_state *mrb, mrb_value self)                      \</div><div class="line">@@ -351,6 +354,7 @@ GET_VALUE_INT64_MRB_CGROUP(cpu, rt_period_us);</div><div class="line"> GET_VALUE_INT64_MRB_CGROUP(cpu, rt_runtime_us);</div><div class="line"> GET_VALUE_INT64_MRB_CGROUP(cpu, shares);</div><div class="line"> GET_VALUE_INT64_MRB_CGROUP(cpuacct, usage);</div><div class="line"><span class="addition">+GET_VALUE_INT64_MRB_CGROUP(memory, limit_in_bytes);</span></div><div class="line"></div><div class="line"> //</div><div class="line"> // cgroup_get_value_string</div><div class="line">@@ -505,6 +509,7 @@ void mrb_mruby_cgroup_gem_init(mrb_state *mrb)</div><div class="line">     struct RClass *cpuacct;</div><div class="line">     struct RClass *cpuset;</div><div class="line">     struct RClass *blkio;</div><div class="line"><span class="addition">+    struct RClass *memory;</span></div><div class="line"></div><div class="line">     cgroup = mrb_define_module(mrb, "Cgroup");</div><div class="line">     mrb_define_module_function(mrb, cgroup, "create", mrb_cgroup_create, ARGS_NONE());</div><div class="line">@@ -567,6 +572,13 @@ void mrb_mruby_cgroup_gem_init(mrb_state *mrb)</div><div class="line">     mrb_define_method(mrb, blkio, "throttle_write_iops_device=", mrb_cgroup_set_blkio_throttle_write_iops_device,</div><div class="line">     mrb_define_method(mrb, blkio, "throttle_write_iops_device", mrb_cgroup_get_blkio_throttle_write_iops_device,</div><div class="line">     DONE;</div><div class="line"><span class="addition">+</span></div><div class="line"><span class="addition">+    memory = mrb_define_class_under(mrb, cgroup, "MEMORY", mrb-&gt;object_class);</span></div><div class="line"><span class="addition">+    mrb_include_module(mrb, memory, mrb_module_get(mrb, "Cgroup"));</span></div><div class="line"><span class="addition">+    mrb_define_method(mrb, memory, "initialize", mrb_cgroup_memory_init, ARGS_ANY());</span></div><div class="line"><span class="addition">+    mrb_define_method(mrb, memory, "limit_in_bytes=", mrb_cgroup_set_memory_limit_in_bytes, ARGS_ANY());</span></div><div class="line"><span class="addition">+    mrb_define_method(mrb, memory, "limit_in_bytes", mrb_cgroup_get_memory_limit_in_bytes, ARGS_ANY());</span></div><div class="line"><span class="addition">+    DONE;</span></div><div class="line"> &#125;</div><div class="line"></div><div class="line"> void mrb_mruby_cgroup_gem_final(mrb_state *mrb)</div></pre></td></tr></table></figure>
+<p>build した mruby で以下のスクリプトを実行</p>
+<figure class="highlight ruby"><figcaption><span>memory.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">c = Cgroup::MEMORY.new <span class="string">"/test"</span></div><div class="line"><span class="keyword">if</span> !c.exist?</div><div class="line">  puts <span class="string">"create cgroup memory /test"</span></div><div class="line">  c.create</div><div class="line"><span class="keyword">end</span></div><div class="line"></div><div class="line">c.limit_in_bytes = <span class="number">1024</span> * <span class="number">8</span></div><div class="line">c.modify</div><div class="line"></div><div class="line">c.attach</div><div class="line"></div><div class="line"><span class="comment"># メモリを確保</span></div><div class="line">a=[]</div><div class="line"><span class="number">99999</span>.times &#123; a &lt;&lt; &#123;&#125; &#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> c.exist?</div><div class="line">  puts <span class="string">"delete /test group"</span></div><div class="line">  c.delete</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># bin/mruby examples/mrbgems/mruby-cgroup/example/memory.rb</div><div class="line">Killed</div></pre></td></tr></table></figure>
+<p>見事に kill された。その時の syslog 。oom-killer が走っている。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">May 17 14:22:02 vagrant-centos64 kernel: mruby invoked oom-killer: gfp_mask=0xd0, order=0, oom_adj=0, oom_score_adj=0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: mruby cpuset=/ mems_allowed=0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Pid: 14095, comm: mruby Not tainted 2.6.32-358.23.2.el6.x86_64 #1</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Call Trace:</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff810cb641&gt;] ? cpuset_print_task_mems_allowed+0x91/0xb0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8111ce40&gt;] ? dump_header+0x90/0x1b0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8121d4ec&gt;] ? security_real_capable_noaudit+0x3c/0x70</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8111d2c2&gt;] ? oom_kill_process+0x82/0x2a0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8111d201&gt;] ? select_bad_process+0xe1/0x120</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8111da42&gt;] ? mem_cgroup_out_of_memory+0x92/0xb0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81173854&gt;] ? mem_cgroup_handle_oom+0x274/0x2a0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81171290&gt;] ? memcg_oom_wake_function+0x0/0xa0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81173e39&gt;] ? __mem_cgroup_try_charge+0x5b9/0x5d0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff811751b7&gt;] ? mem_cgroup_charge_common+0x87/0xd0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81175248&gt;] ? mem_cgroup_newpage_charge+0x48/0x50</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81143f3c&gt;] ? handle_pte_fault+0x79c/0xb50</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8112c7cf&gt;] ? free_hot_page+0x2f/0x60</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8112f45e&gt;] ? __put_single_page+0x1e/0x30</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8112f5e5&gt;] ? put_page+0x25/0x40</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81154dca&gt;] ? free_page_and_swap_cache+0x2a/0x60</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8114452a&gt;] ? handle_mm_fault+0x23a/0x310</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff810474e9&gt;] ? __do_page_fault+0x139/0x480</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81277681&gt;] ? cpumask_any_but+0x31/0x50</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff811494bf&gt;] ? unmap_region+0xff/0x130</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff8114765e&gt;] ? remove_vma+0x6e/0x90</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81513bfe&gt;] ? do_page_fault+0x3e/0xa0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [&lt;ffffffff81510fb5&gt;] ? page_fault+0x25/0x30</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Task in /test killed as a result of limit of /test</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: memory: usage 8kB, limit 8kB, failcnt 9</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: memory+swap: usage 8kB, limit 9007199254740992kB, failcnt 0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Mem-Info:</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Node 0 DMA per-cpu:</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: CPU    0: hi:    0, btch:   1 usd:   0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Node 0 DMA32 per-cpu:</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: CPU    0: hi:  186, btch:  31 usd:  54</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: active_anon:4452 inactive_anon:164 isolated_anon:0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: active_file:48233 inactive_file:40667 isolated_file:0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: unevictable:0 dirty:0 writeback:0 unstable:0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: free:38633 slab_reclaimable:9809 slab_unreclaimable:4725</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: mapped:2176 shmem:194 pagetables:724 bounce:0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Node 0 DMA free:15756kB min:760kB low:948kB high:1140kB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB isolated(file):0kB present:15368kB mlocked:0kB dirty:0kB writeback:0kB mapped:0kB shmem:0kB slab_reclaimable:0kB slab_unreclaimable:0kB kernel_stack:0kB pagetables:0kB unstable:0kB bounce:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: lowmem_reserve[]: 0 588 588 588</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Node 0 DMA32 free:138776kB min:29912kB low:37388kB high:44868kB active_anon:17808kB inactive_anon:656kB active_file:192932kB inactive_file:162668kB unevictable:0kB isolated(anon):0kB isolated(file):0kB present:602904kB mlocked:0kB dirty:0kB writeback:0kB mapped:8704kB shmem:776kB slab_reclaimable:39236kB slab_unreclaimable:18900kB kernel_stack:704kB pagetables:2896kB unstable:0kB bounce:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: lowmem_reserve[]: 0 0 0 0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Node 0 DMA: 3*4kB 2*8kB 1*16kB 1*32kB 1*64kB 0*128kB 1*256kB 0*512kB 1*1024kB 1*2048kB 3*4096kB = 15756kB</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Node 0 DMA32: 2*4kB 4*8kB 349*16kB 283*32kB 289*64kB 99*128kB 63*256kB 12*512kB 5*1024kB 6*2048kB 13*4096kB = 138776kB</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: 89093 total pagecache pages</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: 0 pages in swap cache</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Swap cache stats: add 0, delete 0, find 0/0</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Free swap  = 1254392kB</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Total swap = 1254392kB</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: 156911 pages RAM</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: 6002 pages reserved</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: 75107 pages shared</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: 41918 pages non-shared</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [ pid ]   uid  tgid total_vm      rss cpu oom_adj oom_score_adj name</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: [14095]     0 14095     3619      677   0       0             0 mruby</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Memory cgroup out of memory: Kill process 14095 (mruby) score 1000 or sacrifice child</div><div class="line">May 17 14:22:02 vagrant-centos64 kernel: Killed process 14095, UID 0, (mruby) total-vm:14476kB, anon-rss:1408kB, file-rss:1300kB</div></pre></td></tr></table></figure>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/cgroup/">cgroup</a> <a class="tag tag--primary tag--small t-link" href="/tags/mruby/">mruby</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/20/cgroup-eventfd/"  data-tooltip="cgroup による oom-killer の状態を eventfd 経由で受け取る">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/10/hexo-404-file-not-found/" data-tooltip="hexo で 404 File not found">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F17%2Fmruby-cgroup%2F&title=mruby-cgroup に memory サブシテムを追加してみた">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=mruby-cgroup%20%E3%81%AB%20memory%20%E3%82%B5%E3%83%96%E3%82%B7%E3%83%86%E3%83%A0%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F17%2Fmruby-cgroup%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/20/cgroup-eventfd/"  data-tooltip="cgroup による oom-killer の状態を eventfd 経由で受け取る">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/10/hexo-404-file-not-found/" data-tooltip="hexo で 404 File not found">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F17%2Fmruby-cgroup%2F&title=mruby-cgroup に memory サブシテムを追加してみた">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=mruby-cgroup%20%E3%81%AB%20memory%20%E3%82%B5%E3%83%96%E3%82%B7%E3%83%86%E3%83%A0%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F17%2Fmruby-cgroup%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2015/05/17/mruby-cgroup/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://harasou.jp/2015/05/17/mruby-cgroup/';
+                 
+                    this.page.identifier = '2015/05/17/mruby-cgroup/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>

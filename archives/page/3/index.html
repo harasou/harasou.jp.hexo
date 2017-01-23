@@ -202,7 +202,44 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/20/2015-05-20-cgroup-eventfd/">
+                        <a class="link-unstyled" href="/2015/05/25/CentOS-lxc-rpm/">
+                            CentOS 用に LXC の rpm を作成する
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time itemprop="datePublished" datetime="2015-05-25T02:40:46+09:00">
+	
+		    2015/05/25
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-excerpt" itemprop="articleBody">
+                    <p>Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。</p>
+                    
+                        <a href="/2015/05/25/CentOS-lxc-rpm/" class="postShorten-excerpt_link link">
+                            続きを読む
+                        </a>
+                        
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-right" itemscope itemType="http://schema.org/BlogPosting">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title" itemprop="headline">
+                    
+                        <a class="link-unstyled" href="/2015/05/20/cgroup-eventfd/">
                             cgroup による oom-killer の状態を eventfd 経由で受け取る
                         </a>
                     
@@ -222,7 +259,7 @@
                     <h2 id="cgroup-の通知API"><a href="#cgroup-の通知API" class="headerlink" title="cgroup の通知API"></a>cgroup の通知API</h2><p>cgroup の memory サブシテムを利用すると、登録したプロセスがメモリを使いすぎた際、oom-killer が動作し、対象プロセスを kill することができる（デフォルト動作)。</p>
 <p>kill されたことは syslog など見ればわかるが、cgroup には<code>通知API</code>といった機能があり、アプリ側で oom-killer が動作した際のイベントを受け取ることが可能なので、この機能を試してみる。</p>
                     
-                        <a href="/2015/05/20/2015-05-20-cgroup-eventfd/" class="postShorten-excerpt_link link">
+                        <a href="/2015/05/20/cgroup-eventfd/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -240,7 +277,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/17/2015-05-17-mruby-cgroup/">
+                        <a class="link-unstyled" href="/2015/05/17/mruby-cgroup/">
                             mruby-cgroup に memory サブシテムを追加してみた
                         </a>
                     
@@ -267,7 +304,7 @@
 <p>他に、cgroup のサブシステムには以下のようなものがある(CentOS 6.4)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># cat /proc/cgroups</div><div class="line">#subsys_name    hierarchy   num_cgroups enabled</div><div class="line">cpuset  10  1   1</div><div class="line">ns  0   1   1</div><div class="line">cpu 11  1   1</div><div class="line">cpuacct 12  1   1</div><div class="line">memory  13  1   1</div><div class="line">devices 14  1   1</div><div class="line">freezer 15  1   1</div><div class="line">net_cls 16  1   1</div><div class="line">blkio   17  1   1</div><div class="line">perf_event  0   1   1</div><div class="line">net_prio    0   1   1</div></pre></td></tr></table></figure></p>
 <p>この中から、簡単に使えそうな memory サブシステムを追加してみた。</p>
                     
-                        <a href="/2015/05/17/2015-05-17-mruby-cgroup/" class="postShorten-excerpt_link link">
+                        <a href="/2015/05/17/mruby-cgroup/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -285,7 +322,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/10/2015-05-10-hexo-404-file-not-found/">
+                        <a class="link-unstyled" href="/2015/05/10/hexo-404-file-not-found/">
                             hexo で 404 File not found
                         </a>
                     
@@ -305,7 +342,7 @@
                     <p>blog のトップページなどから<code>日本語タイトル</code>のリンクをたどると 404 になることがあった。</p>
 <p><img src="404.png" alt=""></p>
                     
-                        <a href="/2015/05/10/2015-05-10-hexo-404-file-not-found/" class="postShorten-excerpt_link link">
+                        <a href="/2015/05/10/hexo-404-file-not-found/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -323,7 +360,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/06/2015-05-06-mruby-cgroups-build-on-boot2docker/">
+                        <a class="link-unstyled" href="/2015/05/06/mruby-cgroups-build-on-boot2docker/">
                             mruby-cgroup を boot2docker で build する
                         </a>
                     
@@ -344,7 +381,7 @@
 <p><a href="https://github.com/matsumoto-r/mruby-cgroup">https://github.com/matsumoto-r/mruby-cgroup</a></p>
 <p>cgroup は linux カーネルの機能で、タスク（プロセス）のリソース（CPU, メモリ, IO, etc）を制御するための仕組み。 これを利用すると「特定のプロセスが CPU100% 使うような処理を行っても 50% しか利用させない」といった制御ができるようになる。</p>
                     
-                        <a href="/2015/05/06/2015-05-06-mruby-cgroups-build-on-boot2docker/" class="postShorten-excerpt_link link">
+                        <a href="/2015/05/06/mruby-cgroups-build-on-boot2docker/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -362,7 +399,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/05/2015-05-05-hexo-disqus/">
+                        <a class="link-unstyled" href="/2015/05/05/hexo-disqus/">
                             hexo に DISQUS を追加
                         </a>
                     
@@ -381,7 +418,7 @@
                 <div class="postShorten-excerpt" itemprop="articleBody">
                     <p>DISQUS はコメント機能を提供するサービスで、hexo では簡単に導入できる。</p>
                     
-                        <a href="/2015/05/05/2015-05-05-hexo-disqus/" class="postShorten-excerpt_link link">
+                        <a href="/2015/05/05/hexo-disqus/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -390,9 +427,9 @@
             
         </div>
         
-            <a href="/2015/05/05/2015-05-05-hexo-disqus/">
+            <a href="/2015/05/05/hexo-disqus/">
                 <div class="postShorten-thumbnailimg">
-                    <img alt="" itemprop="image" src="/2015/05/05/2015-05-05-hexo-disqus/disqus.png"/>
+                    <img alt="" itemprop="image" src="/2015/05/05/hexo-disqus/disqus.png"/>
                 </div>
             </a>
             
@@ -406,7 +443,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/03/2015-05-03-mruby-memo/">
+                        <a class="link-unstyled" href="/2015/05/03/mruby-memo/">
                             mruby についてのメモ
                         </a>
                     
@@ -465,7 +502,7 @@
                     
                     
                         <p>
-                            <a href="/2015/05/03/2015-05-03-mruby-memo/#post-footer" class="postShorten-excerpt_link link">
+                            <a href="/2015/05/03/mruby-memo/#post-footer" class="postShorten-excerpt_link link">
                                 コメント・シェア
                             </a>
                         </p>
@@ -483,7 +520,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/05/02/2015-05-02-mruby-faststep/">
+                        <a class="link-unstyled" href="/2015/05/02/mruby-faststep/">
                             mruby をさわってみた
                         </a>
                     
@@ -502,7 +539,7 @@
                 <div class="postShorten-excerpt" itemprop="articleBody">
                     <h2 id="mruby-とは"><a href="#mruby-とは" class="headerlink" title="mruby とは"></a>mruby とは</h2><p>組込み向けに軽量化されたRuby。mruby 単体で実行するというよりは、組み込み機器や Cなどで書いたアプリのなかに、まるごと<code>mrubyアプリケーション+実行環境</code>を組み込んで利用する感じ。<br><img src="mruby.gif" alt="mruby"></p>
                     
-                        <a href="/2015/05/02/2015-05-02-mruby-faststep/" class="postShorten-excerpt_link link">
+                        <a href="/2015/05/02/mruby-faststep/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -520,7 +557,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/04/28/2015-04-28-hexo-setup/">
+                        <a class="link-unstyled" href="/2015/04/28/hexo-setup/">
                             hexo セットアップメモ
                         </a>
                     
@@ -540,7 +577,7 @@
                     <h2 id="hexo-とは"><a href="#hexo-とは" class="headerlink" title="hexo とは"></a>hexo とは</h2><p><a href="https://hexo.io">hexo</a> は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。</p>
 <p><img src="hexo_io.png" alt="https://hexo.io/"></p>
                     
-                        <a href="/2015/04/28/2015-04-28-hexo-setup/" class="postShorten-excerpt_link link">
+                        <a href="/2015/04/28/hexo-setup/" class="postShorten-excerpt_link link">
                             続きを読む
                         </a>
                         
@@ -558,7 +595,7 @@
             <div class="postShorten-header">
                 <h1 class="postShorten-title" itemprop="headline">
                     
-                        <a class="link-unstyled" href="/2015/04/27/2015-04-27-hello-blog/">
+                        <a class="link-unstyled" href="/2015/04/27/hello-blog/">
                             blog はじめました
                         </a>
                     
@@ -583,7 +620,7 @@
                     
                     
                         <p>
-                            <a href="/2015/04/27/2015-04-27-hello-blog/#post-footer" class="postShorten-excerpt_link link">
+                            <a href="/2015/04/27/hello-blog/#post-footer" class="postShorten-excerpt_link link">
                                 コメント・シェア
                             </a>
                         </p>

@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="harasou.jp">
+    <title>cgroup による oom-killer の状態を eventfd 経由で受け取る - harasou.jp</title>
+    <meta name="author" content="harasou">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <meta name="description" content="cgroup の通知APIcgroup の memory サブシテムを利用すると、登録したプロセスがメモリを使いすぎた際、oom-killer が動作し、対象プロセスを kill することができる（デフォルト動作)。
+kill されたことは syslog など見ればわかるが、cgroup には通知APIといった機能があり、アプリ側で oom-killer が動作した際のイベントを受け取ることが可能">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="cgroup による oom-killer の状態を eventfd 経由で受け取る">
+<meta property="og:url" content="https://harasou.jp/2015/05/20/cgroup-eventfd/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="cgroup の通知APIcgroup の memory サブシテムを利用すると、登録したプロセスがメモリを使いすぎた際、oom-killer が動作し、対象プロセスを kill することができる（デフォルト動作)。
+kill されたことは syslog など見ればわかるが、cgroup には通知APIといった機能があり、アプリ側で oom-killer が動作した際のイベントを受け取ることが可能">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cgroup による oom-killer の状態を eventfd 経由で受け取る">
+<meta name="twitter:description" content="cgroup の通知APIcgroup の memory サブシテムを利用すると、登録したプロセスがメモリを使いすぎた際、oom-killer が動作し、対象プロセスを kill することができる（デフォルト動作)。
+kill されたことは syslog など見ればわかるが、cgroup には通知APIといった機能があり、アプリ側で oom-killer が動作した際のイベントを受け取ることが可能">
+<meta name="twitter:creator" content="@harasou5">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
+    <link rel="stylesheet" href="/assets/style.css">
+    <!--STYLES END-->
+    
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-62541096-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+    
+
+<header id="header" data-behavior="3">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <h1 class="header-title">
+        <a class="header-title-link" href="/ ">harasou.jp</a>
+    </h1>
+    
+        
+            <a  class="header-right-picture "
+                href="#about">
+        
+        
+            <img class="header-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=90"/>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+    
+
+<nav id="sidebar" data-behavior="3">
+    
+        <div class="sidebar-profile">
+            <a href="/#about">
+                    <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+            </a>
+            <span class="sidebar-profile-name">harasou</span>
+        </div>
+    
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/ "
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+                    <span class="sidebar-button-desc">ホーム</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-categories"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+                    <span class="sidebar-button-desc">カテゴリー</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-tags"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+                    <span class="sidebar-button-desc">タグ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/all-archives"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+                    <span class="sidebar-button-desc">アーカイブ</span>
+                </a>
+        </li>
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="#about"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+                    <span class="sidebar-button-desc">プロフィール</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link " href="https://github.com/harasou" target="_blank">
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+                    <span class="sidebar-button-desc">GitHub</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+        <ul class="sidebar-buttons">
+        
+            <li class="sidebar-button">
+                
+                    <a  class="sidebar-button-link "
+                         href="/atom.xml"
+                        
+                    >
+                
+                    <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+                    <span class="sidebar-button-desc">RSS</span>
+                </a>
+        </li>
+        
+    </ul>
+    
+</nav>
+
+            
+            <div id="main" data-behavior="3"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post" itemscope itemType="http://schema.org/BlogPosting">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title" itemprop="headline">
+            cgroup による oom-killer の状態を eventfd 経由で受け取る
+        </h1>
+    
+    <div class="post-meta">
+    <time itemprop="datePublished" datetime="2015-05-20T21:30:05+09:00">
+	
+		    2015/05/20
+    	
+    </time>
+    
+</div>
+
+</div>
+    
+    <div class="post-content markdown" itemprop="articleBody">
+        <div class="main-content-wrap">
+            <h2 id="cgroup-の通知API"><a href="#cgroup-の通知API" class="headerlink" title="cgroup の通知API"></a>cgroup の通知API</h2><p>cgroup の memory サブシテムを利用すると、登録したプロセスがメモリを使いすぎた際、oom-killer が動作し、対象プロセスを kill することができる（デフォルト動作)。</p>
+<p>kill されたことは syslog など見ればわかるが、cgroup には<code>通知API</code>といった機能があり、アプリ側で oom-killer が動作した際のイベントを受け取ることが可能なので、この機能を試してみる。</p>
+<a id="more"></a>
+<h2 id="通知を受け取るための流れ"><a href="#通知を受け取るための流れ" class="headerlink" title="通知を受け取るための流れ"></a>通知を受け取るための流れ</h2><ol>
+<li>eventfd を生成する</li>
+<li><code>生成した eventfd</code>と<code>memory.oom_control</code>のファイルディスクリプタを、<code>cgroup.event_control</code> に書き込む</li>
+<li>イベントを受け取るアプリ側で、生成した eventfd を<code>read()</code>する</li>
+<li>cgroup に登録したプロセスが制限以上のメモリを使用すると oom-killer が動作し、eventfd に状態が書き込まれる</li>
+<li>アプリ側では、<code>read()</code>していた処理が戻ってくるので、その値から何かしらの処理を行う</li>
+</ol>
+<h3 id="サンプル"><a href="#サンプル" class="headerlink" title="サンプル"></a>サンプル</h3><p>source にすると以下のような感じ。</p>
+<figure class="highlight c"><figcaption><span>oom-notify.c</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/eventfd.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">die</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *msg)</span> </span>&#123;</div><div class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"error: %s: %s(%d)\n"</span>, msg, strerror(errno), errno);</div><div class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">usage</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</div><div class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"usage: oom_eventfd_test &lt;cgroup.event_control&gt; &lt;memory.oom_control&gt;\n"</span>);</div><div class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> BUFSIZE 256</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">char</span> buf[BUFSIZE];</div><div class="line">    <span class="keyword">int</span> efd, cfd, ofd, rb, wb;</div><div class="line">    <span class="keyword">uint64_t</span> u;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (argc != <span class="number">3</span>)</div><div class="line">        usage();</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((efd = eventfd(<span class="number">0</span>, <span class="number">0</span>)) == <span class="number">-1</span>)</div><div class="line">        die(<span class="string">"eventfd"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((cfd = open(argv[<span class="number">1</span>], O_WRONLY)) == <span class="number">-1</span>)</div><div class="line">        die(<span class="string">"cgroup.event_control"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((ofd = open(argv[<span class="number">2</span>], O_RDONLY)) == <span class="number">-1</span>)</div><div class="line">        die(<span class="string">"memory.oom_control"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ((wb = <span class="built_in">snprintf</span>(buf, BUFSIZE, <span class="string">"%d %d"</span>, efd, ofd)) &gt;= BUFSIZE)</div><div class="line">        die(<span class="string">"buffer too small"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (write(cfd, buf, wb) == <span class="number">-1</span>)</div><div class="line">        die(<span class="string">"write cgroup.event_control"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (close(cfd) == <span class="number">-1</span>)</div><div class="line">        die(<span class="string">"close cgroup.event_control"</span>);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (;;) &#123;</div><div class="line">        <span class="keyword">if</span> (read(efd, &amp;u, <span class="keyword">sizeof</span>(<span class="keyword">uint64_t</span>)) != <span class="keyword">sizeof</span>(<span class="keyword">uint64_t</span>))</div><div class="line">            die(<span class="string">"read eventfd"</span>);</div><div class="line"></div><div class="line">        <span class="built_in">printf</span>(<span class="string">"mem_cgroup oom event received \n"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第１引数で渡された <code>memory.oom_control</code> のパスからファイルディスクリプタを取得し、作成した eventfd  のファイルディスクリプタと合わせた文字列を、第２引数のファイル<code>cgroup.event_control</code>に書き込んでいる。</p>
+<h3 id="evnetfd-とは"><a href="#evnetfd-とは" class="headerlink" title="evnetfd とは"></a>evnetfd とは</h3><p>eventfd は、kernel 2.6.22 から追加されたファイルディスクリプタの一種で、上記のように<code>eventfd(2)</code>で作成する。</p>
+<p><a href="http://linuxjm.osdn.jp/html/LDP_man-pages/man2/eventfd.2.html" target="_blank" rel="external">http://linuxjm.osdn.jp/html/LDP_man-pages/man2/eventfd.2.html</a></p>
+<p>アプリケーションは、作成したファイルディスクリプタ経由で、通知したり、通知を待ったりすることができるが、やりとりできる情報は 8バイトの整数値のみとなっている。</p>
+<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>動作API による oom-killer の通知を試してみる。</p>
+<h3 id="準備"><a href="#準備" class="headerlink" title="準備"></a>準備</h3><ol>
+<li><p>test cgroups を作成し、自身の pid を登録（ここから生成する子プロは全て同じ制限を受ける）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /sys/fs/cgroup/memory/test</div><div class="line">echo $$ &gt; /sys/fs/cgroup/memory/test/tasks</div></pre></td></tr></table></figure>
+</li>
+<li><p>イベント受信用のプログラムを別セッションから起動</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">make oom-notify</div><div class="line">./oom-notify /sys/fs/cgroup/memory/test/cgroup.event_control /sys/fs/cgroup/memory/test/memory.oom_control</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="パターン１「memory-oom-control-0」"><a href="#パターン１「memory-oom-control-0」" class="headerlink" title="パターン１「memory.oom_control = 0」"></a>パターン１「memory.oom_control = 0」</h3><p>oom-killer を有効化した状態でテスト</p>
+<ol>
+<li><p>test cgroup で 10M byte の制限を実施</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo 10M &gt; /sys/fs/cgroup/memory/test/memory.limit_in_bytes</div><div class="line">echo 10M &gt; /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes</div></pre></td></tr></table></figure>
+</li>
+<li><p>「準備 1」のセッションから、1M 近くメモリを消費するコマンドを実行</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# dd if=/dev/zero bs=1024 count=1024 | read a</div><div class="line">1024+0 records in</div><div class="line">1024+0 records out</div><div class="line">1048576 bytes (1.0 MB) copied, 0.23278 s, 4.5 MB/s</div></pre></td></tr></table></figure>
+<p> 10M 許可されているので、正常に完了する。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# ./oom-notify /sys/fs/cgroup/memory/test/cgroup.event_control /sys/fs/cgroup/memory/test/memory.oom_control</div></pre></td></tr></table></figure>
+<p> イベントは何も受け取っていない</p>
+</li>
+<li><p>test cgroup の制限を 1M byte に変更し、同様のコマンドを実行    </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">echo 1M &gt; /sys/fs/cgroup/memory/test/memory.limit_in_bytes</div><div class="line">echo 1M &gt; /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# dd if=/dev/zero bs=1024 count=1024 | read a</div><div class="line">Killed</div></pre></td></tr></table></figure>
+<p> oom-killer が動作し、kill される。kill されたタイミングで、イベントを受信。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# ./oom-notify /sys/fs/cgroup/memory/test/cgroup.event_control /sys/fs/cgroup/memory/test/memory.oom_control</div><div class="line">mem_cgroup oom event received</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="パターン２「memory-oom-control-1」"><a href="#パターン２「memory-oom-control-1」" class="headerlink" title="パターン２「memory.oom_control = 1」"></a>パターン２「memory.oom_control = 1」</h3><p>oom-killer を無効化した状態でテスト。無効化した状態では、タスクが制限値以上のメモリを使用すると停止させられる。メモリを取得できる状態になると（メモリが空くか、制限値が大きくすると）処理が再開する。</p>
+<ol>
+<li><p>oom-killer を無効化</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 1 &gt; /sys/fs/cgroup/memory/test/memory.oom_control</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# cat /sys/fs/cgroup/memory/test/memory.oom_control</div><div class="line">oom_kill_disable 1</div><div class="line">under_oom 0</div></pre></td></tr></table></figure>
+<p> <code>oom_kill_disable</code> が 1 になる</p>
+</li>
+<li><p>「準備 1」のセッションから、1M 近くメモリを消費するコマンドを実行</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# dd if=/dev/zero bs=1024 count=1024 | read a</div></pre></td></tr></table></figure>
+<p> 実行すると処理は完了せず停止させられる。停止したタイミングで、イベントを受信。この時<code>memory.oom_control</code> の under_oom は 1 になる。なお、ps で確認しても、プロセスの状態は T ではない。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# ./oom-notify /sys/fs/cgroup/memory/test/cgroup.event_control /sys/fs/cgroup/memory/test/memory.oom_control</div><div class="line"> :</div><div class="line">mem_cgroup oom event received</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# cat /sys/fs/cgroup/memory/test/memory.oom_control</div><div class="line">oom_kill_disable 1</div><div class="line">under_oom 1</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# ps uf</div><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line"> :</div><div class="line">root      3490  0.0  0.5 188764  2696 pts/0    S    03:42   0:00 sudo -s</div><div class="line">root      3491  0.0  0.4 115512  2100 pts/0    S    03:42   0:00  \_ /bin/bash</div><div class="line">root     12988  0.0  0.0   4340   312 pts/0    D+   08:18   0:00      \_ dd if=/dev/zero bs=1024 count=1024</div><div class="line">root     12989  0.5  0.2 116084  1296 pts/0    D+   08:18   0:00      \_ /bin/bash</div></pre></td></tr></table></figure>
+</li>
+<li><p>test cgroup の制限値を大きくする（1M -&gt; 10M）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">echo 10M &gt; /sys/fs/cgroup/memory/test/memory.memsw.limit_in_bytes</div></pre></td></tr></table></figure>
+<p> 処理が再開され、正常に完了する。<code>memory.oom_control</code>の under_oom は 0 に戻る。イベントの受信はなし。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# dd if=/dev/zero bs=1024 count=1024 | read a</div><div class="line">1024+0 records in</div><div class="line">1024+0 records out</div><div class="line">1048576 bytes (1.0 MB) copied, 82.5348 s, 12.7 kB/s</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost DEV]# cat /sys/fs/cgroup/memory/test/memory.oom_control</div><div class="line">oom_kill_disable 1</div><div class="line">under_oom 0</div></pre></td></tr></table></figure>
+</li>
+</ol>
+
+            
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">タグ</span><br/>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/cgroup/">cgroup</a>
+
+            </div>
+        
+        <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/25/CentOS-lxc-rpm/"  data-tooltip="CentOS 用に LXC の rpm を作成する">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/17/mruby-cgroup/" data-tooltip="mruby-cgroup に memory サブシテムを追加してみた">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F20%2Fcgroup-eventfd%2F&title=cgroup による oom-killer の状態を eventfd 経由で受け取る">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=cgroup%20%E3%81%AB%E3%82%88%E3%82%8B%20oom-killer%20%E3%81%AE%E7%8A%B6%E6%85%8B%E3%82%92%20eventfd%20%E7%B5%8C%E7%94%B1%E3%81%A7%E5%8F%97%E3%81%91%E5%8F%96%E3%82%8B&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F20%2Fcgroup-eventfd%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2017 harasou. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="3">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/25/CentOS-lxc-rpm/"  data-tooltip="CentOS 用に LXC の rpm を作成する">
+                
+                    <i class="fa fa-angle-left"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">前</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/2015/05/17/mruby-cgroup/" data-tooltip="mruby-cgroup に memory サブシテムを追加してみた">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">次</span>
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions"  href="#btn-open-shareoptions">
+                <i class="fa fa-share-alt"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs pocket-btn-icon">
+            <a class="post-action-btn btn btn--default pocket-btn-icon-link" target="new" href="http://getpocket.com/edit?url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F20%2Fcgroup-eventfd%2F&title=cgroup による oom-killer の状態を eventfd 経由で受け取る">
+                 <i class="icon-pocket"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs hatebu-btn-icon">
+            <a class="post-action-btn btn btn--default hatebu-btn-icon-link" target="new" href="http://b.hatena.ne.jp/add?mode=confirm&url=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                 <i class="icon-hatebu hatena-bookmark-button"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-google-plus"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-facebook-official"></i>
+            </a>
+        </li>
+        <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/share?text=cgroup%20%E3%81%AB%E3%82%88%E3%82%8B%20oom-killer%20%E3%81%AE%E7%8A%B6%E6%85%8B%E3%82%92%20eventfd%20%E7%B5%8C%E7%94%B1%E3%81%A7%E5%8F%97%E3%81%91%E5%8F%96%E3%82%8B&via=harasou5&url=https%3A%2F%2Fharasou.jp%2F2015%2F05%2F20%2Fcgroup-eventfd%2F">
+                <i class="fa fa-twitter"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="3">
+    <ul class="share-options">
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-google-plus"></i><span class="">Google Plusで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-facebook-official"></i><span>Facebookで共有</span>
+            </a>
+        </li>
+        <li class="share-option">
+            <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://harasou.jp/2015/05/20/cgroup-eventfd/">
+                <i class="fa fa-twitter"></i><span>Twitterで共有</span>
+            </a>
+        </li>
+    </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+            
+        </div>
+        
+
+
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-remove"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=110"/>
+        
+            <h4 id="about-card-name">harasou</h4>
+        
+            <h5 id="about-card-bio"><p>めくじらを立てない</p>
+</h5>
+        
+        
+            <h5 id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Infra Engineer</p>
+
+            </h5>
+        
+        
+            <h5 id="about-card-location">
+                <i class="fa fa-map-marker"></i>
+                <br/>
+                Fukuoka Japan
+            </h5>
+        
+    </div>
+</div>
+
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+    </body>
+    <!--SCRIPTS-->
+<script src="/assets/js/script-i4qo6jx6jji9fg0dftpya6ivemizsbow4fhow76d8dwpm7m1wbvi378ssumx.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        <script>
+             var disqus_config = function () {
+                 this.page.url = 'https://harasou.jp/2015/05/20/cgroup-eventfd/';
+                 
+                    this.page.identifier = '2015/05/20/cgroup-eventfd/';
+                                  
+             };
+            (function() {
+                var d = document, s = d.createElement('script');
+                var disqus_shortname = 'harasougithubio';
+                s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })();
+        </script>
+    
+
+
+
+</html>
