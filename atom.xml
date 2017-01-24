@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://harasou.jp/"/>
-  <updated>2017-01-23T12:16:37.000Z</updated>
+  <updated>2017-01-24T14:36:22.000Z</updated>
   <id>https://harasou.jp/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://harasou.jp/2017/01/23/linux-signal/"/>
     <id>https://harasou.jp/2017/01/23/linux-signal/</id>
     <published>2017-01-22T17:24:22.000Z</published>
-    <updated>2017-01-23T12:16:37.000Z</updated>
+    <updated>2017-01-24T14:36:22.000Z</updated>
     
     <content type="html"><![CDATA[<p>TLPI (The Linux Programming Interface) 再々。</p>
 <p>TLPI の輪読の際に @matsumotory よりシグナルセットあたりをまとめるようにと指令が出たので、拙遅な感じでまとめました。</p>
@@ -72,7 +72,7 @@
 </tr>
 <tr>
 <td style="text-align:left">raise()</td>
-<td style="text-align:left">自身にグナルを送信</td>
+<td style="text-align:left">自身にシグナルを送信</td>
 </tr>
 <tr>
 <td style="text-align:left">killpg()</td>
@@ -89,7 +89,7 @@
 </li>
 <li>端末へキー入力<ul>
 <li><code>SIGINT</code> : Ctrl+C が入力された</li>
-<li><code>SIGQUIt</code> : Ctrl+\ が入力された</li>
+<li><code>SIGQUIT</code> : Ctrl+\ が入力された</li>
 </ul>
 </li>
 <li>ソフトウェアイベント<ul>
@@ -122,11 +122,11 @@
 </ul>
 <h3 id="シグナルセット"><a href="#シグナルセット" class="headerlink" title="シグナルセット"></a>シグナルセット</h3><p>シグナルセットは、複数のシグナルをまとめて表現するもの。どのシグナルが選択されているかを表すだけなので、Linux では以下のような整数型で実装されており、各ビットの位置がシグナル番号に対応する。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[/usr/include/asm/signal.h]</div><div class="line"></div><div class="line">typedef unsigned long sigset_t;</div></pre></td></tr></table></figure>
-<p>init(PID:1) を例にすると、</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># grep ^SigIgn /proc/1/status</div><div class="line">SigIgn: 0000000000001000</div></pre></td></tr></table></figure>
-<p>プロセスがどのシグナルをブロックしているかは /proc/PID/status を見るとわかる(上記は 64bit 環境)。SigIgn の値がブロックしているシグナルを表していて、これは16進表記になっているので、2進表記にすると以下のようになる。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># ruby -e &apos;printf(&quot;%064b\n&quot;,0x0000000000001000)&apos;</div><div class="line">0000000000000000000000000000000000000000000000000001000000000000</div></pre></td></tr></table></figure>
-<p>つまり、13bit 目にビットが立っているので、上に記載した「<a href="#シグナルの種類">シグナルの種類</a>」を見ると、シグナル番号 13 つまり、SIGPIPE のみブロックしていることがわかる。</p>
+<p>プロセスがどのシグナルをブロックしているかは /proc/PID/status を見るとわかる(下記は 64bit 環境)。 bash を例にすると、<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># grep ^SigBlk /proc/$$/status</div><div class="line">SigBlk: 0000000000010000</div></pre></td></tr></table></figure></p>
+<p>SigBlk の値がブロックしているシグナルを表していて、これは16進表記になっているので、2進表記にすると以下のようになる。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># ruby -e &apos;printf(&quot;%064b\n&quot;,0x0000000000010000)&apos;</div><div class="line">0000000000000000000000000000000000000000000000010000000000000000</div></pre></td></tr></table></figure>
+<p>つまり、17bit 目にビットが立っているので、上に記載した「<a href="#シグナルの種類">シグナルの種類</a>」を見ると、シグナル番号 17 つまり、SIGCHLD のみブロックしていることがわかる。<br><div class="alert warnning"><p>記事公開時、SigBlk を紹介するところを誤って SigIgn の例を記載していたため、修正しました。</p>
+</div></p>
 <p>ただ、Linux の実装がビットマスク使用しているだけなので、シグナルマスクを操作する場合は、必ず以下の関数を用いる必要がある。</p>
 <table>
 <thead>
@@ -141,7 +141,7 @@
 <td style="text-align:left">すべてシグナルが選択されていない状態に初期化する</td>
 </tr>
 <tr>
-<td style="text-align:left">sigemptyset</td>
+<td style="text-align:left">sigfillset</td>
 <td style="text-align:left">すべてシグナルが選択されている状態に初期化する</td>
 </tr>
 <tr>
@@ -202,7 +202,9 @@
     </summary>
     
     
-      <category term="Linux" scheme="https://harasou.jp/tags/Linux/"/>
+      <category term="linux" scheme="https://harasou.jp/tags/linux/"/>
+    
+      <category term="signal" scheme="https://harasou.jp/tags/signal/"/>
     
   </entry>
   
