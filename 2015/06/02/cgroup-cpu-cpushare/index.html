@@ -13,26 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="cgroup の cpu.shares を検証した">
-<meta property="og:url" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
-<meta property="og:image" content="https://harasou.jp/cgroup.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test1.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test2.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test3.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test4.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test5.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test6.png">
-<meta property="og:image" content="https://harasou.jp/cgroup_test7.png">
-<meta property="og:updated_time" content="2016-11-12T14:32:29.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cgroup の cpu.shares を検証した">
-<meta name="twitter:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
-<meta name="twitter:image" content="https://harasou.jp/cgroup.png">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -43,6 +23,26 @@
     
     
     
+    <meta name="description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="cgroup の cpu.shares を検証した">
+<meta property="og:url" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test1.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test2.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test3.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test4.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test5.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test6.png">
+<meta property="og:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup_test7.png">
+<meta property="og:updated_time" content="2016-11-12T14:32:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cgroup の cpu.shares を検証した">
+<meta name="twitter:description" content="cgroup には複数のサブシステム（controller）があるが、その中の cpu.shares について検証してみた。">
+<meta name="twitter:image" content="https://harasou.jp/2015/06/02/cgroup-cpu-cpushare/cgroup.png">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -228,16 +228,16 @@
         <div class="main-content-wrap">
             <p>cgroup には複数のサブシステム（controller）があるが、その中の <code>cpu.shares</code> について検証してみた。</p>
 <a id="more"></a>
-<h2 id="cpu-shares-とは"><a href="#cpu-shares-とは" class="headerlink" title="cpu.shares とは"></a>cpu.shares とは</h2><p>cpu.shares を設定すると、タスクが使用できる CPU 時間の<code>割合</code>を変更することができる。</p>
+<h2 id="cpu-shares-とは"><a href="/2015/06/02/cgroup-cpu-cpushare/#cpu-shares-とは" class="headerlink" title="cpu.shares とは"></a>cpu.shares とは</h2><p>cpu.shares を設定すると、タスクが使用できる CPU 時間の<code>割合</code>を変更することができる。</p>
 <p>具体的に言うと、<code>A</code> <code>B</code>２つのグループを作り、cpu.shares をそれぞれ<code>1024</code> <code>2048</code>とした場合、B のグループにいるプロセスが、A のグループにいるプロセスより 2倍 CPU を使えるようになる。以下、実行例。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mkdir /cgroup/&#123;A,B&#125;</span></div><div class="line"><span class="comment"># echo 1024 &gt; /cgroup/A/cpu.shares</span></div><div class="line"><span class="comment"># echo 2048 &gt; /cgroup/B/cpu.shares</span></div><div class="line"><span class="comment"># sh -c "while : ; do : ; done" &amp; echo $! &gt; /cgroup/A/tasks</span></div><div class="line">[1] 2835</div><div class="line"><span class="comment"># sh -c "while : ; do : ; done" &amp; echo $! &gt; /cgroup/B/tasks</span></div><div class="line">[2] 2836</div><div class="line"><span class="comment"># ps uf</span></div><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line">root      2816  0.0  0.5 175140  2656 pts/2    S    21:44   0:00 sudo <span class="_">-s</span></div><div class="line">root      2817  0.0  0.3 108300  1908 pts/2    S+   21:44   0:00  \_ /bin/bash</div><div class="line">root      2835 34.9  0.2 106056  1268 pts/2    R    21:47   0:56      \_ sh -c <span class="keyword">while</span> : ; <span class="keyword">do</span> : ; <span class="keyword">done</span></div><div class="line">root      2836 66.1  0.2 106056  1268 pts/2    R    21:47   1:43      \_ sh -c <span class="keyword">while</span> : ; <span class="keyword">do</span> : ; <span class="keyword">done</span></div></pre></td></tr></table></figure>
 <p>グループ B に登録した PID:2836 のプロセスが、グループ A に登録した PID:2835 の 2倍 CPU を使用している。</p>
-<h2 id="今回の疑問点"><a href="#今回の疑問点" class="headerlink" title="今回の疑問点"></a>今回の疑問点</h2><p>これだけなら、わかりやすいが、以下の点が不明だったので実際に検証してみた。</p>
+<h2 id="今回の疑問点"><a href="/2015/06/02/cgroup-cpu-cpushare/#今回の疑問点" class="headerlink" title="今回の疑問点"></a>今回の疑問点</h2><p>これだけなら、わかりやすいが、以下の点が不明だったので実際に検証してみた。</p>
 <ul>
 <li>グループ内に複数プロセスがいる場合どのように CPU が割り振られるのか</li>
 <li>ルートグループに属するプロセスの CPU の割り振りはどうなるか</li>
 </ul>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="環境"><a href="/2015/06/02/cgroup-cpu-cpushare/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>マシン: Vagrant(CPU コア1)</li>
 <li><p>OS:</p>
 <ul>
@@ -246,7 +246,7 @@
 </ul>
 </li>
 <li><p>今回検証したグループ構成</p>
-<p>  <img src="cgroup.png" alt=""></p>
+<p>  <img src="/2015/06/02/cgroup-cpu-cpushare/cgroup.png" alt=""></p>
 <ul>
 <li>CPU のルートグループ配下に <code>test</code> グループを作成する</li>
 <li>test グループ配下に、<code>A</code> <code>B</code> <code>C</code> グループを作成する</li>
@@ -262,55 +262,55 @@
 <p>  自分自身の PID をスクリプト名にあったグループに登録し、無限ループを行うシェルスクリプト。</p>
 </li>
 </ul>
-<h2 id="検証１"><a href="#検証１" class="headerlink" title="検証１"></a>検証１</h2><p><code>A</code> グループに、無限ループするプロセスを一つ登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test1.png" alt=""></p>
+<h2 id="検証１"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証１" class="headerlink" title="検証１"></a>検証１</h2><p><code>A</code> グループに、無限ループするプロセスを一つ登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test1.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 99.8  0.3   0:11.30 loop_test_A.sh</div></pre></td></tr></table></figure>
 <ul>
 <li><code>ルート</code> -&gt; <code>test</code> -&gt; <code>A</code> と最下層のグループに登録されているが、CPU は 100% 利用できる。</li>
 </ul>
-<h2 id="検証２"><a href="#検証２" class="headerlink" title="検証２"></a>検証２</h2><p><code>A</code> <code>B</code> <code>C</code>の各グループに、無限ループをするプロセスを一つづつ登録した場合の CPU 使用状況。</p>
-<p><img src="cgroup_test2.png" alt=""></p>
+<h2 id="検証２"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証２" class="headerlink" title="検証２"></a>検証２</h2><p><code>A</code> <code>B</code> <code>C</code>の各グループに、無限ループをするプロセスを一つづつ登録した場合の CPU 使用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test2.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 33.3  0.3   0:51.82 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 33.3  0.3   0:25.00 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 33.3  0.3   0:23.39 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>各グループの cpu.shares の値は同じなので、均等に CPU を 1/3 (33.3%)づつ使用している。</li>
 </ul>
-<h2 id="検証３"><a href="#検証３" class="headerlink" title="検証３"></a>検証３</h2><p>検証２に加え、<code>C</code> グループに、もう一つプロセスを登録した場合の CPU の利用状況。</p>
-<p><img src="cgroup_test3.png" alt=""></p>
+<h2 id="検証３"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証３" class="headerlink" title="検証３"></a>検証３</h2><p>検証２に加え、<code>C</code> グループに、もう一つプロセスを登録した場合の CPU の利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test3.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 33.6  0.3   1:04.14 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 33.3  0.3   0:37.32 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 16.6  0.3   0:34.81 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R 16.6  0.3   0:00.88 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>グループ A, B に割り当てられている CPU 時間は変わらない</li>
 <li>検証２でグループ C に割り当てられていた CPU 時間(33.3%)は、２つのプロセス（2570,2573）に分配されている</li>
 </ul>
-<h2 id="検証４"><a href="#検証４" class="headerlink" title="検証４"></a>検証４</h2><p>検証３に加え、<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test4.png" alt=""></p>
+<h2 id="検証４"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証４" class="headerlink" title="検証４"></a>検証４</h2><p>検証３に加え、<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test4.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1887 root      20   0  103m 1348 1160 R 24.9  0.3   0:05.77 loop_test.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 24.9  0.3   1:15.43 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 24.9  0.3   0:48.61 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 12.6  0.3   0:40.46 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R 12.3  0.3   0:06.53 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、test グループの１つのプロセス <code>1887</code> とグループ<code>A</code> <code>B</code> <code>C</code> で、４等分(25%)されている</li>
 <li>C グループ 配下のプロセスは、４等分された CPU時間(25%) を分配して利用している</li>
 </ul>
-<h2 id="検証５"><a href="#検証５" class="headerlink" title="検証５"></a>検証５</h2><p>検証４に加え、さらに<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test5.png" alt=""></p>
+<h2 id="検証５"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証５" class="headerlink" title="検証５"></a>検証５</h2><p>検証４に加え、さらに<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test5.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1892 root      20   0  103m 1348 1160 R 20.3  0.3   0:01.57 loop_test.sh</div><div class="line"> 1887 root      20   0  103m 1348 1160 R 20.0  0.3   0:14.80 loop_test.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 20.0  0.3   0:57.63 loop_test_B.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 20.0  0.3   1:24.45 loop_test_A.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 10.0  0.3   0:44.97 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R 10.0  0.3   0:11.05 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、test グループの２つのプロセス <code>1892</code> <code>1887</code> とグループ<code>A</code> <code>B</code> <code>C</code> で、５等分(20%)されている</li>
 <li>test グループの２つのプロセス <code>1892</code> <code>1887</code> は、それぞれ５等分された CPU時間(20%) を利用できる</li>
 </ul>
-<h2 id="検証６"><a href="#検証６" class="headerlink" title="検証６"></a>検証６</h2><p>検証３に加え、ルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test6.png" alt=""></p>
+<h2 id="検証６"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証６" class="headerlink" title="検証６"></a>検証６</h2><p>検証３に加え、ルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test6.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1898 root      20   0  103m 1344 1160 R 50.2  0.3   0:03.83 loop.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 16.6  0.3   1:32.35 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 16.6  0.3   1:05.53 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R  8.3  0.3   0:48.92 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R  8.3  0.3   0:14.99 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、ルートグループの１つのプロセス <code>1898</code> と <code>test グループ</code> で、２等分(50%)されている</li>
 <li>test グループ 配下のプロセスは、２等分された CPU時間(50%) を分配して利用している</li>
 </ul>
-<h2 id="検証７"><a href="#検証７" class="headerlink" title="検証７"></a>検証７</h2><p>検証６に加え、さらにルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test7.png" alt=""></p>
+<h2 id="検証７"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証７" class="headerlink" title="検証７"></a>検証７</h2><p>検証６に加え、さらにルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test7.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1898 root      20   0  103m 1344 1160 R 33.5  0.3   0:10.72 loop.sh</div><div class="line"> 1903 root      20   0  103m 1348 1160 R 33.2  0.3   0:01.53 loop.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 11.3  0.3   1:34.65 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 11.0  0.3   1:07.82 loop_test_B.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R  5.6  0.3   0:16.14 loop_test_C.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R  5.3  0.3   0:50.06 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、ルートグループの２つのプロセス<code>1898</code> <code>1903</code> と <code>test グループ</code> で、３等分(33%)されている</li>
 <li>ルートグループの２つのプロセス <code>1898</code> <code>1903</code> は、それぞれ３等分された CPU時間(33%) を利用できる</li>
 <li>test グループ 配下のプロセスは、３等分された CPU時間(33%) を分配して利用している</li>
 </ul>
-<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>検証７の結果を見れば、cpu.shares の振る舞いがだいたいわかる。</p>
+<h2 id="まとめ"><a href="/2015/06/02/cgroup-cpu-cpushare/#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>検証７の結果を見れば、cpu.shares の振る舞いがだいたいわかる。</p>
 <p>test グループ配下のプロセスが利用できる CPU時間は、ルートグループに属するプロセス数や CPU 利用状況によってかわるので、リソース設計が難しい。</p>
 <p>このため、test グループの CPU時間を担保したい場合は、以下のような感じで、一旦ルートグループ配下の全プロセスを別のサブグループ配下に移動してあげればよさそう。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /cgroup/root</div><div class="line">cat /cgroup/tasks &gt; /cgrou/root/tasks</div></pre></td></tr></table></figure>

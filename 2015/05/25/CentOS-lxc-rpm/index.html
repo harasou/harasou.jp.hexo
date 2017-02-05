@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="CentOS 用に LXC の rpm を作成する">
@@ -24,16 +34,6 @@
 <meta name="twitter:title" content="CentOS 用に LXC の rpm を作成する">
 <meta name="twitter:description" content="Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -219,7 +219,7 @@
         <div class="main-content-wrap">
             <p>Linux でコンテナといえば docker しかさわったことがなかった。LXC は docker よりシンプルで面白そうだったので、勉強用に先づ rpm を作成した。</p>
 <a id="more"></a>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="環境"><a href="/2015/05/25/CentOS-lxc-rpm/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>LXC: 1.1.2</li>
 <li>OS:<ul>
 <li>CentOS6.6 (2.6.32-504.16.2.el6.x86_64)</li>
@@ -227,7 +227,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="LXC-の-rpm-を作成"><a href="#LXC-の-rpm-を作成" class="headerlink" title="LXC の rpm を作成"></a>LXC の rpm を作成</h2><p>本家のサイトに、specfile 付きの tarball が公開されているのでそれをビルドするだけ。</p>
+<h2 id="LXC-の-rpm-を作成"><a href="/2015/05/25/CentOS-lxc-rpm/#LXC-の-rpm-を作成" class="headerlink" title="LXC の rpm を作成"></a>LXC の rpm を作成</h2><p>本家のサイトに、specfile 付きの tarball が公開されているのでそれをビルドするだけ。</p>
 <p><a href="https://linuxcontainers.org/ja/lxc/downloads/" target="_blank" rel="external">https://linuxcontainers.org/ja/lxc/downloads/</a></p>
 <ol>
 <li><p>rpmbuild 用の環境を準備</p>
@@ -250,7 +250,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="LXC-のインストール"><a href="#LXC-のインストール" class="headerlink" title="LXC のインストール"></a>LXC のインストール</h2><p>rpm コマンドでインストールするだけだが、OS によって依存で必要なパッケージが違っていた。</p>
+<h2 id="LXC-のインストール"><a href="/2015/05/25/CentOS-lxc-rpm/#LXC-のインストール" class="headerlink" title="LXC のインストール"></a>LXC のインストール</h2><p>rpm コマンドでインストールするだけだが、OS によって依存で必要なパッケージが違っていた。</p>
 <ul>
 <li><p>CentOS 6</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y dnsmasq libcgroup</div><div class="line">rpm -ivh lxc-* lxc-ilbs-*</div></pre></td></tr></table></figure>

@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="mruby-cgroup とはmruby-cgroup は、@matsumotory が開発している mruby から cgroup を利用するためのライブラリ。
 https://github.com/matsumoto-r/mruby-cgroup
 cgroup は linux カーネルの機能で、タスク（プロセス）のリソース（CPU, メモリ, IO, etc）を制御するための仕組み。 これを利">
@@ -30,16 +40,6 @@ cgroup は linux カーネルの機能で、タスク（プロセス）のリソ
 https://github.com/matsumoto-r/mruby-cgroup
 cgroup は linux カーネルの機能で、タスク（プロセス）のリソース（CPU, メモリ, IO, etc）を制御するための仕組み。 これを利">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -223,16 +223,16 @@ cgroup は linux カーネルの機能で、タスク（プロセス）のリソ
     
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
-            <h2 id="mruby-cgroup-とは"><a href="#mruby-cgroup-とは" class="headerlink" title="mruby-cgroup とは"></a>mruby-cgroup とは</h2><p>mruby-cgroup は、@matsumotory が開発している mruby から cgroup を利用するためのライブラリ。</p>
+            <h2 id="mruby-cgroup-とは"><a href="/2015/05/06/mruby-cgroups-build-on-boot2docker/#mruby-cgroup-とは" class="headerlink" title="mruby-cgroup とは"></a>mruby-cgroup とは</h2><p>mruby-cgroup は、@matsumotory が開発している mruby から cgroup を利用するためのライブラリ。</p>
 <p><a href="https://github.com/matsumoto-r/mruby-cgroup" target="_blank" rel="external">https://github.com/matsumoto-r/mruby-cgroup</a></p>
 <p>cgroup は linux カーネルの機能で、タスク（プロセス）のリソース（CPU, メモリ, IO, etc）を制御するための仕組み。 これを利用すると「特定のプロセスが CPU100% 使うような処理を行っても 50% しか利用させない」といった制御ができるようになる。</p>
 <a id="more"></a>
-<h2 id="コンパイル環境について"><a href="#コンパイル環境について" class="headerlink" title="コンパイル環境について"></a>コンパイル環境について</h2><p>cgroup は Linux カーネルの機能であるため、MacOSX では利用できない。このため、MacOSX 上でコンパイルするには、クロスコンパイルの環境が必要。</p>
+<h2 id="コンパイル環境について"><a href="/2015/05/06/mruby-cgroups-build-on-boot2docker/#コンパイル環境について" class="headerlink" title="コンパイル環境について"></a>コンパイル環境について</h2><p>cgroup は Linux カーネルの機能であるため、MacOSX では利用できない。このため、MacOSX 上でコンパイルするには、クロスコンパイルの環境が必要。</p>
 <p>ちょうど、@matsumotory が以下のようなエントリーを書かれていたが、mruby-cgroup の build には、cgroup のヘッダファイルなどが必要で手軽にできる感じではなかったので、とりあえず、VM 上でやることにする（今後試してみたい）。</p>
 <blockquote>
 <p>MacOSX上でLinuxとWindowsとOSXで動くmrubyバイナリを簡単にクロスコンパイルできるmrbgem作った<br><a href="http://hb.matsumoto-r.jp/entry/2015/05/02/232220" target="_blank" rel="external">http://hb.matsumoto-r.jp/entry/2015/05/02/232220</a></p>
 </blockquote>
-<h2 id="boot2docker-で-build"><a href="#boot2docker-で-build" class="headerlink" title="boot2docker で build"></a>boot2docker で build</h2><p>最近の boot2docker は、vboxfs に対応しているのですごく便利。</p>
+<h2 id="boot2docker-で-build"><a href="/2015/05/06/mruby-cgroups-build-on-boot2docker/#boot2docker-で-build" class="headerlink" title="boot2docker で build"></a>boot2docker で build</h2><p>最近の boot2docker は、vboxfs に対応しているのですごく便利。</p>
 <ol>
 <li><p>mruby の取得</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/mruby/mruby.git</div><div class="line">$ cd mruby</div></pre></td></tr></table></figure>

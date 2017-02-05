@@ -13,6 +13,19 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+        <meta property="og:image" content="https://harasou.jp/2016/06/29/linux-acl/linux-programming-interface.png"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://harasou.jp/2016/06/29/linux-acl/linux-programming-interface.png" />
+    
+    
+    
     <meta name="description" content="「Linux プログラミングインタフェース」再び。
 輪読やりながら「こんな機能使うのか？」って、みんな文句言いながら読んでいた章。ここで触っとかないと、今後「ACL とか知らねぇ。」ってなりそうなので、まとめておく。">
 <meta property="og:type" content="blog">
@@ -27,19 +40,6 @@
 <meta name="twitter:description" content="「Linux プログラミングインタフェース」再び。
 輪読やりながら「こんな機能使うのか？」って、みんな文句言いながら読んでいた章。ここで触っとかないと、今後「ACL とか知らねぇ。」ってなりそうなので、まとめておく。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-        <meta property="og:image" content="https://harasou.jp/2016/06/29/linux-acl/linux-programming-interface.png"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://harasou.jp/2016/06/29/linux-acl/linux-programming-interface.png" />
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -231,11 +231,11 @@
 <p>ACL はユーザもしくはグループ単位でのパーミションを設定可能にするもので、ユーザ、グループ数を制限しません。Linux ではバージョン 2.6 で ACL を導入しました。</p>
 </blockquote>
 <p>refs: <a href="https://www.oreilly.co.jp/books/9784873115856/" target="_blank" rel="external">https://www.oreilly.co.jp/books/9784873115856/</a></p>
-<h2 id="ACL-access-control-list-とは"><a href="#ACL-access-control-list-とは" class="headerlink" title="ACL(access control list) とは"></a>ACL(access control list) とは</h2><p>簡単に言うとファイルやディレクトリのパーミッションに <code>＋αのアクセス権</code> を設定できる機能。</p>
+<h2 id="ACL-access-control-list-とは"><a href="/2016/06/29/linux-acl/#ACL-access-control-list-とは" class="headerlink" title="ACL(access control list) とは"></a>ACL(access control list) とは</h2><p>簡単に言うとファイルやディレクトリのパーミッションに <code>＋αのアクセス権</code> を設定できる機能。</p>
 <p>ACL を設定すると下記例のように、通常のパーミッション的には root しか読めないファイルに、vagrant ユーザの参照権限を追加することができる。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># ls -l aclfile</div><div class="line">-rw-r-----+ 1 root root 5 Jun 29 15:13 aclfile  #拡張ACLが設定されたファイルには + がつく</div><div class="line">#</div><div class="line"># sudo -u vagrant cat aclfile</div><div class="line">root</div><div class="line">#</div><div class="line"># sudo -u harasou cat aclfile</div><div class="line">cat: aclfile: Permission denied</div><div class="line">#</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># grep root /etc/group  #2ユーザ共に rootグループには属していない</div><div class="line">root:x:0:</div></pre></td></tr></table></figure>
-<h2 id="ACL-の設定方法"><a href="#ACL-の設定方法" class="headerlink" title="ACL の設定方法"></a>ACL の設定方法</h2><p>ACL の表示や変更は、<code>getfacl</code>、<code>setfcal</code> を使用する。</p>
+<h2 id="ACL-の設定方法"><a href="/2016/06/29/linux-acl/#ACL-の設定方法" class="headerlink" title="ACL の設定方法"></a>ACL の設定方法</h2><p>ACL の表示や変更は、<code>getfacl</code>、<code>setfcal</code> を使用する。</p>
 <ul>
 <li><p>ACL の表示</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># getfacl -c acl_file</div><div class="line">user::rw-</div><div class="line">user:vagrant:r--</div><div class="line">group::---</div><div class="line">mask::r--</div><div class="line">other::---</div></pre></td></tr></table></figure>
@@ -244,7 +244,7 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setfacl -m user:vagrant:r acl_file  #ACLエントリの設定</div><div class="line">setfacl -x user:vagrant   acl_file  #ACLエントリの削除</div><div class="line">setfacl -b                acl_file  #全ての拡張ACLエントリを削除</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="ACL-の基礎"><a href="#ACL-の基礎" class="headerlink" title="ACL の基礎"></a>ACL の基礎</h2><h3 id="ACL-のテキスト表現"><a href="#ACL-のテキスト表現" class="headerlink" title="ACL のテキスト表現"></a>ACL のテキスト表現</h3><p>setfacl で指定するパラメータは、以下のような感じで、ACLエントリ(テキスト表現)を<code>,</code>区切りで並べたものを指定する。</p>
+<h2 id="ACL-の基礎"><a href="/2016/06/29/linux-acl/#ACL-の基礎" class="headerlink" title="ACL の基礎"></a>ACL の基礎</h2><h3 id="ACL-のテキスト表現"><a href="/2016/06/29/linux-acl/#ACL-のテキスト表現" class="headerlink" title="ACL のテキスト表現"></a>ACL のテキスト表現</h3><p>setfacl で指定するパラメータは、以下のような感じで、ACLエントリ(テキスト表現)を<code>,</code>区切りで並べたものを指定する。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setfacl -m u::rw,u:paulh:rw,u:annabel:rw,g::r,g:teach:rw,km::rwx,o::- acl_file</div></pre></td></tr></table></figure>
 <p>各ACLエントリは <code>タグ種類:タグ修飾子:パーミッション</code> といった形式になっていて、上記 ACLを ACLエントリごとにわけると以下のようになる。</p>
 <table>
@@ -289,7 +289,7 @@
 <blockquote>
 <p>acl_file に、通常のパーミッション <code>640</code> を設定し、追加で paulhユーザ と annabelユーザ、teachグループに <code>rw</code> のアクセス権を設定する。</p>
 </blockquote>
-<h3 id="タグの種類"><a href="#タグの種類" class="headerlink" title="タグの種類"></a>タグの種類</h3><p>タグの種類は、通常のパーミッションに相当する<code>基本ACL</code>と、追加で設定するイメージの<code>拡張ACL</code>に分類される。</p>
+<h3 id="タグの種類"><a href="/2016/06/29/linux-acl/#タグの種類" class="headerlink" title="タグの種類"></a>タグの種類</h3><p>タグの種類は、通常のパーミッションに相当する<code>基本ACL</code>と、追加で設定するイメージの<code>拡張ACL</code>に分類される。</p>
 <ul>
 <li>基本ACL<ul>
 <li><code>ACL_USER_OBJ</code>  : 従来パーミッションの owner に相当</li>
@@ -304,7 +304,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="ACL-の動作確認"><a href="#ACL-の動作確認" class="headerlink" title="ACL の動作確認"></a>ACL の動作確認</h2><h3 id="準備"><a href="#準備" class="headerlink" title="準備"></a>準備</h3><p>ACL はファイルシステムの拡張機能として実装れていて、デフォルトでは無効になっているため、mount オプションで有効にする必要がある。</p>
+<h2 id="ACL-の動作確認"><a href="/2016/06/29/linux-acl/#ACL-の動作確認" class="headerlink" title="ACL の動作確認"></a>ACL の動作確認</h2><h3 id="準備"><a href="/2016/06/29/linux-acl/#準備" class="headerlink" title="準備"></a>準備</h3><p>ACL はファイルシステムの拡張機能として実装れていて、デフォルトでは無効になっているため、mount オプションで有効にする必要がある。</p>
 <p>ここでは、パーティション準備するのが面倒なので、ファイルを loop mount してテスト。</p>
 <ol>
 <li><p>ファイルシステムとなる image ファイルを作成</p>
@@ -317,7 +317,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># mkdir acltest                </div><div class="line"># mount -o loop,acl image acltest/ </div><div class="line"># mount | tail -1              </div><div class="line">/home/vagrant/image on /home/vagrant/acltest type ext4 (rw,acl)</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h3><ul>
+<h3 id="動作確認"><a href="/2016/06/29/linux-acl/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h3><ul>
 <li><p>root オーナのファイル<code>aclfile</code> に、vagrant ユーザの <code>rw</code> を設定</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"># ll aclfile</div><div class="line">-rw-r--r-- 1 root root 5 Jun 28 23:31 aclfile</div><div class="line">#</div><div class="line"># setfacl -m user:vagrant:rw aclfile</div><div class="line"># ll aclfile</div><div class="line">-rw-rw-r--+ 1 root root 5 Jun 28 23:31 aclfile</div><div class="line">#</div><div class="line"># getfacl -c aclfile</div><div class="line">user::rw-</div><div class="line">user:vagrant:rw-</div><div class="line">group::r--</div><div class="line">mask::rw-</div><div class="line">other::r--</div><div class="line"></div><div class="line"># sudo -u vagrant sh -c &quot;echo vagrant &gt; aclfile&quot;</div><div class="line"># cat aclfile</div><div class="line">vagrant</div></pre></td></tr></table></figure>
 <ul>
@@ -342,7 +342,7 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># setfacl -b aclfile</div><div class="line"># ls -l aclfile; getfacl -c aclfile</div><div class="line">-rw-r----- 1 root root 5 Jun 29 15:13 aclfile</div><div class="line">user::rw-</div><div class="line">group::r--</div><div class="line">other::---</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="所感"><a href="#所感" class="headerlink" title="所感"></a>所感</h2><p>なかなか使い所が難しい（運用しづらい）感があるが、例えば、レンサバなどは、各ユーザ権限で基本、ファイルを作成するが、apache ユーザでも読み込みができる必要がある。こういったところで使うとわりとシンプルに権限周りを管理できるのかもしれない。</p>
+<h2 id="所感"><a href="/2016/06/29/linux-acl/#所感" class="headerlink" title="所感"></a>所感</h2><p>なかなか使い所が難しい（運用しづらい）感があるが、例えば、レンサバなどは、各ユーザ権限で基本、ファイルを作成するが、apache ユーザでも読み込みができる必要がある。こういったところで使うとわりとシンプルに権限周りを管理できるのかもしれない。</p>
 
             
         </div>

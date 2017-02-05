@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="仕事で kernel のソースが見る機会が度々ありそうなので、MAC上でソースをいつでも追えるように準備しておく。準備といっても大したものではなく、
 
 kernel ソースのダウンロード
@@ -42,16 +52,6 @@ vim の設定
 
 ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -243,11 +243,11 @@ vim の設定
 </ul>
 <p>ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。</p>
 <a id="more"></a>
-<h2 id="kernel-source-の取得"><a href="#kernel-source-の取得" class="headerlink" title="kernel source の取得"></a>kernel source の取得</h2><p>github ではなく tar ball からの取得。複数のリリースを取得するにはこちらの方が簡単そうだったので。</p>
+<h2 id="kernel-source-の取得"><a href="/2015/10/26/linux-kernel-reading/#kernel-source-の取得" class="headerlink" title="kernel source の取得"></a>kernel source の取得</h2><p>github ではなく tar ball からの取得。複数のリリースを取得するにはこちらの方が簡単そうだったので。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p ~/src/kernel</div><div class="line">curl https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.2.4.tar.xz | tar zx -C ~/src/kernel/</div></pre></td></tr></table></figure>
-<h2 id="tag-の作成"><a href="#tag-の作成" class="headerlink" title="tag の作成"></a>tag の作成</h2><p>linux kernel の Makefile には、tag を作成するターゲットがあるので、make するだけで tag の作成ができる。</p>
+<h2 id="tag-の作成"><a href="/2015/10/26/linux-kernel-reading/#tag-の作成" class="headerlink" title="tag の作成"></a>tag の作成</h2><p>linux kernel の Makefile には、tag を作成するターゲットがあるので、make するだけで tag の作成ができる。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/src/kernel/linux-4.2.4</div><div class="line">make tags</div></pre></td></tr></table></figure>
-<h2 id="vim-の設定"><a href="#vim-の設定" class="headerlink" title="vim の設定"></a>vim の設定</h2><p>ctags は、もともと vim の機能だったものが独立したらしいので、特に設定しなくても vim から使える。</p>
+<h2 id="vim-の設定"><a href="/2015/10/26/linux-kernel-reading/#vim-の設定" class="headerlink" title="vim の設定"></a>vim の設定</h2><p>ctags は、もともと vim の機能だったものが独立したらしいので、特に設定しなくても vim から使える。</p>
 <p>使いそうなコマンド。</p>
 <ul>
 <li>ノーマルモード<ul>
@@ -266,7 +266,7 @@ vim の設定
 </ul>
 <p>少しだけカスタマイズ。やるのは、現在のところ２つだけ。</p>
 <figure class="highlight vim"><figcaption><span>.vimrc</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">nnoremap</span>  &lt;C-]&gt;    g&lt;C-]&gt;</div><div class="line"><span class="keyword">nnoremap</span>  v&lt;C-]&gt;   :vsp +:exec(<span class="string">"tag\ "</span>.<span class="built_in">expand</span>(<span class="string">"&lt;cword&gt;"</span>))<span class="symbol">&lt;CR&gt;</span></div><div class="line"><span class="keyword">set</span> splitright     <span class="comment">"新しいウィンドウを右にひらく</span></div></pre></td></tr></table></figure>
-<h2 id="kernel-source-を眺め方"><a href="#kernel-source-を眺め方" class="headerlink" title="kernel source を眺め方"></a>kernel source を眺め方</h2><p>kernel のソースは以下のようなディレクトリ構成になっていて、機能ごとに分かれているので、割と分かりやすい。ソースの大半はドライバのコードになっている(左の数値はduの結果)。</p>
+<h2 id="kernel-source-を眺め方"><a href="/2015/10/26/linux-kernel-reading/#kernel-source-を眺め方" class="headerlink" title="kernel source を眺め方"></a>kernel source を眺め方</h2><p>kernel のソースは以下のようなディレクトリ構成になっていて、機能ごとに分かれているので、割と分かりやすい。ソースの大半はドライバのコードになっている(左の数値はduの結果)。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ du -sh *</div><div class="line"> 20K    COPYING</div><div class="line"> 96K    CREDITS</div><div class="line"> 30M    Documentation/</div><div class="line">4.0K    Kbuild</div><div class="line">4.0K    Kconfig</div><div class="line">316K    MAINTAINERS</div><div class="line"> 56K    Makefile</div><div class="line"> 20K    README</div><div class="line">8.0K    REPORTING-BUGS</div><div class="line">128M    arch/             <span class="comment">#アーキテクチャ固有のカーネルコード</span></div><div class="line">1.1M    block/</div><div class="line">3.0M    crypto//</div><div class="line">358M    drivers/</div><div class="line">5.9M    firmware/</div><div class="line"> 36M    fs/</div><div class="line"> 32M    include/          <span class="comment">#カーネルコードをビルドするのに必要なインクルードファイル</span></div><div class="line">184K    init/             <span class="comment">#カーネルの初期化(initialization)コード</span></div><div class="line">244K    ipc/              <span class="comment">#カーネルのプロセス間通信(inter-process communications)に関するコード</span></div><div class="line">6.8M    kernel/           <span class="comment">#カーネルの初期化コード</span></div><div class="line">3.4M    lib/              </div><div class="line">3.0M    mm/               <span class="comment">#メモリ管理(memory management)コード</span></div><div class="line"> 26M    net/              <span class="comment">#ネットワーク(network)関係のコード</span></div><div class="line">384K    samples/</div><div class="line">3.0M    scripts/</div><div class="line">2.2M    security/</div><div class="line"> 29M    sound/</div><div class="line"> 43M    tags              <span class="comment">#先ほど作成したタグ</span></div><div class="line"> 43M    tags<span class="_">-e</span></div><div class="line">8.9M    tools/</div><div class="line"> 32K    usr/</div><div class="line">300K    virt/</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ du -sh .</div><div class="line">763M    .                  <span class="comment">#全体(763M)の半分はドライバ周りのコード(358M)</span></div></pre></td></tr></table></figure>
 <p>例えば、「 kmalloc()って、slab からメモリ確保してるんだっけ？」って時は、</p>

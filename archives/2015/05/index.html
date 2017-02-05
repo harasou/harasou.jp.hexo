@@ -13,13 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta property="og:type" content="blog">
-<meta property="og:title" content="harasou.jp">
-<meta property="og:url" content="https://harasou.jp/archives/2015/05/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="harasou.jp">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -30,6 +23,13 @@
     
     
     
+    <meta property="og:type" content="blog">
+<meta property="og:title" content="harasou.jp">
+<meta property="og:url" content="https://harasou.jp/archives/2015/05/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="harasou.jp">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -460,9 +460,9 @@
             </div>
             
                 <div class="postShorten-content" itemprop="articleBody">
-                    <h2 id="mruby-の動作"><a href="#mruby-の動作" class="headerlink" title="mruby の動作"></a>mruby の動作</h2><p>mruby の実行基盤である<code>RiteVM</code>は、Rubyスクリプトを逐次解釈して実行するのではなくコンパイル結果の<code>バイナリコード（Rite中間表現）</code>を直接実行する。</p>
+                    <h2 id="mruby-の動作"><a href="/2015/05/03/mruby-memo/#mruby-の動作" class="headerlink" title="mruby の動作"></a>mruby の動作</h2><p>mruby の実行基盤である<code>RiteVM</code>は、Rubyスクリプトを逐次解釈して実行するのではなくコンパイル結果の<code>バイナリコード（Rite中間表現）</code>を直接実行する。</p>
 <p>Rite中間表現をバイナリ出力したものが<code>mrbファイル(Riteバイナリファイル)</code>。</p>
-<h2 id="mrbgem-とは"><a href="#mrbgem-とは" class="headerlink" title="mrbgem とは"></a>mrbgem とは</h2><p>mruby にライブラリを追加するための仕組み。mruby は require などで動的にライブラリを読み込めないので、mruby ビルド時に組み込む必要がある。<br>追加する際は、<code>build_config.rb</code> に追記してビルドする。</p>
+<h2 id="mrbgem-とは"><a href="/2015/05/03/mruby-memo/#mrbgem-とは" class="headerlink" title="mrbgem とは"></a>mrbgem とは</h2><p>mruby にライブラリを追加するための仕組み。mruby は require などで動的にライブラリを読み込めないので、mruby ビルド時に組み込む必要がある。<br>追加する際は、<code>build_config.rb</code> に追記してビルドする。</p>
 <p>なお、mrbgem の実装には、以下３パターンがある。</p>
 <ul>
 <li>C拡張</li>
@@ -474,18 +474,18 @@
 <li><a href="http://blog.matsumoto-r.jp/?p=3923" target="_blank" rel="external">mrubyの拡張モジュールであるmrbgemのテンプレートを自動で生成するmrbgem作った</a></li>
 <li><a href="http://qiita.com/hiroeorz@github/items/d6fa2978d9f53a41c777" target="_blank" rel="external">mrbgemsの作り方メモ(勉強中)</a></li>
 </ul>
-<h2 id="ireq-とは"><a href="#ireq-とは" class="headerlink" title="ireq とは"></a>ireq とは</h2><p>まだ全然わかってないが、この辺り。</p>
+<h2 id="ireq-とは"><a href="/2015/05/03/mruby-memo/#ireq-とは" class="headerlink" title="ireq とは"></a>ireq とは</h2><p>まだ全然わかってないが、この辺り。</p>
 <ul>
 <li><a href="https://github.com/mruby/mruby/issues/944#issuecomment-14556703" target="_blank" rel="external">https://github.com/mruby/mruby/issues/944#issuecomment-14556703</a></li>
 </ul>
-<h2 id="ライブラリ構成"><a href="#ライブラリ構成" class="headerlink" title="ライブラリ構成"></a>ライブラリ構成</h2><p>以下の４つが定義されているが、現在提供されているのはミニマルのみ？</p>
+<h2 id="ライブラリ構成"><a href="/2015/05/03/mruby-memo/#ライブラリ構成" class="headerlink" title="ライブラリ構成"></a>ライブラリ構成</h2><p>以下の４つが定義されているが、現在提供されているのはミニマルのみ？</p>
 <ul>
 <li>ミニマル: 実行に必要な最低限の機能</li>
 <li>スタンダード: JIS X 3017 規格相当</li>
 <li>フル: MRI(CRuby) のフル機能相当</li>
 <li>ドメイン別: 製品ドメイン別の拡張ライブラリ</li>
 </ul>
-<h2 id="参考リンク"><a href="#参考リンク" class="headerlink" title="参考リンク"></a>参考リンク</h2><ul>
+<h2 id="参考リンク"><a href="/2015/05/03/mruby-memo/#参考リンク" class="headerlink" title="参考リンク"></a>参考リンク</h2><ul>
 <li><a href="http://forum.mruby.org/index.html" target="_blank" rel="external">オフィシャルページ</a></li>
 <li><a href="https://github.com/mruby/mruby" target="_blank" rel="external">ソース Github</a></li>
 <li><a href="http://forum.mruby.org/doc/Aboiut_mruby_forumJP.pdf" target="_blank" rel="external">軽量 Ruby のご紹介と 軽量 Ruby フォーラムのご案内</a></li>

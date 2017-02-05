@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="Linux のカーネルモジュールで Hello World してみる。insmod、rmmod した時に dmesg にログを吐くだけの単純なもの。試した環境は、CentOS7 (3.10.0-123.4.4.el7.x86_64)。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="カーネルモジュールで Hello World !">
@@ -24,16 +34,6 @@
 <meta name="twitter:title" content="カーネルモジュールで Hello World !">
 <meta name="twitter:description" content="Linux のカーネルモジュールで Hello World してみる。insmod、rmmod した時に dmesg にログを吐くだけの単純なもの。試した環境は、CentOS7 (3.10.0-123.4.4.el7.x86_64)。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -219,7 +219,7 @@
         <div class="main-content-wrap">
             <p>Linux のカーネルモジュールで Hello World してみる。insmod、rmmod した時に dmesg にログを吐くだけの単純なもの。試した環境は、CentOS7 (3.10.0-123.4.4.el7.x86_64)。</p>
 <a id="more"></a>
-<h2 id="カーネルモジュールの作成"><a href="#カーネルモジュールの作成" class="headerlink" title="カーネルモジュールの作成"></a>カーネルモジュールの作成</h2><ol>
+<h2 id="カーネルモジュールの作成"><a href="/2015/11/03/loadable-kernel-module/#カーネルモジュールの作成" class="headerlink" title="カーネルモジュールの作成"></a>カーネルモジュールの作成</h2><ol>
 <li><p>適当なディレクトリを作成</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p ~/lkm/helloworld</div><div class="line"><span class="built_in">cd</span> <span class="variable">$_</span></div></pre></td></tr></table></figure>
 </li>
@@ -241,10 +241,10 @@
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ ll</div><div class="line">合計 8</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 300 10月 31 17:09 Makefile</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 367 10月 31 16:42 helloworld.c</div><div class="line">$</div><div class="line">$ make</div><div class="line">make -C /lib/modules/3.10.0-123.4.4.el7.x86_64/build SUBDIRS=/home/vagrant/lkm/helloworld KBUILD_VERBOSE=0 modules</div><div class="line">make[1]: ディレクトリ `/usr/src/kernels/3.10.0-123.4.4.el7.x86_64<span class="string">' に入ります</span></div><div class="line">  CC [M]  /home/vagrant/lkm/helloworld/helloworld.o</div><div class="line">  Building modules, stage 2.</div><div class="line">  MODPOST 1 modules</div><div class="line">  CC      /home/vagrant/lkm/helloworld/helloworld.mod.o</div><div class="line">  LD [M]  /home/vagrant/lkm/helloworld/helloworld.ko</div><div class="line">make[1]: ディレクトリ `/usr/src/kernels/3.10.0-123.4.4.el7.x86_64' から出ます</div><div class="line">$</div><div class="line">$ ll</div><div class="line">合計 204</div><div class="line">-rw-rw-r--. 1 vagrant vagrant   300 10月 31 17:09 Makefile</div><div class="line">-rw-rw-r--. 1 vagrant vagrant     0 10月 31 17:36 Module.symvers</div><div class="line">-rw-rw-r--. 1 vagrant vagrant   367 10月 31 16:42 helloworld.c</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 91485 10月 31 17:36 helloworld.ko</div><div class="line">-rw-rw-r--. 1 vagrant vagrant   703 10月 31 17:36 helloworld.mod.c</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 51112 10月 31 17:36 helloworld.mod.o</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 41896 10月 31 17:36 helloworld.o</div><div class="line">-rw-rw-r--. 1 vagrant vagrant    50 10月 31 17:36 modules.order</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>insmod 時にログが表示される。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo /sbin/insmod helloworld.ko</div><div class="line">$ lsmod | grep hellow</div><div class="line">helloworld             12430  0</div><div class="line">$</div><div class="line">$ dmesg |tail -1</div><div class="line">[84783.294666] Hello World!</div></pre></td></tr></table></figure></p>
+<h2 id="動作確認"><a href="/2015/11/03/loadable-kernel-module/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>insmod 時にログが表示される。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo /sbin/insmod helloworld.ko</div><div class="line">$ lsmod | grep hellow</div><div class="line">helloworld             12430  0</div><div class="line">$</div><div class="line">$ dmesg |tail -1</div><div class="line">[84783.294666] Hello World!</div></pre></td></tr></table></figure></p>
 <p>rmmod 時にも表示される。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo /sbin/rmmod helloworld</div><div class="line">$ dmesg |tail -1</div><div class="line">[84802.982990] Goodby World.</div></pre></td></tr></table></figure></p>
 <p>modinfo で先ほど MODULE_XXXX で設定した内容が確認できる。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ modinfo helloworld.ko</div><div class="line">filename:       /home/vagrant/lkm/helloworld/helloworld.ko</div><div class="line">license:        MIT</div><div class="line">description:    Hello World Module</div><div class="line">author:         harasou</div><div class="line">srcversion:     9F090E897E652AF5A8BC5ED</div><div class="line">depends:</div><div class="line">vermagic:       3.10.0-123.4.4.el7.x86_64 SMP mod_unload modversions</div></pre></td></tr></table></figure></p>
-<h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>iptables まわりを調べてる最中に、横道に逸れてカーネルモジュールの作り方を試した。時間があれば、モジュールパラメータ（/sys/module/modxxxx/parameters/xxxx）や proc ファイルシステムを利用したユーザプロセスとのやりとりなども調べてみたい。</p>
+<h2 id="感想"><a href="/2015/11/03/loadable-kernel-module/#感想" class="headerlink" title="感想"></a>感想</h2><p>iptables まわりを調べてる最中に、横道に逸れてカーネルモジュールの作り方を試した。時間があれば、モジュールパラメータ（/sys/module/modxxxx/parameters/xxxx）や proc ファイルシステムを利用したユーザプロセスとのやりとりなども調べてみたい。</p>
 
             
         </div>

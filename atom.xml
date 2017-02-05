@@ -224,11 +224,11 @@
 <p>ACL はユーザもしくはグループ単位でのパーミションを設定可能にするもので、ユーザ、グループ数を制限しません。Linux ではバージョン 2.6 で ACL を導入しました。</p>
 </blockquote>
 <p>refs: <a href="https://www.oreilly.co.jp/books/9784873115856/" target="_blank" rel="external">https://www.oreilly.co.jp/books/9784873115856/</a></p>
-<h2 id="ACL-access-control-list-とは"><a href="#ACL-access-control-list-とは" class="headerlink" title="ACL(access control list) とは"></a>ACL(access control list) とは</h2><p>簡単に言うとファイルやディレクトリのパーミッションに <code>＋αのアクセス権</code> を設定できる機能。</p>
+<h2 id="ACL-access-control-list-とは"><a href="/2016/06/29/linux-acl/#ACL-access-control-list-とは" class="headerlink" title="ACL(access control list) とは"></a>ACL(access control list) とは</h2><p>簡単に言うとファイルやディレクトリのパーミッションに <code>＋αのアクセス権</code> を設定できる機能。</p>
 <p>ACL を設定すると下記例のように、通常のパーミッション的には root しか読めないファイルに、vagrant ユーザの参照権限を追加することができる。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># ls -l aclfile</div><div class="line">-rw-r-----+ 1 root root 5 Jun 29 15:13 aclfile  #拡張ACLが設定されたファイルには + がつく</div><div class="line">#</div><div class="line"># sudo -u vagrant cat aclfile</div><div class="line">root</div><div class="line">#</div><div class="line"># sudo -u harasou cat aclfile</div><div class="line">cat: aclfile: Permission denied</div><div class="line">#</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># grep root /etc/group  #2ユーザ共に rootグループには属していない</div><div class="line">root:x:0:</div></pre></td></tr></table></figure>
-<h2 id="ACL-の設定方法"><a href="#ACL-の設定方法" class="headerlink" title="ACL の設定方法"></a>ACL の設定方法</h2><p>ACL の表示や変更は、<code>getfacl</code>、<code>setfcal</code> を使用する。</p>
+<h2 id="ACL-の設定方法"><a href="/2016/06/29/linux-acl/#ACL-の設定方法" class="headerlink" title="ACL の設定方法"></a>ACL の設定方法</h2><p>ACL の表示や変更は、<code>getfacl</code>、<code>setfcal</code> を使用する。</p>
 <ul>
 <li><p>ACL の表示</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># getfacl -c acl_file</div><div class="line">user::rw-</div><div class="line">user:vagrant:r--</div><div class="line">group::---</div><div class="line">mask::r--</div><div class="line">other::---</div></pre></td></tr></table></figure>
@@ -237,7 +237,7 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setfacl -m user:vagrant:r acl_file  #ACLエントリの設定</div><div class="line">setfacl -x user:vagrant   acl_file  #ACLエントリの削除</div><div class="line">setfacl -b                acl_file  #全ての拡張ACLエントリを削除</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="ACL-の基礎"><a href="#ACL-の基礎" class="headerlink" title="ACL の基礎"></a>ACL の基礎</h2><h3 id="ACL-のテキスト表現"><a href="#ACL-のテキスト表現" class="headerlink" title="ACL のテキスト表現"></a>ACL のテキスト表現</h3><p>setfacl で指定するパラメータは、以下のような感じで、ACLエントリ(テキスト表現)を<code>,</code>区切りで並べたものを指定する。</p>
+<h2 id="ACL-の基礎"><a href="/2016/06/29/linux-acl/#ACL-の基礎" class="headerlink" title="ACL の基礎"></a>ACL の基礎</h2><h3 id="ACL-のテキスト表現"><a href="/2016/06/29/linux-acl/#ACL-のテキスト表現" class="headerlink" title="ACL のテキスト表現"></a>ACL のテキスト表現</h3><p>setfacl で指定するパラメータは、以下のような感じで、ACLエントリ(テキスト表現)を<code>,</code>区切りで並べたものを指定する。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">setfacl -m u::rw,u:paulh:rw,u:annabel:rw,g::r,g:teach:rw,km::rwx,o::- acl_file</div></pre></td></tr></table></figure>
 <p>各ACLエントリは <code>タグ種類:タグ修飾子:パーミッション</code> といった形式になっていて、上記 ACLを ACLエントリごとにわけると以下のようになる。</p>
 <table>
@@ -282,7 +282,7 @@
 <blockquote>
 <p>acl_file に、通常のパーミッション <code>640</code> を設定し、追加で paulhユーザ と annabelユーザ、teachグループに <code>rw</code> のアクセス権を設定する。</p>
 </blockquote>
-<h3 id="タグの種類"><a href="#タグの種類" class="headerlink" title="タグの種類"></a>タグの種類</h3><p>タグの種類は、通常のパーミッションに相当する<code>基本ACL</code>と、追加で設定するイメージの<code>拡張ACL</code>に分類される。</p>
+<h3 id="タグの種類"><a href="/2016/06/29/linux-acl/#タグの種類" class="headerlink" title="タグの種類"></a>タグの種類</h3><p>タグの種類は、通常のパーミッションに相当する<code>基本ACL</code>と、追加で設定するイメージの<code>拡張ACL</code>に分類される。</p>
 <ul>
 <li>基本ACL<ul>
 <li><code>ACL_USER_OBJ</code>  : 従来パーミッションの owner に相当</li>
@@ -297,7 +297,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="ACL-の動作確認"><a href="#ACL-の動作確認" class="headerlink" title="ACL の動作確認"></a>ACL の動作確認</h2><h3 id="準備"><a href="#準備" class="headerlink" title="準備"></a>準備</h3><p>ACL はファイルシステムの拡張機能として実装れていて、デフォルトでは無効になっているため、mount オプションで有効にする必要がある。</p>
+<h2 id="ACL-の動作確認"><a href="/2016/06/29/linux-acl/#ACL-の動作確認" class="headerlink" title="ACL の動作確認"></a>ACL の動作確認</h2><h3 id="準備"><a href="/2016/06/29/linux-acl/#準備" class="headerlink" title="準備"></a>準備</h3><p>ACL はファイルシステムの拡張機能として実装れていて、デフォルトでは無効になっているため、mount オプションで有効にする必要がある。</p>
 <p>ここでは、パーティション準備するのが面倒なので、ファイルを loop mount してテスト。</p>
 <ol>
 <li><p>ファイルシステムとなる image ファイルを作成</p>
@@ -310,7 +310,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># mkdir acltest                </div><div class="line"># mount -o loop,acl image acltest/ </div><div class="line"># mount | tail -1              </div><div class="line">/home/vagrant/image on /home/vagrant/acltest type ext4 (rw,acl)</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h3><ul>
+<h3 id="動作確認"><a href="/2016/06/29/linux-acl/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h3><ul>
 <li><p>root オーナのファイル<code>aclfile</code> に、vagrant ユーザの <code>rw</code> を設定</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"># ll aclfile</div><div class="line">-rw-r--r-- 1 root root 5 Jun 28 23:31 aclfile</div><div class="line">#</div><div class="line"># setfacl -m user:vagrant:rw aclfile</div><div class="line"># ll aclfile</div><div class="line">-rw-rw-r--+ 1 root root 5 Jun 28 23:31 aclfile</div><div class="line">#</div><div class="line"># getfacl -c aclfile</div><div class="line">user::rw-</div><div class="line">user:vagrant:rw-</div><div class="line">group::r--</div><div class="line">mask::rw-</div><div class="line">other::r--</div><div class="line"></div><div class="line"># sudo -u vagrant sh -c &quot;echo vagrant &gt; aclfile&quot;</div><div class="line"># cat aclfile</div><div class="line">vagrant</div></pre></td></tr></table></figure>
 <ul>
@@ -335,7 +335,7 @@
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># setfacl -b aclfile</div><div class="line"># ls -l aclfile; getfacl -c aclfile</div><div class="line">-rw-r----- 1 root root 5 Jun 29 15:13 aclfile</div><div class="line">user::rw-</div><div class="line">group::r--</div><div class="line">other::---</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="所感"><a href="#所感" class="headerlink" title="所感"></a>所感</h2><p>なかなか使い所が難しい（運用しづらい）感があるが、例えば、レンサバなどは、各ユーザ権限で基本、ファイルを作成するが、apache ユーザでも読み込みができる必要がある。こういったところで使うとわりとシンプルに権限周りを管理できるのかもしれない。</p>
+<h2 id="所感"><a href="/2016/06/29/linux-acl/#所感" class="headerlink" title="所感"></a>所感</h2><p>なかなか使い所が難しい（運用しづらい）感があるが、例えば、レンサバなどは、各ユーザ権限で基本、ファイルを作成するが、apache ユーザでも読み込みができる必要がある。こういったところで使うとわりとシンプルに権限周りを管理できるのかもしれない。</p>
 ]]></content>
     
     <summary type="html">
@@ -361,26 +361,26 @@
     
     <content type="html"><![CDATA[<p>最近かなり流行っている「Linux プログラミングインタフェース」を読んでたら、lseek(2) の解説で Sparse File (スパースファイル) の話が出てきたので、実装が気になって調べてみた。</p>
 <a id="more"></a>
-<p><img src="linux-programming-interface.png" alt=""></p>
+<p><img src="/2016/03/24/sparse-file/linux-programming-interface.png" alt=""></p>
 <blockquote>
 <p>ファイル末尾を越えた位置へシークするとどうなるでしょうか? そしてその位置で I/O を実行すると? … (略) 意外 に思われるかもしれませんが、書き込みは可能なのです。</p>
 </blockquote>
 <p>refs: <a href="https://www.oreilly.co.jp/books/9784873115856/" target="_blank" rel="external">https://www.oreilly.co.jp/books/9784873115856/</a></p>
-<h1 id="Sparse-File-とは"><a href="#Sparse-File-とは" class="headerlink" title="Sparse File とは"></a>Sparse File とは</h1><p>簡単に言うと、内部に NULL のかたまり(ファイルホール)を含むファイルのこと。こんなやつ。</p>
+<h1 id="Sparse-File-とは"><a href="/2016/03/24/sparse-file/#Sparse-File-とは" class="headerlink" title="Sparse File とは"></a>Sparse File とは</h1><p>簡単に言うと、内部に NULL のかたまり(ファイルホール)を含むファイルのこと。こんなやつ。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#  ls -shl sparse_file</span></div><div class="line">4.0K -rw-r--r-- 1 root root 1.1M  3月 24 01:30 2016 sparse_file</div></pre></td></tr></table></figure>
 <p>ls で s オプションをつけると実際に使用しているブロックサイズが表示される。ファイルサイズ見ると 1M以上あるが、実際は 4K しか使用していない。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># od -tx1 sparse-file</div><div class="line">0000000 31 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 &lt;-</div><div class="line">0000020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 &lt;- この辺が NULL のかたまり</div><div class="line">*</div><div class="line">4000000 31</div></pre></td></tr></table></figure>
 <p>フォイルの中身はこんな感じ。<br>od の出力にある <code>*</code> は、アドレス 4000000 まで <code>00(NULL)</code> が続いていることを表している。<br>上の例だとファイルの先頭と末尾に１バイトの文字「1 (0x31)」があり、その間の 1Mぐらいが NULL で埋まっている。</p>
-<h1 id="Sparse-File-の作り方"><a href="#Sparse-File-の作り方" class="headerlink" title="Sparse File の作り方"></a>Sparse File の作り方</h1><p>dd 作るのが簡単。</p>
+<h1 id="Sparse-File-の作り方"><a href="/2016/03/24/sparse-file/#Sparse-File-の作り方" class="headerlink" title="Sparse File の作り方"></a>Sparse File の作り方</h1><p>dd 作るのが簡単。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># dd if=/dev/zero of=sparse-file bs=1M seek=1024 count=0</span></div><div class="line">0+0 records <span class="keyword">in</span></div><div class="line">0+0 records out</div><div class="line">0 bytes (0 B) copied, 6.858e-06 s, 0.0 kB/s</div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># ls -lhs sparse-file</span></div><div class="line">0 -rw-r--r-- 1 root root 1.0G  3月 24 01:59 2016 sparse-file</div></pre></td></tr></table></figure>
 <p>上記の dd コマンドは <code>bs(1M)</code> * <code>seek(1024)</code>分先に進んで、<code>of(sparse-file)</code>に <code>if(/dev/zero)</code> を <code>count(0)</code>分書き込む。ただ今回は count=0 なので、seek で進んだだけで、何も書き込んでいない（なので、実際 if はなんでも良い）</p>
-<h1 id="Sparse-File-はどう実装されているのか？"><a href="#Sparse-File-はどう実装されているのか？" class="headerlink" title="Sparse File はどう実装されているのか？"></a>Sparse File はどう実装されているのか？</h1><p>ここからが知りたかったこと。</p>
+<h1 id="Sparse-File-はどう実装されているのか？"><a href="/2016/03/24/sparse-file/#Sparse-File-はどう実装されているのか？" class="headerlink" title="Sparse File はどう実装されているのか？"></a>Sparse File はどう実装されているのか？</h1><p>ここからが知りたかったこと。</p>
 <p>inode を見ればわかると思うので debugfs を使用して確認してみる。inode やブロックの管理はファイルシステムによって異なるので、ext2, ext3, ext4 の３種類確認してみた。</p>
-<h2 id="準備"><a href="#準備" class="headerlink" title="準備"></a>準備</h2><p>ファイルシステムごとにパーティション切るのも面倒なので、dd で作成したファイルをフォーマットし、loopback で mount した。以下準備作業。</p>
+<h2 id="準備"><a href="/2016/03/24/sparse-file/#準備" class="headerlink" title="準備"></a>準備</h2><p>ファイルシステムごとにパーティション切るのも面倒なので、dd で作成したファイルをフォーマットし、loopback で mount した。以下準備作業。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mount 用の image ファイルの作成</span></div><div class="line">dd <span class="keyword">if</span>=/dev/zero of=ext2.img bs=1M count=10</div><div class="line">dd <span class="keyword">if</span>=/dev/zero of=ext3.img bs=1M count=10</div><div class="line">dd <span class="keyword">if</span>=/dev/zero of=ext4.img bs=1M count=10</div><div class="line"></div><div class="line"><span class="comment"># 各ファイルシステムでフォーマット</span></div><div class="line">mkfs -t ext2 -F ext2.img</div><div class="line">mkfs -t ext3 -F ext3.img</div><div class="line">mkfs -t ext4 -F ext4.img</div><div class="line"></div><div class="line"><span class="comment"># マウント</span></div><div class="line">mkdir ext&#123;2,3,4&#125;</div><div class="line">mount -o loop ext2.img ext2</div><div class="line">mount -o loop ext3.img ext3</div><div class="line">mount -o loop ext4.img ext4</div><div class="line"></div><div class="line"><span class="comment"># sparse-file の作成</span></div><div class="line"><span class="comment"># echo で先頭1バイト分のデータを作成し、dd でそのデータを残したまま(conv=notrunc) 1Mバイト seek.</span></div><div class="line"><span class="comment"># seek 後、ファイルの末尾にファイル「1byte」の内容を書き込んでいる</span></div><div class="line"><span class="built_in">echo</span> -n 1 &gt; 1byte</div><div class="line"><span class="built_in">echo</span> -n 1 &gt; ext2/sparse-file</div><div class="line"><span class="built_in">echo</span> -n 1 &gt; ext3/sparse-file</div><div class="line"><span class="built_in">echo</span> -n 1 &gt; ext4/sparse-file</div><div class="line">dd <span class="keyword">if</span>=1byte of=ext2/sparse-file bs=1M count=1 seek=1 conv=notrunc</div><div class="line">dd <span class="keyword">if</span>=1byte of=ext3/sparse-file bs=1M count=1 seek=1 conv=notrunc</div><div class="line">dd <span class="keyword">if</span>=1byte of=ext4/sparse-file bs=1M count=1 seek=1 conv=notrunc</div></pre></td></tr></table></figure>
 <p>ここで作成した sparse-file は、さきほど od で確認したものと同様のもの。</p>
-<h2 id="結果"><a href="#結果" class="headerlink" title="結果"></a>結果</h2><p>debugfs で確認してみると単純な仕組みだった。inode は、ちゃんとファイルサイズの情報を持っていて、そのファイルの何バイト目がどのブロックに対応しているかの情報もある。なので、ブロックに紐付いていないファイルの位置がファイルホールになる。</p>
-<p>下にある ext2 の debugfus の結果を図解するとこんな感じ。<br><img src="inode.png" alt=""></p>
+<h2 id="結果"><a href="/2016/03/24/sparse-file/#結果" class="headerlink" title="結果"></a>結果</h2><p>debugfs で確認してみると単純な仕組みだった。inode は、ちゃんとファイルサイズの情報を持っていて、そのファイルの何バイト目がどのブロックに対応しているかの情報もある。なので、ブロックに紐付いていないファイルの位置がファイルホールになる。</p>
+<p>下にある ext2 の debugfus の結果を図解するとこんな感じ。<br><img src="/2016/03/24/sparse-file/inode.png" alt=""></p>
 <ul>
 <li>白い枠の左にある数字が、ファイルに対応する<code>論理ブロックの番号</code>。</li>
 <li>inode で直接管理しているブロックは 12個 (ブロックサイズが 1024 byte だと 12,288 byte のサイズまで扱える)。</li>
@@ -390,7 +390,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="debugfs-で-inode-の情報を見る"><a href="#debugfs-で-inode-の情報を見る" class="headerlink" title="debugfs で inode の情報を見る"></a>debugfs で inode の情報を見る</h2><p>ext2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"># debugfs ext2.img</div><div class="line">debugfs 1.41.12 (17-May-2010)</div><div class="line">debugfs:  stat sparse-file</div><div class="line">Inode: 12   Type: regular    Mode:  0644   Flags: 0x0</div><div class="line">Generation: 1198064997    Version: 0x00000000</div><div class="line">User:     0   Group:     0   Size: 1048577</div><div class="line">File ACL: 0    Directory ACL: 0</div><div class="line">Links: 1   Blockcount: 8</div><div class="line">Fragment:  Address: 0    Number: 0    Size: 0</div><div class="line">ctime: 0x56f2c487 -- Thu Mar 24 01:29:59 2016</div><div class="line">atime: 0x56f2c959 -- Thu Mar 24 01:50:33 2016</div><div class="line">mtime: 0x56f2c487 -- Thu Mar 24 01:29:59 2016</div><div class="line">BLOCKS:</div><div class="line">(0):2561, (DIND):2562, (IND):2563, (1024):2564</div><div class="line">TOTAL: 4</div></pre></td></tr></table></figure></p>
+<h2 id="debugfs-で-inode-の情報を見る"><a href="/2016/03/24/sparse-file/#debugfs-で-inode-の情報を見る" class="headerlink" title="debugfs で inode の情報を見る"></a>debugfs で inode の情報を見る</h2><p>ext2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"># debugfs ext2.img</div><div class="line">debugfs 1.41.12 (17-May-2010)</div><div class="line">debugfs:  stat sparse-file</div><div class="line">Inode: 12   Type: regular    Mode:  0644   Flags: 0x0</div><div class="line">Generation: 1198064997    Version: 0x00000000</div><div class="line">User:     0   Group:     0   Size: 1048577</div><div class="line">File ACL: 0    Directory ACL: 0</div><div class="line">Links: 1   Blockcount: 8</div><div class="line">Fragment:  Address: 0    Number: 0    Size: 0</div><div class="line">ctime: 0x56f2c487 -- Thu Mar 24 01:29:59 2016</div><div class="line">atime: 0x56f2c959 -- Thu Mar 24 01:50:33 2016</div><div class="line">mtime: 0x56f2c487 -- Thu Mar 24 01:29:59 2016</div><div class="line">BLOCKS:</div><div class="line">(0):2561, (DIND):2562, (IND):2563, (1024):2564</div><div class="line">TOTAL: 4</div></pre></td></tr></table></figure></p>
 <p>ext3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"># debugfs ext3.img</div><div class="line">debugfs 1.41.12 (17-May-2010)</div><div class="line">debugfs:  stat sparse-file</div><div class="line">Inode: 12   Type: regular    Mode:  0644   Flags: 0x0</div><div class="line">Generation: 3857784234    Version: 0x00000000</div><div class="line">User:     0   Group:     0   Size: 1048577</div><div class="line">File ACL: 0    Directory ACL: 0</div><div class="line">Links: 1   Blockcount: 8</div><div class="line">Fragment:  Address: 0    Number: 0    Size: 0</div><div class="line">ctime: 0x56f2c48e -- Thu Mar 24 01:30:06 2016</div><div class="line">atime: 0x56f2c0ab -- Thu Mar 24 01:13:31 2016</div><div class="line">mtime: 0x56f2c48e -- Thu Mar 24 01:30:06 2016</div><div class="line">BLOCKS:</div><div class="line">(0):2562, (DIND):2563, (IND):2564, (1024):2565</div><div class="line">TOTAL: 4</div></pre></td></tr></table></figure></p>
 <p>ext4<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># debugfs ext4.img</div><div class="line">debugfs 1.41.12 (17-May-2010)</div><div class="line">debugfs:  stat sparse-file</div><div class="line">Inode: 12   Type: regular    Mode:  0644   Flags: 0x80000</div><div class="line">Generation: 1296676418    Version: 0x00000001</div><div class="line">User:     0   Group:     0   Size: 1048577</div><div class="line">File ACL: 0    Directory ACL: 0</div><div class="line">Links: 1   Blockcount: 4</div><div class="line">Fragment:  Address: 0    Number: 0    Size: 0</div><div class="line">ctime: 0x56f2c493 -- Thu Mar 24 01:30:11 2016</div><div class="line">atime: 0x56f2c0b1 -- Thu Mar 24 01:13:37 2016</div><div class="line">mtime: 0x56f2c493 -- Thu Mar 24 01:30:11 2016</div><div class="line">EXTENTS:</div><div class="line">(0): 8706, (1024): 8234</div><div class="line">debugfs:  dump_extents sparse-file</div><div class="line">Level Entries       Logical      Physical Length Flags</div><div class="line"> 0/ 0   1/  2     0 -     0  8706 -  8706      1</div><div class="line"> 0/ 0   2/  2  1024 -  1024  8234 -  8234      1</div></pre></td></tr></table></figure></p>
 <ul>
@@ -398,7 +398,7 @@
 <li>ext2, ext3 の BLOCKS の出力にある <code>IND</code> は、たぶん INDirect（間接参照）の略。<code>DIND</code> は Double INDirect (2段間接参照）か？</li>
 <li>ファイルのデータに関連するブロックは、<code>(0)</code> と <code>(1024)</code> しかないので、<code>（1-1023）</code>がファイルホールになる。</li>
 </ul>
-<h1 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h1><ol>
+<h1 id="Tips"><a href="/2016/03/24/sparse-file/#Tips" class="headerlink" title="Tips"></a>Tips</h1><ol>
 <li><p>ファイルシステムのサイズ(485M)より、大きなファイル(1G)が作れる</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># df -h /boot</span></div><div class="line">Filesystem            Size  Used Avail Use% マウント位置</div><div class="line">/dev/sda1             485M   31M  430M   7% /boot</div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># ll -h /boot/sparse-file</span></div><div class="line">-rw-r--r-- 1 root root 1.0G  3月 24 01:41 2016 /boot/sparse-file</div></pre></td></tr></table></figure>
 </li>
@@ -431,7 +431,7 @@
     <content type="html"><![CDATA[<p>glibc の脆弱性 <a href="https://www.jpcert.or.jp/at/2016/at160009.html" target="_blank" rel="external">CVE-2015-7547</a> でも話題になった 512バイトを超える DNS パケットについてのメモ。</p>
 <p>DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。</p>
 <a id="more"></a>
-<h1 id="そもそもなぜ-512-バイト？"><a href="#そもそもなぜ-512-バイト？" class="headerlink" title="そもそもなぜ 512 バイト？"></a>そもそもなぜ 512 バイト？</h1><p>調べてみると、</p>
+<h1 id="そもそもなぜ-512-バイト？"><a href="/2016/02/21/dns-packet-over-512/#そもそもなぜ-512-バイト？" class="headerlink" title="そもそもなぜ 512 バイト？"></a>そもそもなぜ 512 バイト？</h1><p>調べてみると、</p>
 <blockquote>
 <p>インターネットで使われている IP(IPv4)の仕様では 一度に受信可能なデータグラム(ヘッダーを含むパケッ ト)として、<br>576 バイトを保証しなければならないと定められています。この値は、64バイトのヘッダーと 512バイトの<br>データブロックを格納可能な大きさとして選択されたものです</p>
 </blockquote>
@@ -442,43 +442,43 @@
 <p>ちなみに、root DNS が 13 個しかないのも、14 個だと 512バイトを超えてしまうから。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">$ dig . NS</div><div class="line"></div><div class="line">; &lt;&lt;&gt;&gt; DiG 9.8.3-P1 &lt;&lt;&gt;&gt; . NS</div><div class="line">;; global options: +cmd</div><div class="line">;; Got answer:</div><div class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 22440</div><div class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 13</div><div class="line">   :</div><div class="line">;; ANSWER SECTION:</div><div class="line">.           80275   IN  NS  k.root-servers.net.</div><div class="line">.           80275   IN  NS  l.root-servers.net.</div><div class="line">.           80275   IN  NS  m.root-servers.net.</div><div class="line">.           80275   IN  NS  a.root-servers.net.</div><div class="line">.           80275   IN  NS  b.root-servers.net.</div><div class="line">.           80275   IN  NS  c.root-servers.net.</div><div class="line">.           80275   IN  NS  d.root-servers.net.</div><div class="line">.           80275   IN  NS  e.root-servers.net.</div><div class="line">.           80275   IN  NS  f.root-servers.net.</div><div class="line">.           80275   IN  NS  g.root-servers.net.</div><div class="line">.           80275   IN  NS  h.root-servers.net.</div><div class="line">.           80275   IN  NS  i.root-servers.net.</div><div class="line">.           80275   IN  NS  j.root-servers.net.</div><div class="line"></div><div class="line">;; ADDITIONAL SECTION:</div><div class="line">   :</div><div class="line">;; MSG SIZE  rcvd: 496</div></pre></td></tr></table></figure>
 <p><code>ANSWER: 13</code> <code>MSG SIZE  rcvd: 496</code></p>
-<h1 id="TCPフォールバック"><a href="#TCPフォールバック" class="headerlink" title="TCPフォールバック"></a>TCPフォールバック</h1><p>初期の DNSプロトコルでは 512バイトを超えた応答を受け取るためには、TCP で再帰問い合わせ(TCPフォールバック)を<br>行う必要があった。</p>
+<h1 id="TCPフォールバック"><a href="/2016/02/21/dns-packet-over-512/#TCPフォールバック" class="headerlink" title="TCPフォールバック"></a>TCPフォールバック</h1><p>初期の DNSプロトコルでは 512バイトを超えた応答を受け取るためには、TCP で再帰問い合わせ(TCPフォールバック)を<br>行う必要があった。</p>
 <p>サーバは、UDP の問い合わせに対し応答が 512バイトを超える場合、応答するレコードを 512バイト以下に切り詰めた上で、切り詰められたこと示すビット(TC)を立て、UDP の応答を返す。</p>
 <p>クライアント側は、その TCビットを確認すると再度、同じ問い合わせをTCPで行い、全てのレコードがつまった応答を受け取る。</p>
 <p>(このあたりまでは、RFC 1034/1035/1123/5966 の話)</p>
-<h1 id="DNSキャッシュポイズニング対策"><a href="#DNSキャッシュポイズニング対策" class="headerlink" title="DNSキャッシュポイズニング対策"></a>DNSキャッシュポイズニング対策</h1><p>1990年台に問題提起された DNSキャッシュポイズニング対応として、DNSSECの標準化が開始された。</p>
+<h1 id="DNSキャッシュポイズニング対策"><a href="/2016/02/21/dns-packet-over-512/#DNSキャッシュポイズニング対策" class="headerlink" title="DNSキャッシュポイズニング対策"></a>DNSキャッシュポイズニング対策</h1><p>1990年台に問題提起された DNSキャッシュポイズニング対応として、DNSSECの標準化が開始された。</p>
 <p>しかし、DNSSEC では鍵や署名をデータに乗せるため、512バイトに収まらず TCPフォールバックが発生することでレイテンシの問題が顕在化。</p>
 <p>その対策として、UDP で 512バイト以上のデータを応答できる仕組みが検討され、1999年に RFC 26710 として <em>EDNS0</em> が標準化された。この RFC では、DNSを DNSSEC や IPv6 に対応させる場合、EDNS0 への対応が必須となっている。</p>
-<h1 id="EDNS0-Extension-Mechanisms-for-DNS"><a href="#EDNS0-Extension-Mechanisms-for-DNS" class="headerlink" title="EDNS0 (Extension Mechanisms for DNS)"></a>EDNS0 (Extension Mechanisms for DNS)</h1><p>EDNS0 を使用可能なクライアントは、DNS要求の addtional セクションに OPTレコードを記載し、EDNS0 に対応していることをサーバにしめす。サーバ側が EDNS0 に対応していれば正常な応答が返り、対応していなければ、エラーになるか、無視されて TCPフォールバックすることになる。</p>
-<h1 id="動作検証"><a href="#動作検証" class="headerlink" title="動作検証"></a>動作検証</h1><p>dig を使用して、TCPフォールバックと EDNS0 のパケットを確認してみる。</p>
-<h2 id="【検証1】TCPフォールバック"><a href="#【検証1】TCPフォールバック" class="headerlink" title="【検証1】TCPフォールバック"></a>【検証1】TCPフォールバック</h2><p>dig で 512バイトを超える応答を受ける場合、標準でTCPフォールバックが行われる。</p>
+<h1 id="EDNS0-Extension-Mechanisms-for-DNS"><a href="/2016/02/21/dns-packet-over-512/#EDNS0-Extension-Mechanisms-for-DNS" class="headerlink" title="EDNS0 (Extension Mechanisms for DNS)"></a>EDNS0 (Extension Mechanisms for DNS)</h1><p>EDNS0 を使用可能なクライアントは、DNS要求の addtional セクションに OPTレコードを記載し、EDNS0 に対応していることをサーバにしめす。サーバ側が EDNS0 に対応していれば正常な応答が返り、対応していなければ、エラーになるか、無視されて TCPフォールバックすることになる。</p>
+<h1 id="動作検証"><a href="/2016/02/21/dns-packet-over-512/#動作検証" class="headerlink" title="動作検証"></a>動作検証</h1><p>dig を使用して、TCPフォールバックと EDNS0 のパケットを確認してみる。</p>
+<h2 id="【検証1】TCPフォールバック"><a href="/2016/02/21/dns-packet-over-512/#【検証1】TCPフォールバック" class="headerlink" title="【検証1】TCPフォールバック"></a>【検証1】TCPフォールバック</h2><p>dig で 512バイトを超える応答を受ける場合、標準でTCPフォールバックが行われる。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ dig @192.36.144.107 se. any</div><div class="line">;; Truncated, retrying <span class="keyword">in</span> TCP mode.</div><div class="line"> :</div><div class="line">;; Query time: 406 msec</div><div class="line">;; SERVER: 192.36.144.107<span class="comment">#53(192.36.144.107)</span></div><div class="line">;; WHEN: Sat Feb 20 23:30:44 2016</div><div class="line">;; MSG SIZE  rcvd: 2052</div></pre></td></tr></table></figure>
 <p>dig を実行すると始めに <code>Truncated, retrying in TCP mode.</code> の出力があり、TCPフォールバックが実行されたことがわかる。その際の tcpdump。</p>
 <ol>
 <li><p>問い合わせ時のパケット。</p>
-<p> <code>No.1</code>: UDP で問い合わせを行った後、<code>No.6</code>: TCPで再帰問い合わせてしている。<br> <img src="fallback-tcpdump1.jpg" alt=""></p>
+<p> <code>No.1</code>: UDP で問い合わせを行った後、<code>No.6</code>: TCPで再帰問い合わせてしている。<br> <img src="/2016/02/21/dns-packet-over-512/fallback-tcpdump1.jpg" alt=""></p>
 </li>
 <li><p>UDP の応答。</p>
-<p> <code>No2</code>: No1のレスポンス<br> <img src="fallback-tcpdump2.jpg" alt=""><br> TCビットが立てられ、応答の数(Answer RRs)は切り詰められて <code>11</code> となっている。</p>
+<p> <code>No2</code>: No1のレスポンス<br> <img src="/2016/02/21/dns-packet-over-512/fallback-tcpdump2.jpg" alt=""><br> TCビットが立てられ、応答の数(Answer RRs)は切り詰められて <code>11</code> となっている。</p>
 </li>
 <li><p>TCP の応答。</p>
-<p> <code>No9</code>: No6のレスポンス<br> <img src="fallback-tcpdump3.jpg" alt=""><br> TCPフォールバック時の応答の数は UDP時の <code>11</code> から増えて <code>19</code>。 </p>
+<p> <code>No9</code>: No6のレスポンス<br> <img src="/2016/02/21/dns-packet-over-512/fallback-tcpdump3.jpg" alt=""><br> TCPフォールバック時の応答の数は UDP時の <code>11</code> から増えて <code>19</code>。 </p>
 </li>
 </ol>
-<h2 id="【検証2】EDNS0"><a href="#【検証2】EDNS0" class="headerlink" title="【検証2】EDNS0"></a>【検証2】EDNS0</h2><p>dig では、<code>+edns=0</code> オプションをつけると EDNS0 が利用される。（<code>+busize=</code> や <code>+dnssec</code> をつけた際も EDNS0 が利用される）</p>
+<h2 id="【検証2】EDNS0"><a href="/2016/02/21/dns-packet-over-512/#【検証2】EDNS0" class="headerlink" title="【検証2】EDNS0"></a>【検証2】EDNS0</h2><p>dig では、<code>+edns=0</code> オプションをつけると EDNS0 が利用される。（<code>+busize=</code> や <code>+dnssec</code> をつけた際も EDNS0 が利用される）</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ dig @192.36.144.107 se. any +edns=0</div><div class="line"> :</div><div class="line">;; OPT PSEUDOSECTION:</div><div class="line">; EDNS: version: 0, flags:; udp: 4096</div><div class="line"> :</div><div class="line">;; Query time: 312 msec</div><div class="line">;; SERVER: 192.36.144.107<span class="comment">#53(192.36.144.107)</span></div><div class="line">;; WHEN: Mon Feb 22 20:49:14 2016</div><div class="line">;; MSG SIZE  rcvd: 2063</div></pre></td></tr></table></figure>
 <ol>
 <li><p>問い合わせ時の一連のパケット。</p>
-<p> UDP だけで処理が完結している。<br> <img src="edns0-tcpdump1.jpg" alt=""></p>
+<p> UDP だけで処理が完結している。<br> <img src="/2016/02/21/dns-packet-over-512/edns0-tcpdump1.jpg" alt=""></p>
 </li>
 <li><p>UDP の問い合わせ</p>
-<p> <code>No.15</code>: UDP による問い合わせ<br> <img src="edns0-tcpdump2.jpg" alt=""><br> addtional section に OPTレコードがある</p>
+<p> <code>No.15</code>: UDP による問い合わせ<br> <img src="/2016/02/21/dns-packet-over-512/edns0-tcpdump2.jpg" alt=""><br> addtional section に OPTレコードがある</p>
 </li>
 <li><p>UDP の応答</p>
-<p> <code>No.20</code>: UDP による応答<br> <img src="edns0-tcpdump3.jpg" alt=""><br> TCPフォールバックせずに UDP で全ての応答が返ってきている</p>
+<p> <code>No.20</code>: UDP による応答<br> <img src="/2016/02/21/dns-packet-over-512/edns0-tcpdump3.jpg" alt=""><br> TCPフォールバックせずに UDP で全ての応答が返ってきている</p>
 </li>
 </ol>
-<h1 id="補足-DNS-のメッセージフォーマット"><a href="#補足-DNS-のメッセージフォーマット" class="headerlink" title="[補足] DNS のメッセージフォーマット"></a>[補足] DNS のメッセージフォーマット</h1><p>DNS のメッセージフォーマットは、5つのセクションに分かれており、<code>Header</code> のみが必須。要求と応答ともに同じフォーマットしようされる。</p>
+<h1 id="補足-DNS-のメッセージフォーマット"><a href="/2016/02/21/dns-packet-over-512/#補足-DNS-のメッセージフォーマット" class="headerlink" title="[補足] DNS のメッセージフォーマット"></a>[補足] DNS のメッセージフォーマット</h1><p>DNS のメッセージフォーマットは、5つのセクションに分かれており、<code>Header</code> のみが必須。要求と応答ともに同じフォーマットしようされる。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Format</div><div class="line"></div><div class="line">    +---------------------+</div><div class="line">    |        Header       |</div><div class="line">    +---------------------+</div><div class="line">    |       Question      | the question <span class="keyword">for</span> the name server</div><div class="line">    +---------------------+</div><div class="line">    |        Answer       | RRs answering the question</div><div class="line">    +---------------------+</div><div class="line">    |      Authority      | RRs pointing toward an authority</div><div class="line">    +---------------------+</div><div class="line">    |      Additional     | RRs holding additional information</div><div class="line">    +---------------------+</div></pre></td></tr></table></figure>
 <p>Header は 6つに分かれていて、以下のような感じ。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">The header contains the following fields:</div><div class="line"></div><div class="line">      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                      ID                       |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    QDCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    ANCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    NSCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    ARCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div></pre></td></tr></table></figure></p>
 <ol>
@@ -560,14 +560,14 @@
     
     <content type="html"><![CDATA[<p>この記事は、<a href="http://qiita.com/advent-calendar/2015/mruby" target="_blank" rel="external">mruby advent calendar 2015</a> 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。</p>
 <a id="more"></a>
-<h1 id="はじめに"><a href="#はじめに" class="headerlink" title="はじめに"></a>はじめに</h1><p>mruby でコマンドラインツールを作成できる <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を使って、markdown を html に変換する <code>gfmarkdown</code> というコマンドを作ってみました。</p>
+<h1 id="はじめに"><a href="/2015/12/20/gfmarkdown-release/#はじめに" class="headerlink" title="はじめに"></a>はじめに</h1><p>mruby でコマンドラインツールを作成できる <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を使って、markdown を html に変換する <code>gfmarkdown</code> というコマンドを作ってみました。</p>
 <p>mruby-cli は、コマンドを作成するための雛形の作成とコンパイルなどを行ってくれるもので、一つのソースから、Linux や Mac、Windows などで動作するバイナリを生成してくれます。</p>
 <p>markdown から html への変換は、<a href="https://developer.github.com/v3/markdown/" target="_blank" rel="external">Github の API</a> を利用しました。このため、インターネットへ接続できない環境では使用できません。</p>
-<h1 id="gfmarkdown-のインストール"><a href="#gfmarkdown-のインストール" class="headerlink" title="gfmarkdown のインストール"></a>gfmarkdown のインストール</h1><p>各アーキテクチャごとのバイナリを用意しているので、ダウンロード＆展開する。(現状、windows 版はないです)</p>
+<h1 id="gfmarkdown-のインストール"><a href="/2015/12/20/gfmarkdown-release/#gfmarkdown-のインストール" class="headerlink" title="gfmarkdown のインストール"></a>gfmarkdown のインストール</h1><p>各アーキテクチャごとのバイナリを用意しているので、ダウンロード＆展開する。(現状、windows 版はないです)</p>
 <p><a href="https://github.com/harasou/gfmarkdown/releases" target="_blank" rel="external">https://github.com/harasou/gfmarkdown/releases</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -fsSLO https://github.com/harasou/gfmarkdown/releases/download/v0.0.1/gfmarkdown-0.0.1-x86_64-apple-darwin14.zip</div><div class="line">unzip gfmarkdown-*.zip</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ ./gfmarkdown</div><div class="line"></div><div class="line">Usage: gfmarkdown [options] file</div><div class="line">      --mode=markdown|gfm</div><div class="line">                      The rendering mode. markdown or gfm. default markdwon.</div><div class="line">      --context=repository</div><div class="line">                      he repository context. Only taken into account when rendering as gfm</div><div class="line">      --url=url       domain (or through https://yourdomain.com/api/v3/markdown <span class="keyword">for</span> enterprise)</div><div class="line">      --token=token   OAuth2 Token</div><div class="line">      --version       <span class="built_in">print</span> the version</div><div class="line">      --help          show this message, -h <span class="keyword">for</span> short message</div></pre></td></tr></table></figure>
-<h1 id="使い方"><a href="#使い方" class="headerlink" title="使い方"></a>使い方</h1><p>テスト用の markdown ファイル <code>TEST.md</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cat TEST.md</div><div class="line"><span class="comment">## rendering</span></div><div class="line">- harasou/mruby-gfmarkdown<span class="comment">#1</span></div><div class="line">- <span class="comment">#1</span></div></pre></td></tr></table></figure></p>
+<h1 id="使い方"><a href="/2015/12/20/gfmarkdown-release/#使い方" class="headerlink" title="使い方"></a>使い方</h1><p>テスト用の markdown ファイル <code>TEST.md</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cat TEST.md</div><div class="line"><span class="comment">## rendering</span></div><div class="line">- harasou/mruby-gfmarkdown<span class="comment">#1</span></div><div class="line">- <span class="comment">#1</span></div></pre></td></tr></table></figure></p>
 <ol>
 <li><p>通常の変換</p>
  <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ ./gfmarkdown TEST.md</div><div class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"user-content-rendering"</span> <span class="attr">class</span>=<span class="string">"anchor"</span> <span class="attr">href</span>=<span class="string">"#rendering"</span> <span class="attr">aria-hidden</span>=<span class="string">"true"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"octicon octicon-link"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span>rendering<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>harasou/mruby-gfmarkdown#1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>#1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div></pre></td></tr></table></figure>
@@ -580,9 +580,9 @@
 </li>
 </ol>
 <p><a href="http://rtomayko.github.io/bcat/" target="_blank" rel="external">bcat</a> などを使うとブラウザで確認できるので便利です。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./gfmarkdown TEST.md | bcat</div></pre></td></tr></table></figure></p>
-<h1 id="markdown-の変換"><a href="#markdown-の変換" class="headerlink" title="markdown の変換"></a>markdown の変換</h1><p>Github の API を利用しているので、https での通信が必要ですが、これは matsumoto-r さんの <a href="https://github.com/matsumoto-r/mruby-httprequest" target="_blank" rel="external">mruby-httprequest</a> を利用しました。<br>これを使えば、API の通信がワンライナーでかけてしまいます。実際、<code>gfmarkdown</code> で利用している mgem はこんなシンプルなものです。</p>
+<h1 id="markdown-の変換"><a href="/2015/12/20/gfmarkdown-release/#markdown-の変換" class="headerlink" title="markdown の変換"></a>markdown の変換</h1><p>Github の API を利用しているので、https での通信が必要ですが、これは matsumoto-r さんの <a href="https://github.com/matsumoto-r/mruby-httprequest" target="_blank" rel="external">mruby-httprequest</a> を利用しました。<br>これを使えば、API の通信がワンライナーでかけてしまいます。実際、<code>gfmarkdown</code> で利用している mgem はこんなシンプルなものです。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">GFMarkdown</span></span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(opt = &#123;&#125;)</span></span></div><div class="line">    @url = opt[<span class="symbol">:url</span>] ? opt[<span class="symbol">:url</span>] : <span class="string">"https://api.github.com/markdown"</span></div><div class="line">    @token = opt[<span class="symbol">:token</span>]</div><div class="line">    @mode = opt[<span class="symbol">:mode</span>]</div><div class="line">    @context = opt[<span class="symbol">:context</span>]</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">render</span> <span class="title">text</span></span></div><div class="line">    headers = &#123;</div><div class="line">      <span class="string">'User-Agent'</span> =&gt; <span class="string">"mruby-gfmarkdown"</span>,</div><div class="line">    &#125;</div><div class="line">    headers[<span class="string">'Authorization'</span>] = <span class="string">"token <span class="subst">#&#123;@token&#125;</span>"</span> <span class="keyword">if</span> @token</div><div class="line"></div><div class="line">    postdata = &#123;</div><div class="line">      <span class="symbol">:text</span> =&gt; text,</div><div class="line">    &#125;</div><div class="line">    postdata[<span class="symbol">:mode</span>] = @mode <span class="keyword">if</span> @mode</div><div class="line">    postdata[<span class="symbol">:context</span>] = @context <span class="keyword">if</span> @context</div><div class="line"></div><div class="line">    HttpRequest.new().post(@url,JSON.generate(postdata),headers).body</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<h1 id="コマンドの作成"><a href="#コマンドの作成" class="headerlink" title="コマンドの作成"></a>コマンドの作成</h1><p>バイナリの作成は、hone さんの <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を利用しています。簡単に mruby-cli を使ったバイナリの作り方を紹介します。</p>
+<h1 id="コマンドの作成"><a href="/2015/12/20/gfmarkdown-release/#コマンドの作成" class="headerlink" title="コマンドの作成"></a>コマンドの作成</h1><p>バイナリの作成は、hone さんの <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を利用しています。簡単に mruby-cli を使ったバイナリの作り方を紹介します。</p>
 <ol>
 <li><p>mruby-cli コマンドの取得</p>
 <p> mruby-cli のリポジトリ自体は <code>mruby-cli</code> コマンドを作成するものなので特に不要で release からダウンロードできるコマンドがあればよいです。</p>
@@ -607,7 +607,7 @@
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ docker-compose run shell</div><div class="line">root@bb22c9acb029:/home/mruby/code<span class="comment"># uname -a</span></div><div class="line">Linux bb22c9acb029 4.0.9-boot2docker <span class="comment">#1 SMP Thu Aug 13 03:05:44 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h1 id="さいごに"><a href="#さいごに" class="headerlink" title="さいごに"></a>さいごに</h1><p>コマンドラインツールの作成とかだと、最近では golang の方が一般的だと思いますが、ライブラリとして組み込めるのは mruby の良さだと思います。</p>
+<h1 id="さいごに"><a href="/2015/12/20/gfmarkdown-release/#さいごに" class="headerlink" title="さいごに"></a>さいごに</h1><p>コマンドラインツールの作成とかだと、最近では golang の方が一般的だと思いますが、ライブラリとして組み込めるのは mruby の良さだと思います。</p>
 <p>今回、mruby-gfmarkdown という mgem を作成してコマンドを作りましたが、次は、この mgem を組み込んだライブラリ <code>libmruby.a</code> を利用して、Mac の Quilck Look アプリ(.md をプレビューする)を作成したいと画策してます。</p>
 ]]></content>
     
@@ -632,13 +632,13 @@
     <content type="html"><![CDATA[<p>「ユーザ単位で、通信時に使用するソースIP を指定できないか？」って話があって、cgroup や fwmark とか使えばできるんじゃない？って思ってたけど、iptables だけであっさりできたって話。</p>
 <a id="more"></a>
 <p>こんな感じで、サーバ上のプロセスが外部へ通信を行う際に、ユーザごとに別々のソースIP になってほしいって要件。</p>
-<p><img src="processes.png" alt=""></p>
+<p><img src="/2015/11/24/change-sourceIP-for-each-user/processes.png" alt=""></p>
 <p>上の例ではプライベートIP を使用しているが、利用時の想定はグローバルIP (IPマスカレードされたら意味なし :-P)。</p>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>いつものごとく vagrant で。</p>
+<h2 id="環境"><a href="/2015/11/24/change-sourceIP-for-each-user/#環境" class="headerlink" title="環境"></a>環境</h2><p>いつものごとく vagrant で。</p>
 <ul>
 <li>CentOS 7.1 (3.10.0-229.el7.x86_64)</li>
 </ul>
-<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><p>いろいろ面倒くさそうな手順を考えていたが、よく考えると iptables だけであっさり対応できる。上記画像のような環境を構築する手順。</p>
+<h2 id="手順"><a href="/2015/11/24/change-sourceIP-for-each-user/#手順" class="headerlink" title="手順"></a>手順</h2><p>いろいろ面倒くさそうな手順を考えていたが、よく考えると iptables だけであっさり対応できる。上記画像のような環境を構築する手順。</p>
 <ol>
 <li><p>ユーザを追加</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># useradd userA</span></div><div class="line"><span class="comment"># useradd userB</span></div><div class="line"><span class="comment"># useradd userC</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># tail -3 /etc/passwd</span></div><div class="line">userA:x:1001:1001::/home/userA:/bin/bash</div><div class="line">userB:x:1002:1002::/home/userB:/bin/bash</div><div class="line">userC:x:1003:1003::/home/userC:/bin/bash</div></pre></td></tr></table></figure>
@@ -650,7 +650,7 @@
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># iptables -t nat -A POSTROUTING -m owner --uid-owner userA -j SNAT --to-source 10.0.2.101</span></div><div class="line"><span class="comment"># iptables -t nat -A POSTROUTING -m owner --uid-owner userB -j SNAT --to-source 10.0.2.102</span></div><div class="line"><span class="comment"># iptables -t nat -A POSTROUTING -m owner --uid-owner userC -j SNAT --to-source 10.0.2.103</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># iptables -t nat -nvL</span></div><div class="line">Chain PREROUTING (policy ACCEPT 2 packets, 620 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line"></div><div class="line">Chain INPUT (policy ACCEPT 1 packets, 44 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line"></div><div class="line">Chain OUTPUT (policy ACCEPT 24 packets, 1805 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line"></div><div class="line">Chain POSTROUTING (policy ACCEPT 17 packets, 1262 bytes)</div><div class="line"> pkts bytes target     prot opt <span class="keyword">in</span>     out     <span class="built_in">source</span>               destination</div><div class="line">    0     0 SNAT       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1001 to:10.0.2.101</div><div class="line">    0     0 SNAT       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1002 to:10.0.2.102</div><div class="line">    0     0 SNAT       all  --  *      *       0.0.0.0/0            0.0.0.0/0            owner UID match 1003 to:10.0.2.103</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="検証"><a href="#検証" class="headerlink" title="検証"></a>検証</h2><p><code>userB</code> で ping を打った際の tcpdump</p>
+<h2 id="検証"><a href="/2015/11/24/change-sourceIP-for-each-user/#検証" class="headerlink" title="検証"></a>検証</h2><p><code>userB</code> で ping を打った際の tcpdump</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># sudo -u userB ping 8.8.8.8</span></div><div class="line">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.</div><div class="line">64 bytes from 8.8.8.8: icmp_seq=1 ttl=63 time=27.4 ms</div><div class="line">64 bytes from 8.8.8.8: icmp_seq=2 ttl=63 time=30.7 ms</div><div class="line">64 bytes from 8.8.8.8: icmp_seq=3 ttl=63 time=26.4 ms</div><div class="line"> :</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># tcpdump -n icmp</span></div><div class="line">tcpdump: verbose output suppressed, use -v or -vv <span class="keyword">for</span> full protocol decode</div><div class="line">listening on enp0s3, link-type EN10MB (Ethernet), capture size 65535 bytes</div><div class="line">08:09:53.760118 IP 10.0.2.102 &gt; 8.8.8.8: ICMP <span class="built_in">echo</span> request, id 20790, seq 1, length 64</div><div class="line">08:09:53.790121 IP 8.8.8.8 &gt; 10.0.2.102: ICMP <span class="built_in">echo</span> reply, id 20790, seq 1, length 64</div><div class="line">08:09:54.763025 IP 10.0.2.102 &gt; 8.8.8.8: ICMP <span class="built_in">echo</span> request, id 20790, seq 2, length 64</div><div class="line">08:09:54.797682 IP 8.8.8.8 &gt; 10.0.2.102: ICMP <span class="built_in">echo</span> reply, id 20790, seq 2, length 64</div><div class="line">08:09:55.766156 IP 10.0.2.102 &gt; 8.8.8.8: ICMP <span class="built_in">echo</span> request, id 20790, seq 3, length 64</div><div class="line"> :</div></pre></td></tr></table></figure>
 <p>ちゃんと userB のソースIP は <code>10.0.2.102</code> になっている。</p>
@@ -677,7 +677,7 @@
     <content type="html"><![CDATA[<p><a href="http://harasou.github.io/2015/11/03/loadable-kernel-module/" target="_blank" rel="external">前回カーネルモジュールを作った</a>際に、<code>MODULE_XXXX</code> というマクロでモジュール内に情報を埋め込んだが、これがどういう風に埋め込まれているのか調べてみた。環境は今回も CentOS7 (3.10.0-123.4.4.el7.x86_64)。</p>
 <a id="more"></a>
 <p>前回作成した helloworld モジュールでも良いが、せっかくなので OS標準でインストールされているカーネルモジュール「iptalble_filter」について確認。</p>
-<h2 id="ELF-Executable-and-Linking-Format"><a href="#ELF-Executable-and-Linking-Format" class="headerlink" title="ELF(Executable and Linking Format)"></a>ELF(Executable and Linking Format)</h2><p>カーネルモジュールは ELFファイルになっている。</p>
+<h2 id="ELF-Executable-and-Linking-Format"><a href="/2015/11/04/kernel-module-modinfo/#ELF-Executable-and-Linking-Format" class="headerlink" title="ELF(Executable and Linking Format)"></a>ELF(Executable and Linking Format)</h2><p>カーネルモジュールは ELFファイルになっている。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ file iptable_filter.ko</div><div class="line">iptable_filter.ko: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), BuildID[sha1]=0xbabd6cf7c7d83d359fa6aa7a5ad335bda58b0077, not stripped</div></pre></td></tr></table></figure>
 <p>ELFというのは、バイナリフォーマットの一つ（以前の Linux では a.out 形式も使用されていたらしいが、今はほとんどない）。</p>
 <p>Linux では、カーネルモジュールだけではなく、実行ファイル、共有ライブラリなども ELF になっており、ELFファイルを扱うための専用のコマンド <code>elfread</code> <code>elfedit</code> も提供されている。</p>
@@ -688,14 +688,14 @@
 <li>セクションヘッダ</li>
 </ul>
 <p>などのヘッダをもっているが、ELFファイル（オブジェクトファイル）の種類によって、必須のヘッダが異なる。プログラムヘッダは、実行ファイルが必要とするヘッダなので、カーネルモジュールではオプション扱いになる。</p>
-<p><img src="elf.png" alt=""></p>
+<p><img src="/2015/11/04/kernel-module-modinfo/elf.png" alt=""></p>
 <p>ref: <a href="https://ja.wikipedia.org/wiki/Executable_and_Linkable_Format" target="_blank" rel="external">https://ja.wikipedia.org/wiki/Executable_and_Linkable_Format</a></p>
-<h2 id="modinfo"><a href="#modinfo" class="headerlink" title="modinfo"></a>modinfo</h2><p>今回調べたかった modinfo の情報は、セクション<code>.modinfo</code> に格納されている。</p>
+<h2 id="modinfo"><a href="/2015/11/04/kernel-module-modinfo/#modinfo" class="headerlink" title="modinfo"></a>modinfo</h2><p>今回調べたかった modinfo の情報は、セクション<code>.modinfo</code> に格納されている。</p>
 <p>iptable_filter.ko のヘッダ情報。プログラムヘッダはない。セクションヘッダに <code>.modinfo</code> の文字列が見える。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line">$ readelf <span class="_">-e</span> iptable_filter.ko</div><div class="line">ELF ヘッダ:</div><div class="line">  マジック:  7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</div><div class="line">  クラス:                            ELF64</div><div class="line">  データ:                            2 の補数、リトルエンディアン</div><div class="line">  バージョン:                        1 (current)</div><div class="line">  OS/ABI:                            UNIX - System V</div><div class="line">  ABI バージョン:                    0</div><div class="line">  型:                                REL (再配置可能ファイル)</div><div class="line">  マシン:                            Advanced Micro Devices X86-64</div><div class="line">  バージョン:                        0x1</div><div class="line">  エントリポイントアドレス:          0x0</div><div class="line">  プログラムの開始ヘッダ:            0 (バイト)</div><div class="line">  セクションヘッダ始点:              5384 (バイト)</div><div class="line">  フラグ:                            0x0</div><div class="line">  このヘッダのサイズ:                64 (バイト)</div><div class="line">  プログラムヘッダサイズ:            0 (バイト)</div><div class="line">  プログラムヘッダ数:                0</div><div class="line">  セクションヘッダ:                  64 (バイト)</div><div class="line">  セクションヘッダサイズ:            26</div><div class="line">  セクションヘッダ文字列表索引:      25</div><div class="line"></div><div class="line">セクションヘッダ:</div><div class="line">  [番] 名前              タイプ           アドレス          オフセット</div><div class="line">       サイズ            EntSize          フラグ Link  情報  整列</div><div class="line">  [ 0]                   NULL             0000000000000000  00000000</div><div class="line">       0000000000000000  0000000000000000           0     0     0</div><div class="line">  [ 1] .note.gnu.build-i NOTE             0000000000000000  00000040</div><div class="line">       0000000000000024  0000000000000000   A       0     0     4</div><div class="line">  [ 2] .text             PROGBITS         0000000000000000  00000070</div><div class="line">       0000000000000108  0000000000000000  AX       0     0     16</div><div class="line">  [ 3] .rela.text        RELA             0000000000000000  00000178</div><div class="line">       0000000000000108  0000000000000018          22     2     8</div><div class="line">  [ 4] .init.text        PROGBITS         0000000000000000  00000280</div><div class="line">       000000000000004c  0000000000000000  AX       0     0     1</div><div class="line">  [ 5] .rela.init.text   RELA             0000000000000000  000002d0</div><div class="line">       00000000000000c0  0000000000000018          22     4     8</div><div class="line">  [ 6] .exit.text        PROGBITS         0000000000000000  00000390</div><div class="line">       0000000000000025  0000000000000000  AX       0     0     1</div><div class="line">  [ 7] .rela.exit.text   RELA             0000000000000000  000003b8</div><div class="line">       0000000000000078  0000000000000018          22     6     8</div><div class="line">  [ 8] .modinfo          PROGBITS         0000000000000000  00000430</div><div class="line">       000000000000010a  0000000000000000   A       0     0     16</div><div class="line">  [ 9] __param           PROGBITS         0000000000000000  00000540</div><div class="line">       0000000000000020  0000000000000000   A       0     0     8</div><div class="line">  [10] .rela__param      RELA             0000000000000000  00000560</div><div class="line">       0000000000000048  0000000000000018          22     9     8</div><div class="line">  [11] .rodata           PROGBITS         0000000000000000  000005c0</div><div class="line">       0000000000000070  0000000000000000   A       0     0     32</div><div class="line">  [12] .rela.rodata      RELA             0000000000000000  00000630</div><div class="line">       0000000000000018  0000000000000018          22    11     8</div><div class="line">  [13] __mcount_loc      PROGBITS         0000000000000000  00000648</div><div class="line">       0000000000000018  0000000000000000   A       0     0     8</div><div class="line">  [14] .rela__mcount_loc RELA             0000000000000000  00000660</div><div class="line">       0000000000000048  0000000000000018          22    13     8</div><div class="line">  [15] __versions        PROGBITS         0000000000000000  000006c0</div><div class="line">       0000000000000300  0000000000000000   A       0     0     32</div><div class="line">  [16] .data             PROGBITS         0000000000000000  000009c0</div><div class="line">       000000000000003c  0000000000000000  WA       0     0     32</div><div class="line">  [17] .rela.data        RELA             0000000000000000  00000a00</div><div class="line">       0000000000000030  0000000000000018          22    16     8</div><div class="line">  [18] .data..read_mostl PROGBITS         0000000000000000  00000a30</div><div class="line">       0000000000000008  0000000000000000  WA       0     0     8</div><div class="line">  [19] .gnu.linkonce.thi PROGBITS         0000000000000000  00000a40</div><div class="line">       0000000000000238  0000000000000000  WA       0     0     32</div><div class="line">  [20] .rela.gnu.linkonc RELA             0000000000000000  00000c78</div><div class="line">       0000000000000030  0000000000000018          22    19     8</div><div class="line">  [21] .bss              NOBITS           0000000000000000  00000ca8</div><div class="line">       0000000000000000  0000000000000000  WA       0     0     4</div><div class="line">  [22] .symtab           SYMTAB           0000000000000000  00000ca8</div><div class="line">       00000000000004c8  0000000000000018          23    37     8</div><div class="line">  [23] .strtab           STRTAB           0000000000000000  00001170</div><div class="line">       000000000000028c  0000000000000000           0     0     1</div><div class="line">  [24] .gnu_debuglink    PROGBITS         0000000000000000  000013<span class="built_in">fc</span></div><div class="line">       000000000000001c  0000000000000000           0     0     4</div><div class="line">  [25] .shstrtab         STRTAB           0000000000000000  00001418</div><div class="line">       00000000000000ea  0000000000000000           0     0     1</div><div class="line">フラグのキー:</div><div class="line">  W (write), A (alloc), X (実行), M (merge), S (文字列), l (large)</div><div class="line">  I (情報), L (リンク順), G (グループ), T (TLS), E (排他), x (不明)</div><div class="line">  O (追加の OS 処理が必要) o (OS 固有), p (プロセッサ固有)</div><div class="line"></div><div class="line">このファイルにはプログラムヘッダはありません。</div></pre></td></tr></table></figure>
 <p>セクション<code>[ 8] .modinfo</code> の詳細を確認。<br>（ここでは readelf を使っているが <code>objdump -s -j .modinfo iptable_filter.ko</code> などでも確認可能）</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ readelf -p 8 iptable_filter.ko</div><div class="line"></div><div class="line">セクション <span class="string">'.modinfo'</span> の文字列ダンプ:</div><div class="line">  [     0]  parmtype=forward:bool</div><div class="line">  [    16]  description=iptables filter table</div><div class="line">  [    38]  author=Netfilter Core Team &lt;coreteam@netfilter.org&gt;</div><div class="line">  [    6c]  license=GPL</div><div class="line">  [    80]  srcversion=91D2BD9B036F1510ECEBFF9</div><div class="line">  [    b0]  depends=ip_tables</div><div class="line">  [    c2]  intree=Y</div><div class="line">  [    cb]  vermagic=3.10.0-123.4.4.el7.x86_64 SMP mod_unload modversions</div></pre></td></tr></table></figure>
-<h2 id="補足"><a href="#補足" class="headerlink" title="補足"></a>補足</h2><p>modinfo コマンドで確認できる情報には、上記 readelf で確認した項目に加え、<code>signer</code> <code>sig_key</code> <code>sig_hashlgo</code> などの項目が表示されている。</p>
+<h2 id="補足"><a href="/2015/11/04/kernel-module-modinfo/#補足" class="headerlink" title="補足"></a>補足</h2><p>modinfo コマンドで確認できる情報には、上記 readelf で確認した項目に加え、<code>signer</code> <code>sig_key</code> <code>sig_hashlgo</code> などの項目が表示されている。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ modinfo iptable_filter.ko</div><div class="line">filename:       /lib/modules/3.10.0-123.4.4.el7.x86_64/kernel/net/ipv4/netfilter/iptable_filter.ko</div><div class="line">description:    iptables filter table</div><div class="line">author:         Netfilter Core Team &lt;coreteam@netfilter.org&gt;</div><div class="line">license:        GPL</div><div class="line">srcversion:     91D2BD9B036F1510ECEBFF9</div><div class="line">depends:        ip_tables</div><div class="line">intree:         Y</div><div class="line">vermagic:       3.10.0-123.4.4.el7.x86_64 SMP mod_unload modversions</div><div class="line">signer:         CentOS Linux kernel signing key</div><div class="line">sig_key:        3C:8E:B1:41:98:F1:30:5E:0A:47:F9:27:3D:E9:AE:B3:11:FB:DF:59</div><div class="line">sig_hashalgo:   sha256</div><div class="line">parm:           forward:bool</div></pre></td></tr></table></figure>
 <p>これらの項目は、UEFI セキュアブートに関するものらしい。マルウェアなどがないセキュアな OSブートを実現するために、モージュルに署名がされている模様。</p>
 <blockquote>
@@ -725,7 +725,7 @@
     
     <content type="html"><![CDATA[<p>Linux のカーネルモジュールで Hello World してみる。insmod、rmmod した時に dmesg にログを吐くだけの単純なもの。試した環境は、CentOS7 (3.10.0-123.4.4.el7.x86_64)。</p>
 <a id="more"></a>
-<h2 id="カーネルモジュールの作成"><a href="#カーネルモジュールの作成" class="headerlink" title="カーネルモジュールの作成"></a>カーネルモジュールの作成</h2><ol>
+<h2 id="カーネルモジュールの作成"><a href="/2015/11/03/loadable-kernel-module/#カーネルモジュールの作成" class="headerlink" title="カーネルモジュールの作成"></a>カーネルモジュールの作成</h2><ol>
 <li><p>適当なディレクトリを作成</p>
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p ~/lkm/helloworld</div><div class="line"><span class="built_in">cd</span> <span class="variable">$_</span></div></pre></td></tr></table></figure>
 </li>
@@ -747,10 +747,10 @@
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$ ll</div><div class="line">合計 8</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 300 10月 31 17:09 Makefile</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 367 10月 31 16:42 helloworld.c</div><div class="line">$</div><div class="line">$ make</div><div class="line">make -C /lib/modules/3.10.0-123.4.4.el7.x86_64/build SUBDIRS=/home/vagrant/lkm/helloworld KBUILD_VERBOSE=0 modules</div><div class="line">make[1]: ディレクトリ `/usr/src/kernels/3.10.0-123.4.4.el7.x86_64<span class="string">' に入ります</span></div><div class="line">  CC [M]  /home/vagrant/lkm/helloworld/helloworld.o</div><div class="line">  Building modules, stage 2.</div><div class="line">  MODPOST 1 modules</div><div class="line">  CC      /home/vagrant/lkm/helloworld/helloworld.mod.o</div><div class="line">  LD [M]  /home/vagrant/lkm/helloworld/helloworld.ko</div><div class="line">make[1]: ディレクトリ `/usr/src/kernels/3.10.0-123.4.4.el7.x86_64' から出ます</div><div class="line">$</div><div class="line">$ ll</div><div class="line">合計 204</div><div class="line">-rw-rw-r--. 1 vagrant vagrant   300 10月 31 17:09 Makefile</div><div class="line">-rw-rw-r--. 1 vagrant vagrant     0 10月 31 17:36 Module.symvers</div><div class="line">-rw-rw-r--. 1 vagrant vagrant   367 10月 31 16:42 helloworld.c</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 91485 10月 31 17:36 helloworld.ko</div><div class="line">-rw-rw-r--. 1 vagrant vagrant   703 10月 31 17:36 helloworld.mod.c</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 51112 10月 31 17:36 helloworld.mod.o</div><div class="line">-rw-rw-r--. 1 vagrant vagrant 41896 10月 31 17:36 helloworld.o</div><div class="line">-rw-rw-r--. 1 vagrant vagrant    50 10月 31 17:36 modules.order</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>insmod 時にログが表示される。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo /sbin/insmod helloworld.ko</div><div class="line">$ lsmod | grep hellow</div><div class="line">helloworld             12430  0</div><div class="line">$</div><div class="line">$ dmesg |tail -1</div><div class="line">[84783.294666] Hello World!</div></pre></td></tr></table></figure></p>
+<h2 id="動作確認"><a href="/2015/11/03/loadable-kernel-module/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>insmod 時にログが表示される。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo /sbin/insmod helloworld.ko</div><div class="line">$ lsmod | grep hellow</div><div class="line">helloworld             12430  0</div><div class="line">$</div><div class="line">$ dmesg |tail -1</div><div class="line">[84783.294666] Hello World!</div></pre></td></tr></table></figure></p>
 <p>rmmod 時にも表示される。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo /sbin/rmmod helloworld</div><div class="line">$ dmesg |tail -1</div><div class="line">[84802.982990] Goodby World.</div></pre></td></tr></table></figure></p>
 <p>modinfo で先ほど MODULE_XXXX で設定した内容が確認できる。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ modinfo helloworld.ko</div><div class="line">filename:       /home/vagrant/lkm/helloworld/helloworld.ko</div><div class="line">license:        MIT</div><div class="line">description:    Hello World Module</div><div class="line">author:         harasou</div><div class="line">srcversion:     9F090E897E652AF5A8BC5ED</div><div class="line">depends:</div><div class="line">vermagic:       3.10.0-123.4.4.el7.x86_64 SMP mod_unload modversions</div></pre></td></tr></table></figure></p>
-<h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>iptables まわりを調べてる最中に、横道に逸れてカーネルモジュールの作り方を試した。時間があれば、モジュールパラメータ（/sys/module/modxxxx/parameters/xxxx）や proc ファイルシステムを利用したユーザプロセスとのやりとりなども調べてみたい。</p>
+<h2 id="感想"><a href="/2015/11/03/loadable-kernel-module/#感想" class="headerlink" title="感想"></a>感想</h2><p>iptables まわりを調べてる最中に、横道に逸れてカーネルモジュールの作り方を試した。時間があれば、モジュールパラメータ（/sys/module/modxxxx/parameters/xxxx）や proc ファイルシステムを利用したユーザプロセスとのやりとりなども調べてみたい。</p>
 ]]></content>
     
     <summary type="html">
@@ -779,11 +779,11 @@
 </ul>
 <p>ぐらい。tag については、GNU GLOBAL などもあるが、とりあえず ctags で。</p>
 <a id="more"></a>
-<h2 id="kernel-source-の取得"><a href="#kernel-source-の取得" class="headerlink" title="kernel source の取得"></a>kernel source の取得</h2><p>github ではなく tar ball からの取得。複数のリリースを取得するにはこちらの方が簡単そうだったので。</p>
+<h2 id="kernel-source-の取得"><a href="/2015/10/26/linux-kernel-reading/#kernel-source-の取得" class="headerlink" title="kernel source の取得"></a>kernel source の取得</h2><p>github ではなく tar ball からの取得。複数のリリースを取得するにはこちらの方が簡単そうだったので。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p ~/src/kernel</div><div class="line">curl https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.2.4.tar.xz | tar zx -C ~/src/kernel/</div></pre></td></tr></table></figure>
-<h2 id="tag-の作成"><a href="#tag-の作成" class="headerlink" title="tag の作成"></a>tag の作成</h2><p>linux kernel の Makefile には、tag を作成するターゲットがあるので、make するだけで tag の作成ができる。</p>
+<h2 id="tag-の作成"><a href="/2015/10/26/linux-kernel-reading/#tag-の作成" class="headerlink" title="tag の作成"></a>tag の作成</h2><p>linux kernel の Makefile には、tag を作成するターゲットがあるので、make するだけで tag の作成ができる。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/src/kernel/linux-4.2.4</div><div class="line">make tags</div></pre></td></tr></table></figure>
-<h2 id="vim-の設定"><a href="#vim-の設定" class="headerlink" title="vim の設定"></a>vim の設定</h2><p>ctags は、もともと vim の機能だったものが独立したらしいので、特に設定しなくても vim から使える。</p>
+<h2 id="vim-の設定"><a href="/2015/10/26/linux-kernel-reading/#vim-の設定" class="headerlink" title="vim の設定"></a>vim の設定</h2><p>ctags は、もともと vim の機能だったものが独立したらしいので、特に設定しなくても vim から使える。</p>
 <p>使いそうなコマンド。</p>
 <ul>
 <li>ノーマルモード<ul>
@@ -802,7 +802,7 @@
 </ul>
 <p>少しだけカスタマイズ。やるのは、現在のところ２つだけ。</p>
 <figure class="highlight vim"><figcaption><span>.vimrc</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">nnoremap</span>  &lt;C-]&gt;    g&lt;C-]&gt;</div><div class="line"><span class="keyword">nnoremap</span>  v&lt;C-]&gt;   :vsp +:exec(<span class="string">"tag\ "</span>.<span class="built_in">expand</span>(<span class="string">"&lt;cword&gt;"</span>))<span class="symbol">&lt;CR&gt;</span></div><div class="line"><span class="keyword">set</span> splitright     <span class="comment">"新しいウィンドウを右にひらく</span></div></pre></td></tr></table></figure>
-<h2 id="kernel-source-を眺め方"><a href="#kernel-source-を眺め方" class="headerlink" title="kernel source を眺め方"></a>kernel source を眺め方</h2><p>kernel のソースは以下のようなディレクトリ構成になっていて、機能ごとに分かれているので、割と分かりやすい。ソースの大半はドライバのコードになっている(左の数値はduの結果)。</p>
+<h2 id="kernel-source-を眺め方"><a href="/2015/10/26/linux-kernel-reading/#kernel-source-を眺め方" class="headerlink" title="kernel source を眺め方"></a>kernel source を眺め方</h2><p>kernel のソースは以下のようなディレクトリ構成になっていて、機能ごとに分かれているので、割と分かりやすい。ソースの大半はドライバのコードになっている(左の数値はduの結果)。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ du -sh *</div><div class="line"> 20K    COPYING</div><div class="line"> 96K    CREDITS</div><div class="line"> 30M    Documentation/</div><div class="line">4.0K    Kbuild</div><div class="line">4.0K    Kconfig</div><div class="line">316K    MAINTAINERS</div><div class="line"> 56K    Makefile</div><div class="line"> 20K    README</div><div class="line">8.0K    REPORTING-BUGS</div><div class="line">128M    arch/             <span class="comment">#アーキテクチャ固有のカーネルコード</span></div><div class="line">1.1M    block/</div><div class="line">3.0M    crypto//</div><div class="line">358M    drivers/</div><div class="line">5.9M    firmware/</div><div class="line"> 36M    fs/</div><div class="line"> 32M    include/          <span class="comment">#カーネルコードをビルドするのに必要なインクルードファイル</span></div><div class="line">184K    init/             <span class="comment">#カーネルの初期化(initialization)コード</span></div><div class="line">244K    ipc/              <span class="comment">#カーネルのプロセス間通信(inter-process communications)に関するコード</span></div><div class="line">6.8M    kernel/           <span class="comment">#カーネルの初期化コード</span></div><div class="line">3.4M    lib/              </div><div class="line">3.0M    mm/               <span class="comment">#メモリ管理(memory management)コード</span></div><div class="line"> 26M    net/              <span class="comment">#ネットワーク(network)関係のコード</span></div><div class="line">384K    samples/</div><div class="line">3.0M    scripts/</div><div class="line">2.2M    security/</div><div class="line"> 29M    sound/</div><div class="line"> 43M    tags              <span class="comment">#先ほど作成したタグ</span></div><div class="line"> 43M    tags<span class="_">-e</span></div><div class="line">8.9M    tools/</div><div class="line"> 32K    usr/</div><div class="line">300K    virt/</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ du -sh .</div><div class="line">763M    .                  <span class="comment">#全体(763M)の半分はドライバ周りのコード(358M)</span></div></pre></td></tr></table></figure>
 <p>例えば、「 kmalloc()って、slab からメモリ確保してるんだっけ？」って時は、</p>
@@ -846,12 +846,12 @@
     
     <content type="html"><![CDATA[<p>Alfred から実行するターミナルコマンドは、iTerm2 を使用していたが、Alfred のバージョンアップをすると iTerm2 が起動しなくなっていた。</p>
 <a id="more"></a>
-<p><img src="alfred-0.png" alt=""></p>
+<p><img src="/2015/09/09/Alfred-iTerm2/alfred-0.png" alt=""></p>
 <p>調べてみると、Alfred 2.7.2 から Terminal コマンドを iTerm2 上で実行したい場合は、”Custom” スクリプトの作成が必要なとのこと。<a href="https://www.alfredapp.com/blog/tips-and-tricks/better-iterm-integration-in-alfred/" target="_blank" rel="external">https://www.alfredapp.com/blog/tips-and-tricks/better-iterm-integration-in-alfred/</a></p>
 <blockquote>
 <p>With the upcoming release of Alfred 2.7.2, the default iTerm integration has been replaced by the “Custom” scripts option. This allows for a more up-to-date and more flexible way to handle the iTerm integration, using scripts created by one of our fantastic users, Stuart Ryan.</p>
 </blockquote>
-<h1 id="カスタムスクリプトの作成"><a href="#カスタムスクリプトの作成" class="headerlink" title="カスタムスクリプトの作成"></a>カスタムスクリプトの作成</h1><p>iTerm2 を Alfred から利用したい人のために、スクリプトを公開されている人もいる。</p>
+<h1 id="カスタムスクリプトの作成"><a href="/2015/09/09/Alfred-iTerm2/#カスタムスクリプトの作成" class="headerlink" title="カスタムスクリプトの作成"></a>カスタムスクリプトの作成</h1><p>iTerm2 を Alfred から利用したい人のために、スクリプトを公開されている人もいる。</p>
 <ul>
 <li><a href="http://technicalnotebook.com/alfred-workflows/custom-terminal-applescripts-for-alfred-to-fix-iterm-behaviour/" target="_blank" rel="external">Custom Terminal Applescripts for Alfred to Fix iTerm Behaviour</a><ul>
 <li><a href="https://github.com/stuartcryan/custom-iterm-applescripts-for-alfred/blob/master/custom_iterm_script_iterm_2.1.1.applescript" target="_blank" rel="external">iTerm v2.1 用 script</a></li>
@@ -861,7 +861,7 @@
 <p>公開されているスクリプトだと思った感じに動かなかったので、こんな感じのスクリプトを書いた。動きとして、常に新しいタブを開いて、入力されたコマンドを実行する。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">on alfred_script(q)</div><div class="line">    tell application &quot;iTerm&quot;</div><div class="line">        </div><div class="line">        -- iTerm が起動していない場合</div><div class="line">        if not running then</div><div class="line">            launch session &quot;Default&quot;</div><div class="line">            </div><div class="line">        -- iTerm は起動しているが、ウィンドウがない場合</div><div class="line">        else if (count terminals) is 0 then</div><div class="line">            tell (make new terminal)</div><div class="line">                launch session &quot;Default&quot;</div><div class="line">            end tell</div><div class="line">            </div><div class="line">        -- iTerm は起動しており、ウィンドウも普通に開いている場合</div><div class="line">        else</div><div class="line">            tell current terminal</div><div class="line">                launch session &quot;Default&quot;</div><div class="line">            end tell</div><div class="line">        end if</div><div class="line">        </div><div class="line">        -- 入力されたコマンドを実行</div><div class="line">        tell current session of current terminal</div><div class="line">            write text q</div><div class="line">        end tell</div><div class="line">        </div><div class="line">    end tell</div><div class="line">end alfred_script</div></pre></td></tr></table></figure>
 <p>上記スクリプトを Alfred の [Features] -&gt; [Terminal / Shell] -&gt; [Application:] で <code>Custom</code> を選択し、登録する。</p>
-<p><img src="alfred-1.png" alt=""></p>
+<p><img src="/2015/09/09/Alfred-iTerm2/alfred-1.png" alt=""></p>
 <p>無事、iTerm2 復活。</p>
 ]]></content>
     
@@ -885,8 +885,8 @@
     
     <content type="html"><![CDATA[<p>Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。</p>
 <a id="more"></a>
-<p><img src="toolbox.png" alt=""><br>re: <a href="https://www.docker.com/toolbox" target="_blank" rel="external">https://www.docker.com/toolbox</a></p>
-<h2 id="Docker-Toolbox-とは"><a href="#Docker-Toolbox-とは" class="headerlink" title="Docker Toolbox とは"></a>Docker Toolbox とは</h2><p>Docker Toolbox は、手元のマシンに、簡単に Docker 開発環境を構築するためのインストーラで、以下のツールが全て含まれている。いままで使用していた boot2docker コマンドは、docker-machine コマンドが代替となる。</p>
+<p><img src="/2015/08/15/Docker-Toolbox/toolbox.png" alt=""><br>re: <a href="https://www.docker.com/toolbox" target="_blank" rel="external">https://www.docker.com/toolbox</a></p>
+<h2 id="Docker-Toolbox-とは"><a href="/2015/08/15/Docker-Toolbox/#Docker-Toolbox-とは" class="headerlink" title="Docker Toolbox とは"></a>Docker Toolbox とは</h2><p>Docker Toolbox は、手元のマシンに、簡単に Docker 開発環境を構築するためのインストーラで、以下のツールが全て含まれている。いままで使用していた boot2docker コマンドは、docker-machine コマンドが代替となる。</p>
 <ul>
 <li>Docker Client</li>
 <li>Docker Machine</li>
@@ -899,15 +899,15 @@
 <li><a href="http://pocketstudio.jp/log3/2015/08/14/announcing-docker-toolbox/" target="_blank" rel="external">http://pocketstudio.jp/log3/2015/08/14/announcing-docker-toolbox/</a></li>
 <li><a href="http://dev.classmethod.jp/tool/docker1-8-macosx/" target="_blank" rel="external">http://dev.classmethod.jp/tool/docker1-8-macosx/</a></li>
 </ul>
-<h2 id="インストール"><a href="#インストール" class="headerlink" title="インストール"></a>インストール</h2><p><a href="https://www.docker.com/toolbox" target="_blank" rel="external">Docker Toolbox</a>サイトからダウンロードしたインストーラは実行するだけ。<br>インストールには、450MB ほどの空きが必要で、/usr/local 配下(デフォルト)に以下のようなファイルがインストールされた。</p>
+<h2 id="インストール"><a href="/2015/08/15/Docker-Toolbox/#インストール" class="headerlink" title="インストール"></a>インストール</h2><p><a href="https://www.docker.com/toolbox" target="_blank" rel="external">Docker Toolbox</a>サイトからダウンロードしたインストーラは実行するだけ。<br>インストールには、450MB ほどの空きが必要で、/usr/local 配下(デフォルト)に以下のようなファイルがインストールされた。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/docker</div><div class="line">/usr/local/bin/docker-machine</div><div class="line">/usr/local/bin/docker-compose</div><div class="line">/usr/local/share/boot2docker/boot2docker.iso</div></pre></td></tr></table></figure>
 <p>あと、Application フォルダにアプリが２つ。</p>
-<p><img src="docker.png" alt=""></p>
-<h2 id="Docker-Quickstart-Terminal"><a href="#Docker-Quickstart-Terminal" class="headerlink" title="Docker Quickstart Terminal"></a>Docker Quickstart Terminal</h2><p>上記アプリ「Docker Quickstart Terminal」を実行すると、Mac標準の Terminal.app が起動し、その中で下記スクリプトが実行される。</p>
+<p><img src="/2015/08/15/Docker-Toolbox/docker.png" alt=""></p>
+<h2 id="Docker-Quickstart-Terminal"><a href="/2015/08/15/Docker-Toolbox/#Docker-Quickstart-Terminal" class="headerlink" title="Docker Quickstart Terminal"></a>Docker Quickstart Terminal</h2><p>上記アプリ「Docker Quickstart Terminal」を実行すると、Mac標準の Terminal.app が起動し、その中で下記スクリプトが実行される。</p>
 <p>“/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh”</p>
 <p>このスクリプトは、VirtualBox 上の VM の名前や VBoxManage を定義して、最終的に以下のコマンドを実行していた。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval $($DOCKER_MACHINE env $VM --shell=bash)</div></pre></td></tr></table></figure></p>
 <p>また、Toolbox インストール時に既存の boot2docker の VM をマイグレーションしなかったので、このスクリプトの中で「default」という名前の VM が、自動で作成された。</p>
-<h2 id="iTerm2-上で-docker-コマンドを実行する"><a href="#iTerm2-上で-docker-コマンドを実行する" class="headerlink" title="iTerm2 上で docker コマンドを実行する"></a>iTerm2 上で docker コマンドを実行する</h2><p>アプリ「Docker Quickstart Terminal」だと Termainal.app が起動するので、iTerm2 上で docker コマンドを実行したい場合は、boot2docker の時と同じように env を設定する。</p>
+<h2 id="iTerm2-上で-docker-コマンドを実行する"><a href="/2015/08/15/Docker-Toolbox/#iTerm2-上で-docker-コマンドを実行する" class="headerlink" title="iTerm2 上で docker コマンドを実行する"></a>iTerm2 上で docker コマンドを実行する</h2><p>アプリ「Docker Quickstart Terminal」だと Termainal.app が起動するので、iTerm2 上で docker コマンドを実行したい場合は、boot2docker の時と同じように env を設定する。</p>
 <p>boot2docker の場合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(boot2docker shellinit)</div></pre></td></tr></table></figure></p>
 <p>docker-machine の場合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval $(docker-machine env default)</div></pre></td></tr></table></figure></p>
 <p>こんな感じ。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ eval $(docker-machine env default)</div><div class="line">$ docker version</div><div class="line">Client:</div><div class="line"> Version:      1.8.1</div><div class="line"> API version:  1.20</div><div class="line"> Go version:   go1.4.2</div><div class="line"> Git commit:   d12ea79</div><div class="line"> Built:        Thu Aug 13 02:49:29 UTC 2015</div><div class="line"> OS/Arch:      darwin/amd64</div><div class="line"></div><div class="line">Server:</div><div class="line"> Version:      1.8.1</div><div class="line"> API version:  1.20</div><div class="line"> Go version:   go1.4.2</div><div class="line"> Git commit:   d12ea79</div><div class="line"> Built:        Thu Aug 13 02:49:29 UTC 2015</div><div class="line"> OS/Arch:      linux/amd64</div><div class="line">$</div><div class="line">$ docker ps -a</div><div class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</div><div class="line">$</div><div class="line">$ docker images</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE</div><div class="line">$</div></pre></td></tr></table></figure></p>
@@ -933,7 +933,7 @@
     <updated>2016-11-10T12:46:13.000Z</updated>
     
     <content type="html"><![CDATA[<p>base32 について調べた際のメモ書き。</p>
-<h2 id="特徴"><a href="#特徴" class="headerlink" title="特徴"></a>特徴</h2><p>base32 は、base64 などと同様、バイナリ文字列とテキスト文字列の変換（エンコード or デコード）を行うアルゴリズム。</p>
+<h2 id="特徴"><a href="/2015/08/13/base32/#特徴" class="headerlink" title="特徴"></a>特徴</h2><p>base32 は、base64 などと同様、バイナリ文字列とテキスト文字列の変換（エンコード or デコード）を行うアルゴリズム。</p>
 <ul>
 <li>エンコードされたテキスト文字列は、<code>A-Z</code>(26文字) と <code>2-7</code>(6文字)、<code>=</code> の 33文字で構成される。</li>
 <li>大文字小文字の区別がない環境でも利用可能。</li>
@@ -942,13 +942,13 @@
 <li>base32hex というのもあり、これは、<code>0-9</code>、<code>A-V</code>、<code>=</code> の33文字を使用する。</li>
 </ul>
 <a id="more"></a>
-<h2 id="RFC"><a href="#RFC" class="headerlink" title="RFC"></a>RFC</h2><ul>
+<h2 id="RFC"><a href="/2015/08/13/base32/#RFC" class="headerlink" title="RFC"></a>RFC</h2><ul>
 <li>RFC 4648 <a href="http://tools.ietf.org/html/rfc4648.html" target="_blank" rel="external">http://tools.ietf.org/html/rfc4648.html</a></li>
 <li>RFC 3458 <a href="http://tools.ietf.org/html/rfc3548.html" target="_blank" rel="external">http://tools.ietf.org/html/rfc3548.html</a> (Obsoletes)</li>
 </ul>
-<h2 id="対応表"><a href="#対応表" class="headerlink" title="対応表"></a>対応表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">                Table 3: The Base 32 Alphabet</div><div class="line"></div><div class="line">Value Encoding  Value Encoding  Value Encoding  Value Encoding</div><div class="line">    0 A             9 J            18 S            27 3</div><div class="line">    1 B            10 K            19 T            28 4</div><div class="line">    2 C            11 L            20 U            29 5</div><div class="line">    3 D            12 M            21 V            30 6</div><div class="line">    4 E            13 N            22 W            31 7</div><div class="line">    5 F            14 O            23 X</div><div class="line">    6 G            15 P            24 Y         (pad) =</div><div class="line">    7 H            16 Q            25 Z</div><div class="line">    8 I            17 R            26 2</div></pre></td></tr></table></figure>
+<h2 id="対応表"><a href="/2015/08/13/base32/#対応表" class="headerlink" title="対応表"></a>対応表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">                Table 3: The Base 32 Alphabet</div><div class="line"></div><div class="line">Value Encoding  Value Encoding  Value Encoding  Value Encoding</div><div class="line">    0 A             9 J            18 S            27 3</div><div class="line">    1 B            10 K            19 T            28 4</div><div class="line">    2 C            11 L            20 U            29 5</div><div class="line">    3 D            12 M            21 V            30 6</div><div class="line">    4 E            13 N            22 W            31 7</div><div class="line">    5 F            14 O            23 X</div><div class="line">    6 G            15 P            24 Y         (pad) =</div><div class="line">    7 H            16 Q            25 Z</div><div class="line">    8 I            17 R            26 2</div></pre></td></tr></table></figure>
 <p>ref: <a href="http://tools.ietf.org/html/rfc4648#section-6" target="_blank" rel="external">http://tools.ietf.org/html/rfc4648#section-6</a></p>
-<h2 id="エンコード手順"><a href="#エンコード手順" class="headerlink" title="エンコード手順"></a>エンコード手順</h2><p>文字列<code>harasou</code>を base32 でエンコードしてみる。</p>
+<h2 id="エンコード手順"><a href="/2015/08/13/base32/#エンコード手順" class="headerlink" title="エンコード手順"></a>エンコード手順</h2><p>文字列<code>harasou</code>を base32 でエンコードしてみる。</p>
 <p>大まかな流れとしては、2進表記にした文字列<code>harasou</code>を 5ビット単位に分割し、各分割した値を対応表に沿ってテキストに変換する。</p>
 <ol>
 <li><p>文字列<code>harasou</code>の 2進数表記</p>
@@ -992,7 +992,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="補足"><a href="#補足" class="headerlink" title="補足"></a>補足</h2><p><code>=</code>パディングについて補足すると、エンコード対象を 5バイト(40ビット)単位で区切った際に、最後の固まりが、</p>
+<h2 id="補足"><a href="/2015/08/13/base32/#補足" class="headerlink" title="補足"></a>補足</h2><p><code>=</code>パディングについて補足すると、エンコード対象を 5バイト(40ビット)単位で区切った際に、最後の固まりが、</p>
 <ul>
 <li>5バイトに 1バイト満たない場合、<code>=</code>を 1つ付加</li>
 <li>5バイトに 2バイト満たない場合、<code>=</code>を 3つ付加</li>
@@ -1001,7 +1001,7 @@
 </ul>
 <p>といった感じになる。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">例）</div><div class="line">     最後のかたまり -&gt; エンコード結果</div><div class="line">5バイト丁度： AAAAA -&gt; IFAUCQKB</div><div class="line">1バイト不足： AAAA_ -&gt; IFAUCQI= (「=」を1つ付加)</div><div class="line">2バイト不足： AAA__ -&gt; IFAUC=== (「=」を3つ付加)</div><div class="line">3バイト不足： AA___ -&gt; IFAQ==== (「=」を4つ付加)</div><div class="line">4バイト不足： A____ -&gt; IE====== (「=」を6つ付加)</div></pre></td></tr></table></figure>
-<h2 id="実装"><a href="#実装" class="headerlink" title="実装"></a>実装</h2><p>やってる処理は上のようなものだが、実装は様々。</p>
+<h2 id="実装"><a href="/2015/08/13/base32/#実装" class="headerlink" title="実装"></a>実装</h2><p>やってる処理は上のようなものだが、実装は様々。</p>
 <ul>
 <li><p>golang</p>
 <ul>
@@ -1049,16 +1049,16 @@
     <updated>2016-11-12T03:29:48.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近、h2o で mruby がサポートされたので、まずはコンパイルしてみた。</p>
-<p><img src="h2o.png" alt=""><br><a href="https://github.com/h2o/h2o" target="_blank" rel="external">https://github.com/h2o/h2o</a></p>
+<p><img src="/2015/08/05/h2o-mruby/h2o.png" alt=""><br><a href="https://github.com/h2o/h2o" target="_blank" rel="external">https://github.com/h2o/h2o</a></p>
 <p>h2o は、@kazuho さんが作成されている HTTP/2 ＆ HTTP/1.x 対応の高速な WEBサーバです。</p>
 <a id="more"></a>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>いつものごとく vagrant で。</p>
+<h2 id="環境"><a href="/2015/08/05/h2o-mruby/#環境" class="headerlink" title="環境"></a>環境</h2><p>いつものごとく vagrant で。</p>
 <ul>
 <li>CentOS 7.1 (3.10.0-229.el7.x86_64)</li>
 <li>h2o 1.4.2</li>
 <li>mruby 1.1.0</li>
 </ul>
-<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><p>現状 h2o で mruby を利用する場合は、h2o と mruby のコンパイルを、別々に行わなければいけない(mod_mruby とかだとそのなかで mruby をビルドしてくれる)。</p>
+<h2 id="手順"><a href="/2015/08/05/h2o-mruby/#手順" class="headerlink" title="手順"></a>手順</h2><p>現状 h2o で mruby を利用する場合は、h2o と mruby のコンパイルを、別々に行わなければいけない(mod_mruby とかだとそのなかで mruby をビルドしてくれる)。</p>
 <p>流れとしてはまず、libmruby.a を作成し、h2o コンパイル時にそれをリンクする感じ。</p>
 <ol>
 <li><p>作業ディレクトリの作成</p>
@@ -1083,12 +1083,12 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ make h2o</div><div class="line"> :</div><div class="line">Linking C executable h2o</div><div class="line">[100%] Built target h2o</div><div class="line"></div><div class="line">$ ls -l h2o</div><div class="line">-rwxrwxr-x 1 vagrant vagrant 11680735  8月  4 22:39 h2o</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>サンプルの conf で起動。</p>
+<h2 id="動作確認"><a href="/2015/08/05/h2o-mruby/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>サンプルの conf で起動。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ ./h2o -c ./examples/h2o_mruby/h2o.conf</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/server.crt</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/server.crt</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/alternate.crt</div><div class="line">[INFO] raised RLIMIT_NOFILE to 4096</div><div class="line">[OCSP Stapling] failed to execute share/h2o/fetch-ocsp-response:No such file or directory</div><div class="line">[OCSP Stapling] disabled for certificate file:examples/h2o/alternate.crt</div><div class="line">h2o server (pid:27481) is ready to serve requests</div></pre></td></tr></table></figure>
 <p>curl でアクセス</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># curl http://localhost:8080/</div><div class="line">hello from h2o_mruby. User-Agent:curl/7.29.0 New User-Agent:new-curl/7.29.0-h2o_mruby path:/ host:localhost method:GET query: remote_ip:::1</div></pre></td></tr></table></figure>
 <p>hello 。</p>
-<h2 id="examples-h2o-mruby"><a href="#examples-h2o-mruby" class="headerlink" title="examples/h2o_mruby"></a>examples/h2o_mruby</h2><p>ちなみに examples の conf 等はこんな感じだった。</p>
+<h2 id="examples-h2o-mruby"><a href="/2015/08/05/h2o-mruby/#examples-h2o-mruby" class="headerlink" title="examples/h2o_mruby"></a>examples/h2o_mruby</h2><p>ちなみに examples の conf 等はこんな感じだった。</p>
 <figure class="highlight yaml"><figcaption><span>examples/h2o_mruby/h2o.conf</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># to find out the configuration commands, run: h2o --help</span></div><div class="line"><span class="attr">listen:</span> <span class="number">8080</span></div><div class="line"><span class="attr">listen:</span></div><div class="line"><span class="attr">  port:</span> <span class="number">8081</span></div><div class="line"><span class="attr">  ssl:</span></div><div class="line"><span class="attr">    certificate-file:</span> examples/h2o/server.crt</div><div class="line"><span class="attr">    key-file:</span> examples/h2o/server.key</div><div class="line"><span class="attr">hosts:</span></div><div class="line">  <span class="string">"127.0.0.1.xip.io:8080"</span>:</div><div class="line"><span class="attr">    paths:</span></div><div class="line">      /:</div><div class="line">        file.dir: examples/doc_root</div><div class="line">        mruby.handler_path: examples/h2o_mruby/hello.rb</div><div class="line"><span class="attr">    access-log:</span> /dev/stdout</div><div class="line">  <span class="string">"alternate.127.0.0.1.xip.io:8081"</span>:</div><div class="line"><span class="attr">    listen:</span></div><div class="line"><span class="attr">      port:</span> <span class="number">8081</span></div><div class="line"><span class="attr">      ssl:</span></div><div class="line"><span class="attr">        certificate-file:</span> examples/h2o/alternate.crt</div><div class="line"><span class="attr">        key-file:</span> examples/h2o/alternate.key</div><div class="line"><span class="attr">    paths:</span></div><div class="line">      /:</div><div class="line">        file.dir: examples/doc_root.alternate</div><div class="line"><span class="attr">    access-log:</span> /dev/stdout</div></pre></td></tr></table></figure>
 <figure class="highlight rb"><figcaption><span>examples/h2o_mruby/hello.rb</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># paths:</span></div><div class="line"><span class="comment">#   /:</span></div><div class="line"><span class="comment">#     file.dir: examples/doc_root</span></div><div class="line"><span class="comment">#     mruby.handler_path: /path/to/hello.rb</span></div><div class="line"></div><div class="line">r = H2O::Request.new</div><div class="line"></div><div class="line">h = <span class="string">"hello"</span></div><div class="line">m =  <span class="string">"from h2o_mruby"</span></div><div class="line"></div><div class="line">ua = r.headers_in[<span class="string">"User-Agent"</span>].to_s</div><div class="line">new_ua = r.headers_in[<span class="string">"User-Agent"</span>] = <span class="string">"new-<span class="subst">#&#123;ua&#125;</span>-h2o_mruby"</span></div><div class="line">uri = r.uri</div><div class="line">host = r.hostname</div><div class="line">method = r.method</div><div class="line">query = r.query</div><div class="line"></div><div class="line">msg = <span class="string">"<span class="subst">#&#123;h&#125;</span> <span class="subst">#&#123;m&#125;</span>. User-Agent:<span class="subst">#&#123;ua&#125;</span> New User-Agent:<span class="subst">#&#123;new_ua&#125;</span> path:<span class="subst">#&#123;uri&#125;</span> host:<span class="subst">#&#123;host&#125;</span> method:<span class="subst">#&#123;method&#125;</span> query:<span class="subst">#&#123;query&#125;</span> remote_ip:<span class="subst">#&#123;H2O::Connection.new.remote_ip&#125;</span>"</span></div><div class="line"></div><div class="line">r.log_error msg</div><div class="line"></div><div class="line">H2O.<span class="keyword">return</span> <span class="number">200</span>, <span class="string">"OK"</span>, msg + <span class="string">"\n"</span></div></pre></td></tr></table></figure>
 ]]></content>
@@ -1116,14 +1116,14 @@
     <updated>2016-11-12T03:40:14.000Z</updated>
     
     <content type="html"><![CDATA[<p>社内で便利に活用しているかんばんソフト<a href="https://trello.com/" target="_blank" rel="external">trello</a> 。このクローンである <a href="https://github.com/libreboard/libreboard/wiki" target="_blank" rel="external">Libreboard</a> を boot2docker で動かしてみた。</p>
-<p><img src="libreboard-1.png" alt=""></p>
+<p><img src="/2015/07/28/libreboard/libreboard-1.png" alt=""></p>
 <a id="more"></a>
-<h2 id="Libreboard-とは"><a href="#Libreboard-とは" class="headerlink" title="Libreboard とは"></a>Libreboard とは</h2><p>Libreboard は、node.js のフレームワークである meteor(メテオ) 、DB として MongoDB が使われている trello のクローン。<br>github に公開されているリポジトリには、Dockerfile が含まれているので、Mac 上の boot2docker で動かしてみる。</p>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="Libreboard-とは"><a href="/2015/07/28/libreboard/#Libreboard-とは" class="headerlink" title="Libreboard とは"></a>Libreboard とは</h2><p>Libreboard は、node.js のフレームワークである meteor(メテオ) 、DB として MongoDB が使われている trello のクローン。<br>github に公開されているリポジトリには、Dockerfile が含まれているので、Mac 上の boot2docker で動かしてみる。</p>
+<h2 id="環境"><a href="/2015/07/28/libreboard/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>MacOSX Yosemite 10.10.4 </li>
 <li>boot2docker v1.7.1</li>
 </ul>
-<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><ol>
+<h2 id="手順"><a href="/2015/07/28/libreboard/#手順" class="headerlink" title="手順"></a>手順</h2><ol>
 <li><p>boot2docker を最新化</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew upgrade boot2docker</div><div class="line">boot2docker update</div><div class="line">$(boot2docker shellinit)</div></pre></td></tr></table></figure>
 </li>
@@ -1153,7 +1153,7 @@
 <p> npm の WARN は出ているが、とりあえず build 完了。</p>
 </li>
 </ol>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><ol>
+<h2 id="動作確認"><a href="/2015/07/28/libreboard/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><ol>
 <li><p>コンテナの起動</p>
 <p> Libreboard の Dockerfile に書かれている通り、コンテナを 2つ起動する。<br> なお、２つ目のコンテナが使用するイメージは、先ほど build したタグ<code>libreboard/libreboard</code>を指定。</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker run -d --name libreboard-db mongo</div><div class="line">docker run -d --link &quot;libreboard-db:db&quot; -e &quot;MONGO_URL=mongodb://db&quot; \</div><div class="line">  -e &quot;ROOT_URL=http://example.com&quot; -p 8080:80 libreboard/libreboard</div></pre></td></tr></table></figure>
@@ -1161,11 +1161,11 @@
 </li>
 <li><p>VirtualBox でポートフォワーディング</p>
 <p> boot2docker 上では、8080 でアクセスすることができるが、Mac 上からはアクセスできない。このため、VirtualBox でポートフォワーディングの設定を行う。</p>
-<p> <img src="portfowarding.png" alt=""></p>
+<p> <img src="/2015/07/28/libreboard/portfowarding.png" alt=""></p>
 </li>
 <li><p>ブラウザからアクセス</p>
 <p> <a href="http://localhost:8080/" target="_blank" rel="external">http://localhost:8080/</a> 適当にアカウント作ってログインして、カード作ってみた。</p>
-<p> ログイン画面。<br> <img src="libreboard-2.png" alt=""><br> ボードの追加。<br> <img src="libreboard-3.png" alt=""><br> 言語とプロファイルを設定。<br> <img src="libreboard-4.png" alt=""><br> カードの追加。Markdown もいけるっぽい。<br> <img src="libreboard-5.png" alt=""></p>
+<p> ログイン画面。<br> <img src="/2015/07/28/libreboard/libreboard-2.png" alt=""><br> ボードの追加。<br> <img src="/2015/07/28/libreboard/libreboard-3.png" alt=""><br> 言語とプロファイルを設定。<br> <img src="/2015/07/28/libreboard/libreboard-4.png" alt=""><br> カードの追加。Markdown もいけるっぽい。<br> <img src="/2015/07/28/libreboard/libreboard-5.png" alt=""></p>
 </li>
 </ol>
 ]]></content>
@@ -1193,7 +1193,7 @@
 <p>harasou: 「松本さん、mrbgems の作り方教えてくださいよ」<br>matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」</p>
 <p>おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）<br>というわけで、その時のことを簡単にご紹介。</p>
 <a id="more"></a>
-<h2 id="そもそも-mrbgems-とは"><a href="#そもそも-mrbgems-とは" class="headerlink" title="そもそも mrbgems とは"></a>そもそも mrbgems とは</h2><p>mrbgems は、CRuby の gem みたいなもので、mruby コアに色々な機能(ライブラリ)を追加する仕組み。ただ、CRuby のように動的にロードできるわけでなく、mruby コンパイル時に明示的に組み込んでおく必要がある。</p>
+<h2 id="そもそも-mrbgems-とは"><a href="/2015/07/26/5-minutes-mrbgems/#そもそも-mrbgems-とは" class="headerlink" title="そもそも mrbgems とは"></a>そもそも mrbgems とは</h2><p>mrbgems は、CRuby の gem みたいなもので、mruby コアに色々な機能(ライブラリ)を追加する仕組み。ただ、CRuby のように動的にロードできるわけでなく、mruby コンパイル時に明示的に組み込んでおく必要がある。</p>
 <p>この mrbgems は、mruby スクリプトだけで作成することもできるし、C言語だけ、あるいは、C言語 + mruby といった組み合わせたもので作成することもできる。</p>
 <ul>
 <li>mruby だけで実装</li>
@@ -1201,7 +1201,7 @@
 <li>C言語 + mruby で実装</li>
 </ul>
 <p>飛行機では、一番簡単な mruby だけの実装をやった。</p>
-<h2 id="mrbgems-はじめの一歩"><a href="#mrbgems-はじめの一歩" class="headerlink" title="mrbgems はじめの一歩"></a>mrbgems はじめの一歩</h2><p>ここでは、設定した名前を返すだけの <code>yourname</code>メソッドを実装した <code>mruby-yourname</code> をつくった。 </p>
+<h2 id="mrbgems-はじめの一歩"><a href="/2015/07/26/5-minutes-mrbgems/#mrbgems-はじめの一歩" class="headerlink" title="mrbgems はじめの一歩"></a>mrbgems はじめの一歩</h2><p>ここでは、設定した名前を返すだけの <code>yourname</code>メソッドを実装した <code>mruby-yourname</code> をつくった。 </p>
 <ol>
 <li><p>mrbgems 用のディレクトリ作成</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p work/mruby-yourname/mrblib/</div><div class="line">cd work</div></pre></td></tr></table></figure>
@@ -1223,7 +1223,7 @@
 </li>
 </ol>
 <p>事前に mruby は落としていたので、ここまで所要時間は 5分ぐらい。</p>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>mruby のシェル「mirb」で動作確認。</p>
+<h2 id="動作確認"><a href="/2015/07/26/5-minutes-mrbgems/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>mruby のシェル「mirb」で動作確認。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/mirb</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mirb - Embeddable Interactive Ruby Shell</div><div class="line"></div><div class="line">&gt; y = Yourname.new(&quot;harasou&quot;)</div><div class="line"> =&gt; #&lt;Yourname:0x1425d70 @name=&quot;harasou&quot;&gt;</div><div class="line">&gt;</div><div class="line">&gt; y.yourname</div><div class="line">harasou</div><div class="line"> =&gt; nil</div></pre></td></tr></table></figure>
 <p>できた。</p>
@@ -1251,9 +1251,9 @@
     <updated>2016-11-12T14:28:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>2015/07/11(土)に行われた「<a href="http://regional.rubykaigi.org/kansai06/" target="_blank" rel="external">関西Ruby会議06</a>」に登壇させてもらい、mruby の利用事例について紹介してきた。<br>インフラしか知らないエンジニアが、matz さんを前に mruby の説明なんて、かなり場違いで恐縮な状況でした。</p>
-<p><a href="http://regional.rubykaigi.org/kansai06/" target="_blank" rel="external"><img src="knsrb.png" alt=""></a></p>
+<p><a href="http://regional.rubykaigi.org/kansai06/" target="_blank" rel="external"><img src="/2015/07/15/kansai-ruby-kaigi/knsrb.png" alt=""></a></p>
 <a id="more"></a>
-<h2 id="発表内容"><a href="#発表内容" class="headerlink" title="発表内容"></a>発表内容</h2><p>ホスティングを運用していく上で問題となる「DDoS」「高負荷のプロセス」への対応として、Apache のモジュールである mod_mruby を利用した対応方法を紹介。</p>
+<h2 id="発表内容"><a href="/2015/07/15/kansai-ruby-kaigi/#発表内容" class="headerlink" title="発表内容"></a>発表内容</h2><p>ホスティングを運用していく上で問題となる「DDoS」「高負荷のプロセス」への対応として、Apache のモジュールである mod_mruby を利用した対応方法を紹介。</p>
 <p>そこで利用する３つの mrbgems (CRuby でいうところの gem) の実装例（コード）などの紹介も行いました。</p>
 <ul>
 <li><a href="http://hb.matsumoto-r.jp/entry/2015/06/08/224827" target="_blank" rel="external">http-dos-detector</a></li>
@@ -1262,7 +1262,7 @@
 </ul>
 <div style="width: 65%"><br><script async class="speakerdeck-embed" data-slide="1" data-id="0238b7f2c8a44f92a189f2fa62958f2e" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script><br></div>
 
-<h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>自分の発表については、準備不足でひたすら反省しているので割愛。</p>
+<h2 id="感想"><a href="/2015/07/15/kansai-ruby-kaigi/#感想" class="headerlink" title="感想"></a>感想</h2><p>自分の発表については、準備不足でひたすら反省しているので割愛。</p>
 <p>登壇者用の控え室で、生の matz さんを初めて見て萎縮してしまいました。matsumotory さんが言うには、全然怖い人ではないそうですが。</p>
 <p>インフラの人間としては、RSpec だ Minitest だと言われてもちょっとついていけなかったが、笹田さんのキーワードパラメータの話はおもしろかった。最新の CRuby の話が聞けたし、仕様を決める感じがオープソースなんだなぁって感じで。</p>
 ]]></content>
@@ -1296,25 +1296,25 @@
 <li>slides : <a href="http://kimromi.hatenablog.jp/entry/2015/07/04/211334" target="_blank" rel="external">http://kimromi.hatenablog.jp/entry/2015/07/04/211334</a></li>
 </ul>
 <p>@takesi_yosimura さんが、twitter をまとめてくださっていました。ありがとうございます！また、@kimroi さんは発表スライドをまとめてくれていました。ありがとうございます！</p>
-<h2 id="発表内容について"><a href="#発表内容について" class="headerlink" title="発表内容について"></a>発表内容について</h2><p>最近ペパボで積極的に投入している mruby についての事例紹介をしています。</p>
+<h2 id="発表内容について"><a href="/2015/07/06/pepabo-tech-conference/#発表内容について" class="headerlink" title="発表内容について"></a>発表内容について</h2><p>最近ペパボで積極的に投入している mruby についての事例紹介をしています。</p>
 <p>WEBアクセス時に実行される各プロセスのリソース(CPU)を、動的にコントールする方法について。また、それ以外の用途で利用している mruby の事例について。</p>
 <div style="width: 65%"><br><script async class="speakerdeck-embed" data-slide="1" data-id="8f4290b61a4e47bf85364194023ecdaa" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script><br></div>
 
 
-<h2 id="訂正と感謝と感想"><a href="#訂正と感謝と感想" class="headerlink" title="訂正と感謝と感想"></a>訂正と感謝と感想</h2><h3 id="cgroup-利用時の性能劣化"><a href="#cgroup-利用時の性能劣化" class="headerlink" title="cgroup 利用時の性能劣化"></a>cgroup 利用時の性能劣化</h3><p>発表後に、以下のような質問があって回答させていただいたですが、前提の話が足りてなくて正しい回答とは言えなかったので、この場で訂正させていただきます。</p>
+<h2 id="訂正と感謝と感想"><a href="/2015/07/06/pepabo-tech-conference/#訂正と感謝と感想" class="headerlink" title="訂正と感謝と感想"></a>訂正と感謝と感想</h2><h3 id="cgroup-利用時の性能劣化"><a href="/2015/07/06/pepabo-tech-conference/#cgroup-利用時の性能劣化" class="headerlink" title="cgroup 利用時の性能劣化"></a>cgroup 利用時の性能劣化</h3><p>発表後に、以下のような質問があって回答させていただいたですが、前提の話が足りてなくて正しい回答とは言えなかったので、この場で訂正させていただきます。</p>
 <p>質問「リクエストごとに、それぞれのユーザの cgroup にアタッチすると性能が劣化しないか？」</p>
 <p>回答「mruby が速いのと、スクリプトもキャッシュするので、それほど劣化はないです」</p>
 <p>正しくは、</p>
 <p>回答「cgroup へのアタッチは、cgi にのみしか行っていないので、cgi の fork や処理のコストに比べると問題なるような性能劣化はないです」</p>
 <p>CGI を対象にしているという前提を説明していませんでした。申し訳ありません…</p>
-<h3 id="vm-swappiness-0-の問題"><a href="#vm-swappiness-0-の問題" class="headerlink" title="vm.swappiness=0 の問題"></a>vm.swappiness=0 の問題</h3><p>また、@rrreeeyyy さんより vm.swappiness の情報をいただきました。ありがとうございます。こういった知見はほんとありがたい。</p>
+<h3 id="vm-swappiness-0-の問題"><a href="/2015/07/06/pepabo-tech-conference/#vm-swappiness-0-の問題" class="headerlink" title="vm.swappiness=0 の問題"></a>vm.swappiness=0 の問題</h3><p>また、@rrreeeyyy さんより vm.swappiness の情報をいただきました。ありがとうございます。こういった知見はほんとありがたい。</p>
 <p><blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr">vm.swappiness はカーネルのバージョンによって挙動が違うので 0 に設定したほうがいい時と 10 ぐらいにしておいたほうがいい(0 にするとヤバイ)時がある <a href="https://twitter.com/hashtag/pbtech?src=hash" target="_blank" rel="external">#pbtech</a></p>&mdash; れい (Yoshikawa Ryota) (@rrreeeyyy) <a href="https://twitter.com/rrreeeyyy/status/617192261781032960" target="_blank" rel="external">2015, 7月 4</a></blockquote></p>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 <blockquote class="twitter-tweet" lang="ja"><p lang="ja" dir="ltr">これです / “OOM relation to vm.swappiness=0 in new kernel; kills MySQL server process” <a href="http://t.co/KCH9JRJiRp" target="_blank" rel="external">http://t.co/KCH9JRJiRp</a></p>&mdash; れい (Yoshikawa Ryota) (@rrreeeyyy) <a href="https://twitter.com/rrreeeyyy/status/617193176932036608" target="_blank" rel="external">2015, 7月 4</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 
-<h3 id="懇親会"><a href="#懇親会" class="headerlink" title="懇親会"></a>懇親会</h3><p>普段 blog で見てた人と実際にあえたり、上司に振り回されている若者の話を聞けたり、楽しい懇親会でした。</p>
+<h3 id="懇親会"><a href="/2015/07/06/pepabo-tech-conference/#懇親会" class="headerlink" title="懇親会"></a>懇親会</h3><p>普段 blog で見てた人と実際にあえたり、上司に振り回されている若者の話を聞けたり、楽しい懇親会でした。</p>
 <p>ただ懇親会中、仕事があるのを失念してしまってチームメンバーに迷惑をかけたので、猛烈に反省しています。</p>
 ]]></content>
     
@@ -1337,9 +1337,9 @@
     <updated>2016-11-12T03:29:08.000Z</updated>
     
     <content type="html"><![CDATA[<p>Mac 上で hexo の記事を書いていると、記事へのリンクが 404 File not found になることがあった。<br><a href="http://harasou.github.io/2015/05/10/hexo-で-404-File-not-found/" target="_blank" rel="external">以前の記事</a>では、sed でダサい対応をしていたのだが、@kazu69 が hexo-plugin を作成してくれました。</p>
-<p><a href="https://www.npmjs.com/package/hexo-filter-permalink-normalization" target="_blank" rel="external">npm: hexo-filter-permalink-normalization</a><br><a href="https://www.npmjs.com/package/hexo-filter-permalink-normalization" target="_blank" rel="external"><img src="npm.png" alt=""></a></p>
+<p><a href="https://www.npmjs.com/package/hexo-filter-permalink-normalization" target="_blank" rel="external">npm: hexo-filter-permalink-normalization</a><br><a href="https://www.npmjs.com/package/hexo-filter-permalink-normalization" target="_blank" rel="external"><img src="/2015/06/28/hexo-goodby-404/npm.png" alt=""></a></p>
 <a id="more"></a>
-<h2 id="導入手順"><a href="#導入手順" class="headerlink" title="導入手順"></a>導入手順</h2><p>plugin にしてくれたので、導入はホント簡単。blog を管理しているディレクトリで、npm install し、plugin の設定をするだけ。</p>
+<h2 id="導入手順"><a href="/2015/06/28/hexo-goodby-404/#導入手順" class="headerlink" title="導入手順"></a>導入手順</h2><p>plugin にしてくれたので、導入はホント簡単。blog を管理しているディレクトリで、npm install し、plugin の設定をするだけ。</p>
 <ol>
 <li><p>plugin インストール</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-filter-permalink-normalization --save</div></pre></td></tr></table></figure>
@@ -1348,7 +1348,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo config permalink_normalization.type nfc</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="感想"><a href="#感想" class="headerlink" title="感想"></a>感想</h2><p>自分はプログラミングがほとんどできないので、こんな plugin は作成できないが、困ってると話をすると @atani が sed ではなく、ちゃんと <a href="https://atani.github.io/2015/06/hexoで日本語のパーマリンクを見れるようにしよう！" target="_blank" rel="external">node で対応するやり方</a>を見つけてくれたり、 @kazu69 が plugin を公開してくれたり。</p>
+<h2 id="感想"><a href="/2015/06/28/hexo-goodby-404/#感想" class="headerlink" title="感想"></a>感想</h2><p>自分はプログラミングがほとんどできないので、こんな plugin は作成できないが、困ってると話をすると @atani が sed ではなく、ちゃんと <a href="https://atani.github.io/2015/06/hexoで日本語のパーマリンクを見れるようにしよう！" target="_blank" rel="external">node で対応するやり方</a>を見つけてくれたり、 @kazu69 が plugin を公開してくれたり。</p>
 <p>OSS って、使うだけでも便利だけど、それに関わっていくと、さらに良さがわかる。</p>
 ]]></content>
     
@@ -1373,7 +1373,7 @@
     
     <content type="html"><![CDATA[<p>先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。</p>
 <a id="more"></a>
-<h2 id="MySQL-で外部コマンドを実行するには"><a href="#MySQL-で外部コマンドを実行するには" class="headerlink" title="MySQL で外部コマンドを実行するには"></a>MySQL で外部コマンドを実行するには</h2><p>mysql で外部コマンドを実行するには <code>system</code> が使える。</p>
+<h2 id="MySQL-で外部コマンドを実行するには"><a href="/2015/06/07/MySQL-trigger/#MySQL-で外部コマンドを実行するには" class="headerlink" title="MySQL で外部コマンドを実行するには"></a>MySQL で外部コマンドを実行するには</h2><p>mysql で外部コマンドを実行するには <code>system</code> が使える。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; system uname -a</div><div class="line">Linux cent6 2.6.32-504.16.2.el6.x86_64 #1 SMP Wed Apr 22 06:48:29 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</div></pre></td></tr></table></figure>
 <p>ただ、これはターミナル上からとかでないと使えない。</p>
 <p>調べてみると、mysql には UDF(User Defined Function) という仕組みがあって、自作関数を作成することができるらしい。これは、C や C++ で書いて共有ライブラリ(.so)を作成し、mysql の plugindir に放り込めば使えるようになる。</p>
@@ -1390,11 +1390,11 @@
 <p>さすが、mattn さん。しかも、なんともう一つの方はわれらが CTO の kentaro さん。</p>
 <p>早速試してみる。kentaro さんのは、make 一発で mruby のコンパイルから plugin ディレクトリへのインストールまでやってくる便利設計。</p>
 <p>ただ、今回は mruby に他の mrbgem 組み込んだりする予定なので、mattn さんのを使わせていただいた。</p>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="環境"><a href="/2015/06/07/MySQL-trigger/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>CentOS6.6 (2.6.32-504.16.2.el6.x86_64)</li>
 <li>mruby 1.1.0 (2014-11-19)</li>
 </ul>
-<h2 id="準備"><a href="#準備" class="headerlink" title="準備"></a>準備</h2><ol>
+<h2 id="準備"><a href="/2015/06/07/MySQL-trigger/#準備" class="headerlink" title="準備"></a>準備</h2><ol>
 <li><p>mruby のコンパイル</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd</div><div class="line">git clone https://github.com/mruby/mruby.git</div><div class="line">cd mruby</div><div class="line">./minirake</div></pre></td></tr></table></figure>
 </li>
@@ -1417,7 +1417,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/mysqld restart</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="mrb-eval-を使ってみる"><a href="#mrb-eval-を使ってみる" class="headerlink" title="mrb_eval() を使ってみる"></a>mrb_eval() を使ってみる</h2><ol>
+<h2 id="mrb-eval-を使ってみる"><a href="/2015/06/07/MySQL-trigger/#mrb-eval-を使ってみる" class="headerlink" title="mrb_eval() を使ってみる"></a>mrb_eval() を使ってみる</h2><ol>
 <li><p>関数の作成</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql -uroot</div><div class="line">mysql&gt; create function mrb_eval returns string soname &apos;mrb_eval.so&apos;;</div></pre></td></tr></table></figure>
 </li>
@@ -1426,8 +1426,8 @@
 <p> おお、実行された。</p>
 </li>
 </ol>
-<h2 id="トリガとして使ってみる"><a href="#トリガとして使ってみる" class="headerlink" title="トリガとして使ってみる"></a>トリガとして使ってみる</h2><p>想定としては「テーブルのレコードが削除されたら、REST API 経由でアプリの共有メモリを削除する」というもの。</p>
-<h3 id="準備-1"><a href="#準備-1" class="headerlink" title="準備"></a>準備</h3><ol>
+<h2 id="トリガとして使ってみる"><a href="/2015/06/07/MySQL-trigger/#トリガとして使ってみる" class="headerlink" title="トリガとして使ってみる"></a>トリガとして使ってみる</h2><p>想定としては「テーブルのレコードが削除されたら、REST API 経由でアプリの共有メモリを削除する」というもの。</p>
+<h3 id="準備-1"><a href="/2015/06/07/MySQL-trigger/#準備-1" class="headerlink" title="準備"></a>準備</h3><ol>
 <li><p>mruby-simplehttp の組み込み<br> とりあえず API が叩ければよいので、http clinet の機能を mruby に組み込む。あと、<code>PIC</code> もデフォルトで有効にしておく。</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cd ~/mruby</div><div class="line">vim build_config     # 下記 diff を参照</div><div class="line">./minirake</div><div class="line">cd ~/mysql-mruby</div><div class="line">make</div><div class="line">cp -v mrb_eval.so $(mysql_config --plugindir)/mrb_eval.so</div><div class="line">/etc/init.d/mysql restart</div></pre></td></tr></table></figure>
  <figure class="highlight diff"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">diff --git a/build_config.rb b/build_config.rb</div><div class="line">index 3408f19..ee149e9 100644</div><div class="line"><span class="comment">--- a/build_config.rb</span></div><div class="line"><span class="comment">+++ b/build_config.rb</span></div><div class="line">@@ -18,6 +18,11 @@ MRuby::Build.new do |conf|</div><div class="line">   # conf.gem 'examples/mrbgems/c_and_ruby_extension_example'</div><div class="line">   # conf.gem :github =&gt; 'masuidrive/mrbgems-example', :checksum_hash =&gt; '76518e8aecd131d047378448ac8055fa29d974a9'</div><div class="line">   # conf.gem :git =&gt; 'git@github.com:masuidrive/mrbgems-example.git', :branch =&gt; 'master', :options =&gt; '-v'</div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-io'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-mtest'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-pack'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-socket'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'matsumoto-r/mruby-simplehttp'</span></div><div class="line"></div><div class="line">   # include the default GEMs</div><div class="line">   conf.gembox 'default'</div><div class="line">@@ -25,7 +30,7 @@ MRuby::Build.new do |conf|</div><div class="line">   # C compiler settings</div><div class="line">   # conf.cc do |cc|</div><div class="line">   #   cc.command = ENV['CC'] || 'gcc'</div><div class="line"><span class="deletion">-  #   cc.flags = [ENV['CFLAGS'] || %w()]</span></div><div class="line"><span class="addition">+  #   cc.flags = [ENV['CFLAGS'] || %w(-fPIC)]</span></div><div class="line">   #   cc.include_paths = ["#&#123;root&#125;/include"]</div><div class="line">   #   cc.defines = %w(DISABLE_GEMS)</div><div class="line">   #   cc.option_include_path = '-I%s'</div></pre></td></tr></table></figure>
@@ -1439,7 +1439,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">DELIMITER //</div><div class="line"></div><div class="line">CREATE TRIGGER delete_mrb_eval AFTER DELETE ON members</div><div class="line">FOR EACH ROW</div><div class="line">BEGIN</div><div class="line">  DECLARE result CHAR(255);</div><div class="line">  DECLARE script CHAR(255);</div><div class="line">  SET script = CONCAT(&apos;SimpleHttp.new(&quot;http&quot;,&quot;localhost&quot;).request(&quot;DELETE&quot;,&quot;/api/items/&apos;, OLD.id ,&apos;&quot;,&#123;&quot;User-Agent&quot; =&gt; &quot;mruby-simplehttp&quot;&#125;)&apos;);</div><div class="line">  SET result = mrb_eval(script);</div><div class="line">END //</div><div class="line"></div><div class="line">DELIMITER ;</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id="テスト"><a href="#テスト" class="headerlink" title="テスト"></a>テスト</h3><p>nginx を localhost で実行した状態で、members テーブルのレコードを削除してみる。</p>
+<h3 id="テスト"><a href="/2015/06/07/MySQL-trigger/#テスト" class="headerlink" title="テスト"></a>テスト</h3><p>nginx を localhost で実行した状態で、members テーブルのレコードを削除してみる。</p>
 <ol>
 <li><p>レコードを１行削除</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; delete from members where id = 2;</div><div class="line">Query OK, 1 row affected (0.02 sec)</div><div class="line">mysql&gt;</div><div class="line">mysql&gt; select * from members;</div><div class="line">+------+----------+</div><div class="line">| id   | name     |</div><div class="line">+------+----------+</div><div class="line">|    1 | harasou1 |</div><div class="line">|    3 | harasou3 |</div><div class="line">+------+----------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
@@ -1449,7 +1449,7 @@
 <p> API や共有メモリ周りの処理は何も入れていないので 405 になっているが、ちゃんとアクセスは来ている。</p>
 </li>
 </ol>
-<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>トリガの細かい動きは調べられていないが、mysql のイベントを拾って mruby を実行することで、かなりいろんな処理ができそう。</p>
+<h2 id="まとめ"><a href="/2015/06/07/MySQL-trigger/#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>トリガの細かい動きは調べられていないが、mysql のイベントを拾って mruby を実行することで、かなりいろんな処理ができそう。</p>
 <p>mruby には、いろいろな package が公開されているので、がしがし使っていきたい。</p>
 <p><a href="http://www.mruby.org/libraries/" target="_blank" rel="external">http://www.mruby.org/libraries/</a></p>
 ]]></content>
@@ -1476,16 +1476,16 @@
     
     <content type="html"><![CDATA[<p>cgroup には複数のサブシステム（controller）があるが、その中の <code>cpu.shares</code> について検証してみた。</p>
 <a id="more"></a>
-<h2 id="cpu-shares-とは"><a href="#cpu-shares-とは" class="headerlink" title="cpu.shares とは"></a>cpu.shares とは</h2><p>cpu.shares を設定すると、タスクが使用できる CPU 時間の<code>割合</code>を変更することができる。</p>
+<h2 id="cpu-shares-とは"><a href="/2015/06/02/cgroup-cpu-cpushare/#cpu-shares-とは" class="headerlink" title="cpu.shares とは"></a>cpu.shares とは</h2><p>cpu.shares を設定すると、タスクが使用できる CPU 時間の<code>割合</code>を変更することができる。</p>
 <p>具体的に言うと、<code>A</code> <code>B</code>２つのグループを作り、cpu.shares をそれぞれ<code>1024</code> <code>2048</code>とした場合、B のグループにいるプロセスが、A のグループにいるプロセスより 2倍 CPU を使えるようになる。以下、実行例。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mkdir /cgroup/&#123;A,B&#125;</span></div><div class="line"><span class="comment"># echo 1024 &gt; /cgroup/A/cpu.shares</span></div><div class="line"><span class="comment"># echo 2048 &gt; /cgroup/B/cpu.shares</span></div><div class="line"><span class="comment"># sh -c "while : ; do : ; done" &amp; echo $! &gt; /cgroup/A/tasks</span></div><div class="line">[1] 2835</div><div class="line"><span class="comment"># sh -c "while : ; do : ; done" &amp; echo $! &gt; /cgroup/B/tasks</span></div><div class="line">[2] 2836</div><div class="line"><span class="comment"># ps uf</span></div><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line">root      2816  0.0  0.5 175140  2656 pts/2    S    21:44   0:00 sudo <span class="_">-s</span></div><div class="line">root      2817  0.0  0.3 108300  1908 pts/2    S+   21:44   0:00  \_ /bin/bash</div><div class="line">root      2835 34.9  0.2 106056  1268 pts/2    R    21:47   0:56      \_ sh -c <span class="keyword">while</span> : ; <span class="keyword">do</span> : ; <span class="keyword">done</span></div><div class="line">root      2836 66.1  0.2 106056  1268 pts/2    R    21:47   1:43      \_ sh -c <span class="keyword">while</span> : ; <span class="keyword">do</span> : ; <span class="keyword">done</span></div></pre></td></tr></table></figure>
 <p>グループ B に登録した PID:2836 のプロセスが、グループ A に登録した PID:2835 の 2倍 CPU を使用している。</p>
-<h2 id="今回の疑問点"><a href="#今回の疑問点" class="headerlink" title="今回の疑問点"></a>今回の疑問点</h2><p>これだけなら、わかりやすいが、以下の点が不明だったので実際に検証してみた。</p>
+<h2 id="今回の疑問点"><a href="/2015/06/02/cgroup-cpu-cpushare/#今回の疑問点" class="headerlink" title="今回の疑問点"></a>今回の疑問点</h2><p>これだけなら、わかりやすいが、以下の点が不明だったので実際に検証してみた。</p>
 <ul>
 <li>グループ内に複数プロセスがいる場合どのように CPU が割り振られるのか</li>
 <li>ルートグループに属するプロセスの CPU の割り振りはどうなるか</li>
 </ul>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="環境"><a href="/2015/06/02/cgroup-cpu-cpushare/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>マシン: Vagrant(CPU コア1)</li>
 <li><p>OS:</p>
 <ul>
@@ -1494,7 +1494,7 @@
 </ul>
 </li>
 <li><p>今回検証したグループ構成</p>
-<p>  <img src="cgroup.png" alt=""></p>
+<p>  <img src="/2015/06/02/cgroup-cpu-cpushare/cgroup.png" alt=""></p>
 <ul>
 <li>CPU のルートグループ配下に <code>test</code> グループを作成する</li>
 <li>test グループ配下に、<code>A</code> <code>B</code> <code>C</code> グループを作成する</li>
@@ -1510,55 +1510,55 @@
 <p>  自分自身の PID をスクリプト名にあったグループに登録し、無限ループを行うシェルスクリプト。</p>
 </li>
 </ul>
-<h2 id="検証１"><a href="#検証１" class="headerlink" title="検証１"></a>検証１</h2><p><code>A</code> グループに、無限ループするプロセスを一つ登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test1.png" alt=""></p>
+<h2 id="検証１"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証１" class="headerlink" title="検証１"></a>検証１</h2><p><code>A</code> グループに、無限ループするプロセスを一つ登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test1.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 99.8  0.3   0:11.30 loop_test_A.sh</div></pre></td></tr></table></figure>
 <ul>
 <li><code>ルート</code> -&gt; <code>test</code> -&gt; <code>A</code> と最下層のグループに登録されているが、CPU は 100% 利用できる。</li>
 </ul>
-<h2 id="検証２"><a href="#検証２" class="headerlink" title="検証２"></a>検証２</h2><p><code>A</code> <code>B</code> <code>C</code>の各グループに、無限ループをするプロセスを一つづつ登録した場合の CPU 使用状況。</p>
-<p><img src="cgroup_test2.png" alt=""></p>
+<h2 id="検証２"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証２" class="headerlink" title="検証２"></a>検証２</h2><p><code>A</code> <code>B</code> <code>C</code>の各グループに、無限ループをするプロセスを一つづつ登録した場合の CPU 使用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test2.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 33.3  0.3   0:51.82 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 33.3  0.3   0:25.00 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 33.3  0.3   0:23.39 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>各グループの cpu.shares の値は同じなので、均等に CPU を 1/3 (33.3%)づつ使用している。</li>
 </ul>
-<h2 id="検証３"><a href="#検証３" class="headerlink" title="検証３"></a>検証３</h2><p>検証２に加え、<code>C</code> グループに、もう一つプロセスを登録した場合の CPU の利用状況。</p>
-<p><img src="cgroup_test3.png" alt=""></p>
+<h2 id="検証３"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証３" class="headerlink" title="検証３"></a>検証３</h2><p>検証２に加え、<code>C</code> グループに、もう一つプロセスを登録した場合の CPU の利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test3.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 33.6  0.3   1:04.14 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 33.3  0.3   0:37.32 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 16.6  0.3   0:34.81 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R 16.6  0.3   0:00.88 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>グループ A, B に割り当てられている CPU 時間は変わらない</li>
 <li>検証２でグループ C に割り当てられていた CPU 時間(33.3%)は、２つのプロセス（2570,2573）に分配されている</li>
 </ul>
-<h2 id="検証４"><a href="#検証４" class="headerlink" title="検証４"></a>検証４</h2><p>検証３に加え、<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test4.png" alt=""></p>
+<h2 id="検証４"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証４" class="headerlink" title="検証４"></a>検証４</h2><p>検証３に加え、<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test4.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1887 root      20   0  103m 1348 1160 R 24.9  0.3   0:05.77 loop_test.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 24.9  0.3   1:15.43 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 24.9  0.3   0:48.61 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 12.6  0.3   0:40.46 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R 12.3  0.3   0:06.53 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、test グループの１つのプロセス <code>1887</code> とグループ<code>A</code> <code>B</code> <code>C</code> で、４等分(25%)されている</li>
 <li>C グループ 配下のプロセスは、４等分された CPU時間(25%) を分配して利用している</li>
 </ul>
-<h2 id="検証５"><a href="#検証５" class="headerlink" title="検証５"></a>検証５</h2><p>検証４に加え、さらに<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test5.png" alt=""></p>
+<h2 id="検証５"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証５" class="headerlink" title="検証５"></a>検証５</h2><p>検証４に加え、さらに<code>test</code>グループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test5.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1892 root      20   0  103m 1348 1160 R 20.3  0.3   0:01.57 loop_test.sh</div><div class="line"> 1887 root      20   0  103m 1348 1160 R 20.0  0.3   0:14.80 loop_test.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 20.0  0.3   0:57.63 loop_test_B.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 20.0  0.3   1:24.45 loop_test_A.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R 10.0  0.3   0:44.97 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R 10.0  0.3   0:11.05 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、test グループの２つのプロセス <code>1892</code> <code>1887</code> とグループ<code>A</code> <code>B</code> <code>C</code> で、５等分(20%)されている</li>
 <li>test グループの２つのプロセス <code>1892</code> <code>1887</code> は、それぞれ５等分された CPU時間(20%) を利用できる</li>
 </ul>
-<h2 id="検証６"><a href="#検証６" class="headerlink" title="検証６"></a>検証６</h2><p>検証３に加え、ルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test6.png" alt=""></p>
+<h2 id="検証６"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証６" class="headerlink" title="検証６"></a>検証６</h2><p>検証３に加え、ルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test6.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1898 root      20   0  103m 1344 1160 R 50.2  0.3   0:03.83 loop.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 16.6  0.3   1:32.35 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 16.6  0.3   1:05.53 loop_test_B.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R  8.3  0.3   0:48.92 loop_test_C.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R  8.3  0.3   0:14.99 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、ルートグループの１つのプロセス <code>1898</code> と <code>test グループ</code> で、２等分(50%)されている</li>
 <li>test グループ 配下のプロセスは、２等分された CPU時間(50%) を分配して利用している</li>
 </ul>
-<h2 id="検証７"><a href="#検証７" class="headerlink" title="検証７"></a>検証７</h2><p>検証６に加え、さらにルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
-<p><img src="cgroup_test7.png" alt=""></p>
+<h2 id="検証７"><a href="/2015/06/02/cgroup-cpu-cpushare/#検証７" class="headerlink" title="検証７"></a>検証７</h2><p>検証６に加え、さらにルートグループに無限ループするスクリプトを一つ、追加登録した場合の CPU 利用状況。</p>
+<p><img src="/2015/06/02/cgroup-cpu-cpushare/cgroup_test7.png" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># 結果</div><div class="line">  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND</div><div class="line"> 1898 root      20   0  103m 1344 1160 R 33.5  0.3   0:10.72 loop.sh</div><div class="line"> 1903 root      20   0  103m 1348 1160 R 33.2  0.3   0:01.53 loop.sh</div><div class="line"> 1858 root      20   0  103m 1344 1160 R 11.3  0.3   1:34.65 loop_test_A.sh</div><div class="line"> 1863 root      20   0  103m 1348 1160 R 11.0  0.3   1:07.82 loop_test_B.sh</div><div class="line"> 1882 root      20   0  103m 1348 1160 R  5.6  0.3   0:16.14 loop_test_C.sh</div><div class="line"> 1868 root      20   0  103m 1344 1160 R  5.3  0.3   0:50.06 loop_test_C.sh</div></pre></td></tr></table></figure>
 <ul>
 <li>CPU 時間は、ルートグループの２つのプロセス<code>1898</code> <code>1903</code> と <code>test グループ</code> で、３等分(33%)されている</li>
 <li>ルートグループの２つのプロセス <code>1898</code> <code>1903</code> は、それぞれ３等分された CPU時間(33%) を利用できる</li>
 <li>test グループ 配下のプロセスは、３等分された CPU時間(33%) を分配して利用している</li>
 </ul>
-<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>検証７の結果を見れば、cpu.shares の振る舞いがだいたいわかる。</p>
+<h2 id="まとめ"><a href="/2015/06/02/cgroup-cpu-cpushare/#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>検証７の結果を見れば、cpu.shares の振る舞いがだいたいわかる。</p>
 <p>test グループ配下のプロセスが利用できる CPU時間は、ルートグループに属するプロセス数や CPU 利用状況によってかわるので、リソース設計が難しい。</p>
 <p>このため、test グループの CPU時間を担保したい場合は、以下のような感じで、一旦ルートグループ配下の全プロセスを別のサブグループ配下に移動してあげればよさそう。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir /cgroup/root</div><div class="line">cat /cgroup/tasks &gt; /cgrou/root/tasks</div></pre></td></tr></table></figure>

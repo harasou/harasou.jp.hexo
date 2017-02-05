@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="base32 について調べた際のメモ書き。
 特徴base32 は、base64 などと同様、バイナリ文字列とテキスト文字列の変換（エンコード or デコード）を行うアルゴリズム。
 
@@ -39,16 +49,6 @@
 大文字小文字の区別がない環境でも利用可能。
 エンコードは、40ビット(5文字)単位を、8文字に変換していく。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -233,7 +233,7 @@
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
             <p>base32 について調べた際のメモ書き。</p>
-<h2 id="特徴"><a href="#特徴" class="headerlink" title="特徴"></a>特徴</h2><p>base32 は、base64 などと同様、バイナリ文字列とテキスト文字列の変換（エンコード or デコード）を行うアルゴリズム。</p>
+<h2 id="特徴"><a href="/2015/08/13/base32/#特徴" class="headerlink" title="特徴"></a>特徴</h2><p>base32 は、base64 などと同様、バイナリ文字列とテキスト文字列の変換（エンコード or デコード）を行うアルゴリズム。</p>
 <ul>
 <li>エンコードされたテキスト文字列は、<code>A-Z</code>(26文字) と <code>2-7</code>(6文字)、<code>=</code> の 33文字で構成される。</li>
 <li>大文字小文字の区別がない環境でも利用可能。</li>
@@ -242,13 +242,13 @@
 <li>base32hex というのもあり、これは、<code>0-9</code>、<code>A-V</code>、<code>=</code> の33文字を使用する。</li>
 </ul>
 <a id="more"></a>
-<h2 id="RFC"><a href="#RFC" class="headerlink" title="RFC"></a>RFC</h2><ul>
+<h2 id="RFC"><a href="/2015/08/13/base32/#RFC" class="headerlink" title="RFC"></a>RFC</h2><ul>
 <li>RFC 4648 <a href="http://tools.ietf.org/html/rfc4648.html" target="_blank" rel="external">http://tools.ietf.org/html/rfc4648.html</a></li>
 <li>RFC 3458 <a href="http://tools.ietf.org/html/rfc3548.html" target="_blank" rel="external">http://tools.ietf.org/html/rfc3548.html</a> (Obsoletes)</li>
 </ul>
-<h2 id="対応表"><a href="#対応表" class="headerlink" title="対応表"></a>対応表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">                Table 3: The Base 32 Alphabet</div><div class="line"></div><div class="line">Value Encoding  Value Encoding  Value Encoding  Value Encoding</div><div class="line">    0 A             9 J            18 S            27 3</div><div class="line">    1 B            10 K            19 T            28 4</div><div class="line">    2 C            11 L            20 U            29 5</div><div class="line">    3 D            12 M            21 V            30 6</div><div class="line">    4 E            13 N            22 W            31 7</div><div class="line">    5 F            14 O            23 X</div><div class="line">    6 G            15 P            24 Y         (pad) =</div><div class="line">    7 H            16 Q            25 Z</div><div class="line">    8 I            17 R            26 2</div></pre></td></tr></table></figure>
+<h2 id="対応表"><a href="/2015/08/13/base32/#対応表" class="headerlink" title="対応表"></a>対応表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">                Table 3: The Base 32 Alphabet</div><div class="line"></div><div class="line">Value Encoding  Value Encoding  Value Encoding  Value Encoding</div><div class="line">    0 A             9 J            18 S            27 3</div><div class="line">    1 B            10 K            19 T            28 4</div><div class="line">    2 C            11 L            20 U            29 5</div><div class="line">    3 D            12 M            21 V            30 6</div><div class="line">    4 E            13 N            22 W            31 7</div><div class="line">    5 F            14 O            23 X</div><div class="line">    6 G            15 P            24 Y         (pad) =</div><div class="line">    7 H            16 Q            25 Z</div><div class="line">    8 I            17 R            26 2</div></pre></td></tr></table></figure>
 <p>ref: <a href="http://tools.ietf.org/html/rfc4648#section-6" target="_blank" rel="external">http://tools.ietf.org/html/rfc4648#section-6</a></p>
-<h2 id="エンコード手順"><a href="#エンコード手順" class="headerlink" title="エンコード手順"></a>エンコード手順</h2><p>文字列<code>harasou</code>を base32 でエンコードしてみる。</p>
+<h2 id="エンコード手順"><a href="/2015/08/13/base32/#エンコード手順" class="headerlink" title="エンコード手順"></a>エンコード手順</h2><p>文字列<code>harasou</code>を base32 でエンコードしてみる。</p>
 <p>大まかな流れとしては、2進表記にした文字列<code>harasou</code>を 5ビット単位に分割し、各分割した値を対応表に沿ってテキストに変換する。</p>
 <ol>
 <li><p>文字列<code>harasou</code>の 2進数表記</p>
@@ -292,7 +292,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="補足"><a href="#補足" class="headerlink" title="補足"></a>補足</h2><p><code>=</code>パディングについて補足すると、エンコード対象を 5バイト(40ビット)単位で区切った際に、最後の固まりが、</p>
+<h2 id="補足"><a href="/2015/08/13/base32/#補足" class="headerlink" title="補足"></a>補足</h2><p><code>=</code>パディングについて補足すると、エンコード対象を 5バイト(40ビット)単位で区切った際に、最後の固まりが、</p>
 <ul>
 <li>5バイトに 1バイト満たない場合、<code>=</code>を 1つ付加</li>
 <li>5バイトに 2バイト満たない場合、<code>=</code>を 3つ付加</li>
@@ -301,7 +301,7 @@
 </ul>
 <p>といった感じになる。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">例）</div><div class="line">     最後のかたまり -&gt; エンコード結果</div><div class="line">5バイト丁度： AAAAA -&gt; IFAUCQKB</div><div class="line">1バイト不足： AAAA_ -&gt; IFAUCQI= (「=」を1つ付加)</div><div class="line">2バイト不足： AAA__ -&gt; IFAUC=== (「=」を3つ付加)</div><div class="line">3バイト不足： AA___ -&gt; IFAQ==== (「=」を4つ付加)</div><div class="line">4バイト不足： A____ -&gt; IE====== (「=」を6つ付加)</div></pre></td></tr></table></figure>
-<h2 id="実装"><a href="#実装" class="headerlink" title="実装"></a>実装</h2><p>やってる処理は上のようなものだが、実装は様々。</p>
+<h2 id="実装"><a href="/2015/08/13/base32/#実装" class="headerlink" title="実装"></a>実装</h2><p>やってる処理は上のようなものだが、実装は様々。</p>
 <ul>
 <li><p>golang</p>
 <ul>

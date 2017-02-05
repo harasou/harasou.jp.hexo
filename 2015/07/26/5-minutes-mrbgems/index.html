@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="先日の関西Ruby会議の帰りの飛行機の中、着陸５分前ぐらいの出来事。
 harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」
 おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）というわけで、その時のことを簡単にご紹介。">
@@ -30,16 +40,6 @@ harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusm
 harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」
 おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）というわけで、その時のことを簡単にご紹介。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -227,7 +227,7 @@ harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusm
 <p>harasou: 「松本さん、mrbgems の作り方教えてくださいよ」<br>matusmotory:「じゃあ、まづ mrblib ってディレクトリ作って…」</p>
 <p>おもむろに二人並んで PC を取り出し、mrbgems を作り始めた（着陸直前だったので、PC出して良かったのかよくわからないが…）<br>というわけで、その時のことを簡単にご紹介。</p>
 <a id="more"></a>
-<h2 id="そもそも-mrbgems-とは"><a href="#そもそも-mrbgems-とは" class="headerlink" title="そもそも mrbgems とは"></a>そもそも mrbgems とは</h2><p>mrbgems は、CRuby の gem みたいなもので、mruby コアに色々な機能(ライブラリ)を追加する仕組み。ただ、CRuby のように動的にロードできるわけでなく、mruby コンパイル時に明示的に組み込んでおく必要がある。</p>
+<h2 id="そもそも-mrbgems-とは"><a href="/2015/07/26/5-minutes-mrbgems/#そもそも-mrbgems-とは" class="headerlink" title="そもそも mrbgems とは"></a>そもそも mrbgems とは</h2><p>mrbgems は、CRuby の gem みたいなもので、mruby コアに色々な機能(ライブラリ)を追加する仕組み。ただ、CRuby のように動的にロードできるわけでなく、mruby コンパイル時に明示的に組み込んでおく必要がある。</p>
 <p>この mrbgems は、mruby スクリプトだけで作成することもできるし、C言語だけ、あるいは、C言語 + mruby といった組み合わせたもので作成することもできる。</p>
 <ul>
 <li>mruby だけで実装</li>
@@ -235,7 +235,7 @@ harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusm
 <li>C言語 + mruby で実装</li>
 </ul>
 <p>飛行機では、一番簡単な mruby だけの実装をやった。</p>
-<h2 id="mrbgems-はじめの一歩"><a href="#mrbgems-はじめの一歩" class="headerlink" title="mrbgems はじめの一歩"></a>mrbgems はじめの一歩</h2><p>ここでは、設定した名前を返すだけの <code>yourname</code>メソッドを実装した <code>mruby-yourname</code> をつくった。 </p>
+<h2 id="mrbgems-はじめの一歩"><a href="/2015/07/26/5-minutes-mrbgems/#mrbgems-はじめの一歩" class="headerlink" title="mrbgems はじめの一歩"></a>mrbgems はじめの一歩</h2><p>ここでは、設定した名前を返すだけの <code>yourname</code>メソッドを実装した <code>mruby-yourname</code> をつくった。 </p>
 <ol>
 <li><p>mrbgems 用のディレクトリ作成</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p work/mruby-yourname/mrblib/</div><div class="line">cd work</div></pre></td></tr></table></figure>
@@ -257,7 +257,7 @@ harasou: 「松本さん、mrbgems の作り方教えてくださいよ」matusm
 </li>
 </ol>
 <p>事前に mruby は落としていたので、ここまで所要時間は 5分ぐらい。</p>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>mruby のシェル「mirb」で動作確認。</p>
+<h2 id="動作確認"><a href="/2015/07/26/5-minutes-mrbgems/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><p>mruby のシェル「mirb」で動作確認。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bin/mirb</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mirb - Embeddable Interactive Ruby Shell</div><div class="line"></div><div class="line">&gt; y = Yourname.new(&quot;harasou&quot;)</div><div class="line"> =&gt; #&lt;Yourname:0x1425d70 @name=&quot;harasou&quot;&gt;</div><div class="line">&gt;</div><div class="line">&gt; y.yourname</div><div class="line">harasou</div><div class="line"> =&gt; nil</div></pre></td></tr></table></figure>
 <p>できた。</p>

@@ -13,24 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="trello クローンの Libreboard を動かしてみた">
-<meta property="og:url" content="https://harasou.jp/2015/07/28/libreboard/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
-<meta property="og:image" content="https://harasou.jp/libreboard-1.png">
-<meta property="og:image" content="https://harasou.jp/portfowarding.png">
-<meta property="og:image" content="https://harasou.jp/libreboard-2.png">
-<meta property="og:image" content="https://harasou.jp/libreboard-3.png">
-<meta property="og:image" content="https://harasou.jp/libreboard-4.png">
-<meta property="og:image" content="https://harasou.jp/libreboard-5.png">
-<meta property="og:updated_time" content="2016-11-12T03:40:14.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="trello クローンの Libreboard を動かしてみた">
-<meta name="twitter:description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
-<meta name="twitter:image" content="https://harasou.jp/libreboard-1.png">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -44,6 +26,24 @@
     
     
     
+    <meta name="description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="trello クローンの Libreboard を動かしてみた">
+<meta property="og:url" content="https://harasou.jp/2015/07/28/libreboard/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
+<meta property="og:image" content="https://harasou.jp/2015/07/28/libreboard/libreboard-1.png">
+<meta property="og:image" content="https://harasou.jp/2015/07/28/libreboard/portfowarding.png">
+<meta property="og:image" content="https://harasou.jp/2015/07/28/libreboard/libreboard-2.png">
+<meta property="og:image" content="https://harasou.jp/2015/07/28/libreboard/libreboard-3.png">
+<meta property="og:image" content="https://harasou.jp/2015/07/28/libreboard/libreboard-4.png">
+<meta property="og:image" content="https://harasou.jp/2015/07/28/libreboard/libreboard-5.png">
+<meta property="og:updated_time" content="2016-11-12T03:40:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="trello クローンの Libreboard を動かしてみた">
+<meta name="twitter:description" content="社内で便利に活用しているかんばんソフトtrello 。このクローンである Libreboard を boot2docker で動かしてみた。">
+<meta name="twitter:image" content="https://harasou.jp/2015/07/28/libreboard/libreboard-1.png">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -228,14 +228,14 @@
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
             <p>社内で便利に活用しているかんばんソフト<a href="https://trello.com/" target="_blank" rel="external">trello</a> 。このクローンである <a href="https://github.com/libreboard/libreboard/wiki" target="_blank" rel="external">Libreboard</a> を boot2docker で動かしてみた。</p>
-<p><img src="libreboard-1.png" alt=""></p>
+<p><img src="/2015/07/28/libreboard/libreboard-1.png" alt=""></p>
 <a id="more"></a>
-<h2 id="Libreboard-とは"><a href="#Libreboard-とは" class="headerlink" title="Libreboard とは"></a>Libreboard とは</h2><p>Libreboard は、node.js のフレームワークである meteor(メテオ) 、DB として MongoDB が使われている trello のクローン。<br>github に公開されているリポジトリには、Dockerfile が含まれているので、Mac 上の boot2docker で動かしてみる。</p>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="Libreboard-とは"><a href="/2015/07/28/libreboard/#Libreboard-とは" class="headerlink" title="Libreboard とは"></a>Libreboard とは</h2><p>Libreboard は、node.js のフレームワークである meteor(メテオ) 、DB として MongoDB が使われている trello のクローン。<br>github に公開されているリポジトリには、Dockerfile が含まれているので、Mac 上の boot2docker で動かしてみる。</p>
+<h2 id="環境"><a href="/2015/07/28/libreboard/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>MacOSX Yosemite 10.10.4 </li>
 <li>boot2docker v1.7.1</li>
 </ul>
-<h2 id="手順"><a href="#手順" class="headerlink" title="手順"></a>手順</h2><ol>
+<h2 id="手順"><a href="/2015/07/28/libreboard/#手順" class="headerlink" title="手順"></a>手順</h2><ol>
 <li><p>boot2docker を最新化</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">brew upgrade boot2docker</div><div class="line">boot2docker update</div><div class="line">$(boot2docker shellinit)</div></pre></td></tr></table></figure>
 </li>
@@ -265,7 +265,7 @@
 <p> npm の WARN は出ているが、とりあえず build 完了。</p>
 </li>
 </ol>
-<h2 id="動作確認"><a href="#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><ol>
+<h2 id="動作確認"><a href="/2015/07/28/libreboard/#動作確認" class="headerlink" title="動作確認"></a>動作確認</h2><ol>
 <li><p>コンテナの起動</p>
 <p> Libreboard の Dockerfile に書かれている通り、コンテナを 2つ起動する。<br> なお、２つ目のコンテナが使用するイメージは、先ほど build したタグ<code>libreboard/libreboard</code>を指定。</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker run -d --name libreboard-db mongo</div><div class="line">docker run -d --link &quot;libreboard-db:db&quot; -e &quot;MONGO_URL=mongodb://db&quot; \</div><div class="line">  -e &quot;ROOT_URL=http://example.com&quot; -p 8080:80 libreboard/libreboard</div></pre></td></tr></table></figure>
@@ -273,11 +273,11 @@
 </li>
 <li><p>VirtualBox でポートフォワーディング</p>
 <p> boot2docker 上では、8080 でアクセスすることができるが、Mac 上からはアクセスできない。このため、VirtualBox でポートフォワーディングの設定を行う。</p>
-<p> <img src="portfowarding.png" alt=""></p>
+<p> <img src="/2015/07/28/libreboard/portfowarding.png" alt=""></p>
 </li>
 <li><p>ブラウザからアクセス</p>
 <p> <a href="http://localhost:8080/" target="_blank" rel="external">http://localhost:8080/</a> 適当にアカウント作ってログインして、カード作ってみた。</p>
-<p> ログイン画面。<br> <img src="libreboard-2.png" alt=""><br> ボードの追加。<br> <img src="libreboard-3.png" alt=""><br> 言語とプロファイルを設定。<br> <img src="libreboard-4.png" alt=""><br> カードの追加。Markdown もいけるっぽい。<br> <img src="libreboard-5.png" alt=""></p>
+<p> ログイン画面。<br> <img src="/2015/07/28/libreboard/libreboard-2.png" alt=""><br> ボードの追加。<br> <img src="/2015/07/28/libreboard/libreboard-3.png" alt=""><br> 言語とプロファイルを設定。<br> <img src="/2015/07/28/libreboard/libreboard-4.png" alt=""><br> カードの追加。Markdown もいけるっぽい。<br> <img src="/2015/07/28/libreboard/libreboard-5.png" alt=""></p>
 </li>
 </ol>
 

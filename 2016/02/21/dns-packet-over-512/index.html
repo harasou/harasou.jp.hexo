@@ -13,27 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
-DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="512バイトを超える DNSパケット">
-<meta property="og:url" content="https://harasou.jp/2016/02/21/dns-packet-over-512/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
-DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
-<meta property="og:image" content="https://harasou.jp/fallback-tcpdump1.jpg">
-<meta property="og:image" content="https://harasou.jp/fallback-tcpdump2.jpg">
-<meta property="og:image" content="https://harasou.jp/fallback-tcpdump3.jpg">
-<meta property="og:image" content="https://harasou.jp/edns0-tcpdump1.jpg">
-<meta property="og:image" content="https://harasou.jp/edns0-tcpdump2.jpg">
-<meta property="og:image" content="https://harasou.jp/edns0-tcpdump3.jpg">
-<meta property="og:updated_time" content="2016-11-12T13:03:06.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="512バイトを超える DNSパケット">
-<meta name="twitter:description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
-DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
-<meta name="twitter:image" content="https://harasou.jp/fallback-tcpdump1.jpg">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -44,6 +23,27 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
     
     
     
+    <meta name="description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
+DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="512バイトを超える DNSパケット">
+<meta property="og:url" content="https://harasou.jp/2016/02/21/dns-packet-over-512/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
+DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
+<meta property="og:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/fallback-tcpdump1.jpg">
+<meta property="og:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/fallback-tcpdump2.jpg">
+<meta property="og:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/fallback-tcpdump3.jpg">
+<meta property="og:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/edns0-tcpdump1.jpg">
+<meta property="og:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/edns0-tcpdump2.jpg">
+<meta property="og:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/edns0-tcpdump3.jpg">
+<meta property="og:updated_time" content="2016-11-12T13:03:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="512バイトを超える DNSパケット">
+<meta name="twitter:description" content="glibc の脆弱性 CVE-2015-7547 でも話題になった 512バイトを超える DNS パケットについてのメモ。
+DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。">
+<meta name="twitter:image" content="https://harasou.jp/2016/02/21/dns-packet-over-512/fallback-tcpdump1.jpg">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -230,7 +230,7 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
             <p>glibc の脆弱性 <a href="https://www.jpcert.or.jp/at/2016/at160009.html" target="_blank" rel="external">CVE-2015-7547</a> でも話題になった 512バイトを超える DNS パケットについてのメモ。</p>
 <p>DNS では、TCP が使われたり、512 バイト超えるデータが扱われることは知っていたが、詳しい仕組みなど知らなかったので、備忘録のためにまとめておく。</p>
 <a id="more"></a>
-<h1 id="そもそもなぜ-512-バイト？"><a href="#そもそもなぜ-512-バイト？" class="headerlink" title="そもそもなぜ 512 バイト？"></a>そもそもなぜ 512 バイト？</h1><p>調べてみると、</p>
+<h1 id="そもそもなぜ-512-バイト？"><a href="/2016/02/21/dns-packet-over-512/#そもそもなぜ-512-バイト？" class="headerlink" title="そもそもなぜ 512 バイト？"></a>そもそもなぜ 512 バイト？</h1><p>調べてみると、</p>
 <blockquote>
 <p>インターネットで使われている IP(IPv4)の仕様では 一度に受信可能なデータグラム(ヘッダーを含むパケッ ト)として、<br>576 バイトを保証しなければならないと定められています。この値は、64バイトのヘッダーと 512バイトの<br>データブロックを格納可能な大きさとして選択されたものです</p>
 </blockquote>
@@ -241,43 +241,43 @@ DNS では、TCP が使われたり、512 バイト超えるデータが扱わ�
 <p>ちなみに、root DNS が 13 個しかないのも、14 個だと 512バイトを超えてしまうから。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">$ dig . NS</div><div class="line"></div><div class="line">; &lt;&lt;&gt;&gt; DiG 9.8.3-P1 &lt;&lt;&gt;&gt; . NS</div><div class="line">;; global options: +cmd</div><div class="line">;; Got answer:</div><div class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 22440</div><div class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 13</div><div class="line">   :</div><div class="line">;; ANSWER SECTION:</div><div class="line">.           80275   IN  NS  k.root-servers.net.</div><div class="line">.           80275   IN  NS  l.root-servers.net.</div><div class="line">.           80275   IN  NS  m.root-servers.net.</div><div class="line">.           80275   IN  NS  a.root-servers.net.</div><div class="line">.           80275   IN  NS  b.root-servers.net.</div><div class="line">.           80275   IN  NS  c.root-servers.net.</div><div class="line">.           80275   IN  NS  d.root-servers.net.</div><div class="line">.           80275   IN  NS  e.root-servers.net.</div><div class="line">.           80275   IN  NS  f.root-servers.net.</div><div class="line">.           80275   IN  NS  g.root-servers.net.</div><div class="line">.           80275   IN  NS  h.root-servers.net.</div><div class="line">.           80275   IN  NS  i.root-servers.net.</div><div class="line">.           80275   IN  NS  j.root-servers.net.</div><div class="line"></div><div class="line">;; ADDITIONAL SECTION:</div><div class="line">   :</div><div class="line">;; MSG SIZE  rcvd: 496</div></pre></td></tr></table></figure>
 <p><code>ANSWER: 13</code> <code>MSG SIZE  rcvd: 496</code></p>
-<h1 id="TCPフォールバック"><a href="#TCPフォールバック" class="headerlink" title="TCPフォールバック"></a>TCPフォールバック</h1><p>初期の DNSプロトコルでは 512バイトを超えた応答を受け取るためには、TCP で再帰問い合わせ(TCPフォールバック)を<br>行う必要があった。</p>
+<h1 id="TCPフォールバック"><a href="/2016/02/21/dns-packet-over-512/#TCPフォールバック" class="headerlink" title="TCPフォールバック"></a>TCPフォールバック</h1><p>初期の DNSプロトコルでは 512バイトを超えた応答を受け取るためには、TCP で再帰問い合わせ(TCPフォールバック)を<br>行う必要があった。</p>
 <p>サーバは、UDP の問い合わせに対し応答が 512バイトを超える場合、応答するレコードを 512バイト以下に切り詰めた上で、切り詰められたこと示すビット(TC)を立て、UDP の応答を返す。</p>
 <p>クライアント側は、その TCビットを確認すると再度、同じ問い合わせをTCPで行い、全てのレコードがつまった応答を受け取る。</p>
 <p>(このあたりまでは、RFC 1034/1035/1123/5966 の話)</p>
-<h1 id="DNSキャッシュポイズニング対策"><a href="#DNSキャッシュポイズニング対策" class="headerlink" title="DNSキャッシュポイズニング対策"></a>DNSキャッシュポイズニング対策</h1><p>1990年台に問題提起された DNSキャッシュポイズニング対応として、DNSSECの標準化が開始された。</p>
+<h1 id="DNSキャッシュポイズニング対策"><a href="/2016/02/21/dns-packet-over-512/#DNSキャッシュポイズニング対策" class="headerlink" title="DNSキャッシュポイズニング対策"></a>DNSキャッシュポイズニング対策</h1><p>1990年台に問題提起された DNSキャッシュポイズニング対応として、DNSSECの標準化が開始された。</p>
 <p>しかし、DNSSEC では鍵や署名をデータに乗せるため、512バイトに収まらず TCPフォールバックが発生することでレイテンシの問題が顕在化。</p>
 <p>その対策として、UDP で 512バイト以上のデータを応答できる仕組みが検討され、1999年に RFC 26710 として <em>EDNS0</em> が標準化された。この RFC では、DNSを DNSSEC や IPv6 に対応させる場合、EDNS0 への対応が必須となっている。</p>
-<h1 id="EDNS0-Extension-Mechanisms-for-DNS"><a href="#EDNS0-Extension-Mechanisms-for-DNS" class="headerlink" title="EDNS0 (Extension Mechanisms for DNS)"></a>EDNS0 (Extension Mechanisms for DNS)</h1><p>EDNS0 を使用可能なクライアントは、DNS要求の addtional セクションに OPTレコードを記載し、EDNS0 に対応していることをサーバにしめす。サーバ側が EDNS0 に対応していれば正常な応答が返り、対応していなければ、エラーになるか、無視されて TCPフォールバックすることになる。</p>
-<h1 id="動作検証"><a href="#動作検証" class="headerlink" title="動作検証"></a>動作検証</h1><p>dig を使用して、TCPフォールバックと EDNS0 のパケットを確認してみる。</p>
-<h2 id="【検証1】TCPフォールバック"><a href="#【検証1】TCPフォールバック" class="headerlink" title="【検証1】TCPフォールバック"></a>【検証1】TCPフォールバック</h2><p>dig で 512バイトを超える応答を受ける場合、標準でTCPフォールバックが行われる。</p>
+<h1 id="EDNS0-Extension-Mechanisms-for-DNS"><a href="/2016/02/21/dns-packet-over-512/#EDNS0-Extension-Mechanisms-for-DNS" class="headerlink" title="EDNS0 (Extension Mechanisms for DNS)"></a>EDNS0 (Extension Mechanisms for DNS)</h1><p>EDNS0 を使用可能なクライアントは、DNS要求の addtional セクションに OPTレコードを記載し、EDNS0 に対応していることをサーバにしめす。サーバ側が EDNS0 に対応していれば正常な応答が返り、対応していなければ、エラーになるか、無視されて TCPフォールバックすることになる。</p>
+<h1 id="動作検証"><a href="/2016/02/21/dns-packet-over-512/#動作検証" class="headerlink" title="動作検証"></a>動作検証</h1><p>dig を使用して、TCPフォールバックと EDNS0 のパケットを確認してみる。</p>
+<h2 id="【検証1】TCPフォールバック"><a href="/2016/02/21/dns-packet-over-512/#【検証1】TCPフォールバック" class="headerlink" title="【検証1】TCPフォールバック"></a>【検証1】TCPフォールバック</h2><p>dig で 512バイトを超える応答を受ける場合、標準でTCPフォールバックが行われる。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ dig @192.36.144.107 se. any</div><div class="line">;; Truncated, retrying <span class="keyword">in</span> TCP mode.</div><div class="line"> :</div><div class="line">;; Query time: 406 msec</div><div class="line">;; SERVER: 192.36.144.107<span class="comment">#53(192.36.144.107)</span></div><div class="line">;; WHEN: Sat Feb 20 23:30:44 2016</div><div class="line">;; MSG SIZE  rcvd: 2052</div></pre></td></tr></table></figure>
 <p>dig を実行すると始めに <code>Truncated, retrying in TCP mode.</code> の出力があり、TCPフォールバックが実行されたことがわかる。その際の tcpdump。</p>
 <ol>
 <li><p>問い合わせ時のパケット。</p>
-<p> <code>No.1</code>: UDP で問い合わせを行った後、<code>No.6</code>: TCPで再帰問い合わせてしている。<br> <img src="fallback-tcpdump1.jpg" alt=""></p>
+<p> <code>No.1</code>: UDP で問い合わせを行った後、<code>No.6</code>: TCPで再帰問い合わせてしている。<br> <img src="/2016/02/21/dns-packet-over-512/fallback-tcpdump1.jpg" alt=""></p>
 </li>
 <li><p>UDP の応答。</p>
-<p> <code>No2</code>: No1のレスポンス<br> <img src="fallback-tcpdump2.jpg" alt=""><br> TCビットが立てられ、応答の数(Answer RRs)は切り詰められて <code>11</code> となっている。</p>
+<p> <code>No2</code>: No1のレスポンス<br> <img src="/2016/02/21/dns-packet-over-512/fallback-tcpdump2.jpg" alt=""><br> TCビットが立てられ、応答の数(Answer RRs)は切り詰められて <code>11</code> となっている。</p>
 </li>
 <li><p>TCP の応答。</p>
-<p> <code>No9</code>: No6のレスポンス<br> <img src="fallback-tcpdump3.jpg" alt=""><br> TCPフォールバック時の応答の数は UDP時の <code>11</code> から増えて <code>19</code>。 </p>
+<p> <code>No9</code>: No6のレスポンス<br> <img src="/2016/02/21/dns-packet-over-512/fallback-tcpdump3.jpg" alt=""><br> TCPフォールバック時の応答の数は UDP時の <code>11</code> から増えて <code>19</code>。 </p>
 </li>
 </ol>
-<h2 id="【検証2】EDNS0"><a href="#【検証2】EDNS0" class="headerlink" title="【検証2】EDNS0"></a>【検証2】EDNS0</h2><p>dig では、<code>+edns=0</code> オプションをつけると EDNS0 が利用される。（<code>+busize=</code> や <code>+dnssec</code> をつけた際も EDNS0 が利用される）</p>
+<h2 id="【検証2】EDNS0"><a href="/2016/02/21/dns-packet-over-512/#【検証2】EDNS0" class="headerlink" title="【検証2】EDNS0"></a>【検証2】EDNS0</h2><p>dig では、<code>+edns=0</code> オプションをつけると EDNS0 が利用される。（<code>+busize=</code> や <code>+dnssec</code> をつけた際も EDNS0 が利用される）</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ dig @192.36.144.107 se. any +edns=0</div><div class="line"> :</div><div class="line">;; OPT PSEUDOSECTION:</div><div class="line">; EDNS: version: 0, flags:; udp: 4096</div><div class="line"> :</div><div class="line">;; Query time: 312 msec</div><div class="line">;; SERVER: 192.36.144.107<span class="comment">#53(192.36.144.107)</span></div><div class="line">;; WHEN: Mon Feb 22 20:49:14 2016</div><div class="line">;; MSG SIZE  rcvd: 2063</div></pre></td></tr></table></figure>
 <ol>
 <li><p>問い合わせ時の一連のパケット。</p>
-<p> UDP だけで処理が完結している。<br> <img src="edns0-tcpdump1.jpg" alt=""></p>
+<p> UDP だけで処理が完結している。<br> <img src="/2016/02/21/dns-packet-over-512/edns0-tcpdump1.jpg" alt=""></p>
 </li>
 <li><p>UDP の問い合わせ</p>
-<p> <code>No.15</code>: UDP による問い合わせ<br> <img src="edns0-tcpdump2.jpg" alt=""><br> addtional section に OPTレコードがある</p>
+<p> <code>No.15</code>: UDP による問い合わせ<br> <img src="/2016/02/21/dns-packet-over-512/edns0-tcpdump2.jpg" alt=""><br> addtional section に OPTレコードがある</p>
 </li>
 <li><p>UDP の応答</p>
-<p> <code>No.20</code>: UDP による応答<br> <img src="edns0-tcpdump3.jpg" alt=""><br> TCPフォールバックせずに UDP で全ての応答が返ってきている</p>
+<p> <code>No.20</code>: UDP による応答<br> <img src="/2016/02/21/dns-packet-over-512/edns0-tcpdump3.jpg" alt=""><br> TCPフォールバックせずに UDP で全ての応答が返ってきている</p>
 </li>
 </ol>
-<h1 id="補足-DNS-のメッセージフォーマット"><a href="#補足-DNS-のメッセージフォーマット" class="headerlink" title="[補足] DNS のメッセージフォーマット"></a>[補足] DNS のメッセージフォーマット</h1><p>DNS のメッセージフォーマットは、5つのセクションに分かれており、<code>Header</code> のみが必須。要求と応答ともに同じフォーマットしようされる。</p>
+<h1 id="補足-DNS-のメッセージフォーマット"><a href="/2016/02/21/dns-packet-over-512/#補足-DNS-のメッセージフォーマット" class="headerlink" title="[補足] DNS のメッセージフォーマット"></a>[補足] DNS のメッセージフォーマット</h1><p>DNS のメッセージフォーマットは、5つのセクションに分かれており、<code>Header</code> のみが必須。要求と応答ともに同じフォーマットしようされる。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Format</div><div class="line"></div><div class="line">    +---------------------+</div><div class="line">    |        Header       |</div><div class="line">    +---------------------+</div><div class="line">    |       Question      | the question <span class="keyword">for</span> the name server</div><div class="line">    +---------------------+</div><div class="line">    |        Answer       | RRs answering the question</div><div class="line">    +---------------------+</div><div class="line">    |      Authority      | RRs pointing toward an authority</div><div class="line">    +---------------------+</div><div class="line">    |      Additional     | RRs holding additional information</div><div class="line">    +---------------------+</div></pre></td></tr></table></figure>
 <p>Header は 6つに分かれていて、以下のような感じ。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">The header contains the following fields:</div><div class="line"></div><div class="line">      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                      ID                       |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    QDCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    ANCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    NSCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div><div class="line">    |                    ARCOUNT                    |</div><div class="line">    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</div></pre></td></tr></table></figure></p>
 <ol>

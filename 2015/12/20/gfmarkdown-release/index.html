@@ -13,17 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="この記事は、mruby advent calendar 2015 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="markdown(GFM) を変換するコマンドを mruby-cli で作ってみた">
-<meta property="og:url" content="https://harasou.jp/2015/12/20/gfmarkdown-release/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="この記事は、mruby advent calendar 2015 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。">
-<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="markdown(GFM) を変換するコマンドを mruby-cli で作ってみた">
-<meta name="twitter:description" content="この記事は、mruby advent calendar 2015 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -37,6 +26,17 @@
     
     
     
+    <meta name="description" content="この記事は、mruby advent calendar 2015 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="markdown(GFM) を変換するコマンドを mruby-cli で作ってみた">
+<meta property="og:url" content="https://harasou.jp/2015/12/20/gfmarkdown-release/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="この記事は、mruby advent calendar 2015 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="markdown(GFM) を変換するコマンドを mruby-cli で作ってみた">
+<meta name="twitter:description" content="この記事は、mruby advent calendar 2015 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -222,14 +222,14 @@
         <div class="main-content-wrap">
             <p>この記事は、<a href="http://qiita.com/advent-calendar/2015/mruby" target="_blank" rel="external">mruby advent calendar 2015</a> 20日目の記事です。みなさん難しい記事が多いですが、私にそういうのは無理なので軽めの内容になっています。</p>
 <a id="more"></a>
-<h1 id="はじめに"><a href="#はじめに" class="headerlink" title="はじめに"></a>はじめに</h1><p>mruby でコマンドラインツールを作成できる <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を使って、markdown を html に変換する <code>gfmarkdown</code> というコマンドを作ってみました。</p>
+<h1 id="はじめに"><a href="/2015/12/20/gfmarkdown-release/#はじめに" class="headerlink" title="はじめに"></a>はじめに</h1><p>mruby でコマンドラインツールを作成できる <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を使って、markdown を html に変換する <code>gfmarkdown</code> というコマンドを作ってみました。</p>
 <p>mruby-cli は、コマンドを作成するための雛形の作成とコンパイルなどを行ってくれるもので、一つのソースから、Linux や Mac、Windows などで動作するバイナリを生成してくれます。</p>
 <p>markdown から html への変換は、<a href="https://developer.github.com/v3/markdown/" target="_blank" rel="external">Github の API</a> を利用しました。このため、インターネットへ接続できない環境では使用できません。</p>
-<h1 id="gfmarkdown-のインストール"><a href="#gfmarkdown-のインストール" class="headerlink" title="gfmarkdown のインストール"></a>gfmarkdown のインストール</h1><p>各アーキテクチャごとのバイナリを用意しているので、ダウンロード＆展開する。(現状、windows 版はないです)</p>
+<h1 id="gfmarkdown-のインストール"><a href="/2015/12/20/gfmarkdown-release/#gfmarkdown-のインストール" class="headerlink" title="gfmarkdown のインストール"></a>gfmarkdown のインストール</h1><p>各アーキテクチャごとのバイナリを用意しているので、ダウンロード＆展開する。(現状、windows 版はないです)</p>
 <p><a href="https://github.com/harasou/gfmarkdown/releases" target="_blank" rel="external">https://github.com/harasou/gfmarkdown/releases</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl -fsSLO https://github.com/harasou/gfmarkdown/releases/download/v0.0.1/gfmarkdown-0.0.1-x86_64-apple-darwin14.zip</div><div class="line">unzip gfmarkdown-*.zip</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ ./gfmarkdown</div><div class="line"></div><div class="line">Usage: gfmarkdown [options] file</div><div class="line">      --mode=markdown|gfm</div><div class="line">                      The rendering mode. markdown or gfm. default markdwon.</div><div class="line">      --context=repository</div><div class="line">                      he repository context. Only taken into account when rendering as gfm</div><div class="line">      --url=url       domain (or through https://yourdomain.com/api/v3/markdown <span class="keyword">for</span> enterprise)</div><div class="line">      --token=token   OAuth2 Token</div><div class="line">      --version       <span class="built_in">print</span> the version</div><div class="line">      --help          show this message, -h <span class="keyword">for</span> short message</div></pre></td></tr></table></figure>
-<h1 id="使い方"><a href="#使い方" class="headerlink" title="使い方"></a>使い方</h1><p>テスト用の markdown ファイル <code>TEST.md</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cat TEST.md</div><div class="line"><span class="comment">## rendering</span></div><div class="line">- harasou/mruby-gfmarkdown<span class="comment">#1</span></div><div class="line">- <span class="comment">#1</span></div></pre></td></tr></table></figure></p>
+<h1 id="使い方"><a href="/2015/12/20/gfmarkdown-release/#使い方" class="headerlink" title="使い方"></a>使い方</h1><p>テスト用の markdown ファイル <code>TEST.md</code><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ cat TEST.md</div><div class="line"><span class="comment">## rendering</span></div><div class="line">- harasou/mruby-gfmarkdown<span class="comment">#1</span></div><div class="line">- <span class="comment">#1</span></div></pre></td></tr></table></figure></p>
 <ol>
 <li><p>通常の変換</p>
  <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ ./gfmarkdown TEST.md</div><div class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"user-content-rendering"</span> <span class="attr">class</span>=<span class="string">"anchor"</span> <span class="attr">href</span>=<span class="string">"#rendering"</span> <span class="attr">aria-hidden</span>=<span class="string">"true"</span>&gt;</span><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"octicon octicon-link"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">a</span>&gt;</span>rendering<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>harasou/mruby-gfmarkdown#1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span>#1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div></pre></td></tr></table></figure>
@@ -242,9 +242,9 @@
 </li>
 </ol>
 <p><a href="http://rtomayko.github.io/bcat/" target="_blank" rel="external">bcat</a> などを使うとブラウザで確認できるので便利です。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./gfmarkdown TEST.md | bcat</div></pre></td></tr></table></figure></p>
-<h1 id="markdown-の変換"><a href="#markdown-の変換" class="headerlink" title="markdown の変換"></a>markdown の変換</h1><p>Github の API を利用しているので、https での通信が必要ですが、これは matsumoto-r さんの <a href="https://github.com/matsumoto-r/mruby-httprequest" target="_blank" rel="external">mruby-httprequest</a> を利用しました。<br>これを使えば、API の通信がワンライナーでかけてしまいます。実際、<code>gfmarkdown</code> で利用している mgem はこんなシンプルなものです。</p>
+<h1 id="markdown-の変換"><a href="/2015/12/20/gfmarkdown-release/#markdown-の変換" class="headerlink" title="markdown の変換"></a>markdown の変換</h1><p>Github の API を利用しているので、https での通信が必要ですが、これは matsumoto-r さんの <a href="https://github.com/matsumoto-r/mruby-httprequest" target="_blank" rel="external">mruby-httprequest</a> を利用しました。<br>これを使えば、API の通信がワンライナーでかけてしまいます。実際、<code>gfmarkdown</code> で利用している mgem はこんなシンプルなものです。</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">GFMarkdown</span></span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(opt = &#123;&#125;)</span></span></div><div class="line">    @url = opt[<span class="symbol">:url</span>] ? opt[<span class="symbol">:url</span>] : <span class="string">"https://api.github.com/markdown"</span></div><div class="line">    @token = opt[<span class="symbol">:token</span>]</div><div class="line">    @mode = opt[<span class="symbol">:mode</span>]</div><div class="line">    @context = opt[<span class="symbol">:context</span>]</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">render</span> <span class="title">text</span></span></div><div class="line">    headers = &#123;</div><div class="line">      <span class="string">'User-Agent'</span> =&gt; <span class="string">"mruby-gfmarkdown"</span>,</div><div class="line">    &#125;</div><div class="line">    headers[<span class="string">'Authorization'</span>] = <span class="string">"token <span class="subst">#&#123;@token&#125;</span>"</span> <span class="keyword">if</span> @token</div><div class="line"></div><div class="line">    postdata = &#123;</div><div class="line">      <span class="symbol">:text</span> =&gt; text,</div><div class="line">    &#125;</div><div class="line">    postdata[<span class="symbol">:mode</span>] = @mode <span class="keyword">if</span> @mode</div><div class="line">    postdata[<span class="symbol">:context</span>] = @context <span class="keyword">if</span> @context</div><div class="line"></div><div class="line">    HttpRequest.new().post(@url,JSON.generate(postdata),headers).body</div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<h1 id="コマンドの作成"><a href="#コマンドの作成" class="headerlink" title="コマンドの作成"></a>コマンドの作成</h1><p>バイナリの作成は、hone さんの <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を利用しています。簡単に mruby-cli を使ったバイナリの作り方を紹介します。</p>
+<h1 id="コマンドの作成"><a href="/2015/12/20/gfmarkdown-release/#コマンドの作成" class="headerlink" title="コマンドの作成"></a>コマンドの作成</h1><p>バイナリの作成は、hone さんの <a href="https://github.com/hone/mruby-cli" target="_blank" rel="external">mruby-cli</a> を利用しています。簡単に mruby-cli を使ったバイナリの作り方を紹介します。</p>
 <ol>
 <li><p>mruby-cli コマンドの取得</p>
 <p> mruby-cli のリポジトリ自体は <code>mruby-cli</code> コマンドを作成するものなので特に不要で release からダウンロードできるコマンドがあればよいです。</p>
@@ -269,7 +269,7 @@
  <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ docker-compose run shell</div><div class="line">root@bb22c9acb029:/home/mruby/code<span class="comment"># uname -a</span></div><div class="line">Linux bb22c9acb029 4.0.9-boot2docker <span class="comment">#1 SMP Thu Aug 13 03:05:44 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</span></div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h1 id="さいごに"><a href="#さいごに" class="headerlink" title="さいごに"></a>さいごに</h1><p>コマンドラインツールの作成とかだと、最近では golang の方が一般的だと思いますが、ライブラリとして組み込めるのは mruby の良さだと思います。</p>
+<h1 id="さいごに"><a href="/2015/12/20/gfmarkdown-release/#さいごに" class="headerlink" title="さいごに"></a>さいごに</h1><p>コマンドラインツールの作成とかだと、最近では golang の方が一般的だと思いますが、ライブラリとして組み込めるのは mruby の良さだと思います。</p>
 <p>今回、mruby-gfmarkdown という mgem を作成してコマンドを作りましたが、次は、この mgem を組み込んだライブラリ <code>libmruby.a</code> を利用して、Mac の Quilck Look アプリ(.md をプレビューする)を作成したいと画策してます。</p>
 
             

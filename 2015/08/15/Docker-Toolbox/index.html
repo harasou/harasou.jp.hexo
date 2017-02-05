@@ -13,20 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="Docker Toolbox for Mac OS X">
-<meta property="og:url" content="https://harasou.jp/2015/08/15/Docker-Toolbox/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。">
-<meta property="og:image" content="https://harasou.jp/toolbox.png">
-<meta property="og:image" content="https://harasou.jp/docker.png">
-<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker Toolbox for Mac OS X">
-<meta name="twitter:description" content="Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。">
-<meta name="twitter:image" content="https://harasou.jp/toolbox.png">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -40,6 +26,20 @@
     
     
     
+    <meta name="description" content="Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Docker Toolbox for Mac OS X">
+<meta property="og:url" content="https://harasou.jp/2015/08/15/Docker-Toolbox/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。">
+<meta property="og:image" content="https://harasou.jp/2015/08/15/Docker-Toolbox/toolbox.png">
+<meta property="og:image" content="https://harasou.jp/2015/08/15/Docker-Toolbox/docker.png">
+<meta property="og:updated_time" content="2016-11-10T12:46:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Toolbox for Mac OS X">
+<meta name="twitter:description" content="Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。">
+<meta name="twitter:image" content="https://harasou.jp/2015/08/15/Docker-Toolbox/toolbox.png">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -225,8 +225,8 @@
         <div class="main-content-wrap">
             <p>Docker 1.8 のリリースに伴い、Mac OSX 標準の Docker デプロイツールが boot2docker から Docker Toolbox に変更になった模様。とりあえず、インストールしてみた。</p>
 <a id="more"></a>
-<p><img src="toolbox.png" alt=""><br>re: <a href="https://www.docker.com/toolbox" target="_blank" rel="external">https://www.docker.com/toolbox</a></p>
-<h2 id="Docker-Toolbox-とは"><a href="#Docker-Toolbox-とは" class="headerlink" title="Docker Toolbox とは"></a>Docker Toolbox とは</h2><p>Docker Toolbox は、手元のマシンに、簡単に Docker 開発環境を構築するためのインストーラで、以下のツールが全て含まれている。いままで使用していた boot2docker コマンドは、docker-machine コマンドが代替となる。</p>
+<p><img src="/2015/08/15/Docker-Toolbox/toolbox.png" alt=""><br>re: <a href="https://www.docker.com/toolbox" target="_blank" rel="external">https://www.docker.com/toolbox</a></p>
+<h2 id="Docker-Toolbox-とは"><a href="/2015/08/15/Docker-Toolbox/#Docker-Toolbox-とは" class="headerlink" title="Docker Toolbox とは"></a>Docker Toolbox とは</h2><p>Docker Toolbox は、手元のマシンに、簡単に Docker 開発環境を構築するためのインストーラで、以下のツールが全て含まれている。いままで使用していた boot2docker コマンドは、docker-machine コマンドが代替となる。</p>
 <ul>
 <li>Docker Client</li>
 <li>Docker Machine</li>
@@ -239,15 +239,15 @@
 <li><a href="http://pocketstudio.jp/log3/2015/08/14/announcing-docker-toolbox/" target="_blank" rel="external">http://pocketstudio.jp/log3/2015/08/14/announcing-docker-toolbox/</a></li>
 <li><a href="http://dev.classmethod.jp/tool/docker1-8-macosx/" target="_blank" rel="external">http://dev.classmethod.jp/tool/docker1-8-macosx/</a></li>
 </ul>
-<h2 id="インストール"><a href="#インストール" class="headerlink" title="インストール"></a>インストール</h2><p><a href="https://www.docker.com/toolbox" target="_blank" rel="external">Docker Toolbox</a>サイトからダウンロードしたインストーラは実行するだけ。<br>インストールには、450MB ほどの空きが必要で、/usr/local 配下(デフォルト)に以下のようなファイルがインストールされた。</p>
+<h2 id="インストール"><a href="/2015/08/15/Docker-Toolbox/#インストール" class="headerlink" title="インストール"></a>インストール</h2><p><a href="https://www.docker.com/toolbox" target="_blank" rel="external">Docker Toolbox</a>サイトからダウンロードしたインストーラは実行するだけ。<br>インストールには、450MB ほどの空きが必要で、/usr/local 配下(デフォルト)に以下のようなファイルがインストールされた。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/usr/local/bin/docker</div><div class="line">/usr/local/bin/docker-machine</div><div class="line">/usr/local/bin/docker-compose</div><div class="line">/usr/local/share/boot2docker/boot2docker.iso</div></pre></td></tr></table></figure>
 <p>あと、Application フォルダにアプリが２つ。</p>
-<p><img src="docker.png" alt=""></p>
-<h2 id="Docker-Quickstart-Terminal"><a href="#Docker-Quickstart-Terminal" class="headerlink" title="Docker Quickstart Terminal"></a>Docker Quickstart Terminal</h2><p>上記アプリ「Docker Quickstart Terminal」を実行すると、Mac標準の Terminal.app が起動し、その中で下記スクリプトが実行される。</p>
+<p><img src="/2015/08/15/Docker-Toolbox/docker.png" alt=""></p>
+<h2 id="Docker-Quickstart-Terminal"><a href="/2015/08/15/Docker-Toolbox/#Docker-Quickstart-Terminal" class="headerlink" title="Docker Quickstart Terminal"></a>Docker Quickstart Terminal</h2><p>上記アプリ「Docker Quickstart Terminal」を実行すると、Mac標準の Terminal.app が起動し、その中で下記スクリプトが実行される。</p>
 <p>“/Applications/Docker/Docker Quickstart Terminal.app/Contents/Resources/Scripts/start.sh”</p>
 <p>このスクリプトは、VirtualBox 上の VM の名前や VBoxManage を定義して、最終的に以下のコマンドを実行していた。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval $($DOCKER_MACHINE env $VM --shell=bash)</div></pre></td></tr></table></figure></p>
 <p>また、Toolbox インストール時に既存の boot2docker の VM をマイグレーションしなかったので、このスクリプトの中で「default」という名前の VM が、自動で作成された。</p>
-<h2 id="iTerm2-上で-docker-コマンドを実行する"><a href="#iTerm2-上で-docker-コマンドを実行する" class="headerlink" title="iTerm2 上で docker コマンドを実行する"></a>iTerm2 上で docker コマンドを実行する</h2><p>アプリ「Docker Quickstart Terminal」だと Termainal.app が起動するので、iTerm2 上で docker コマンドを実行したい場合は、boot2docker の時と同じように env を設定する。</p>
+<h2 id="iTerm2-上で-docker-コマンドを実行する"><a href="/2015/08/15/Docker-Toolbox/#iTerm2-上で-docker-コマンドを実行する" class="headerlink" title="iTerm2 上で docker コマンドを実行する"></a>iTerm2 上で docker コマンドを実行する</h2><p>アプリ「Docker Quickstart Terminal」だと Termainal.app が起動するので、iTerm2 上で docker コマンドを実行したい場合は、boot2docker の時と同じように env を設定する。</p>
 <p>boot2docker の場合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(boot2docker shellinit)</div></pre></td></tr></table></figure></p>
 <p>docker-machine の場合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eval $(docker-machine env default)</div></pre></td></tr></table></figure></p>
 <p>こんな感じ。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$ eval $(docker-machine env default)</div><div class="line">$ docker version</div><div class="line">Client:</div><div class="line"> Version:      1.8.1</div><div class="line"> API version:  1.20</div><div class="line"> Go version:   go1.4.2</div><div class="line"> Git commit:   d12ea79</div><div class="line"> Built:        Thu Aug 13 02:49:29 UTC 2015</div><div class="line"> OS/Arch:      darwin/amd64</div><div class="line"></div><div class="line">Server:</div><div class="line"> Version:      1.8.1</div><div class="line"> API version:  1.20</div><div class="line"> Go version:   go1.4.2</div><div class="line"> Git commit:   d12ea79</div><div class="line"> Built:        Thu Aug 13 02:49:29 UTC 2015</div><div class="line"> OS/Arch:      linux/amd64</div><div class="line">$</div><div class="line">$ docker ps -a</div><div class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</div><div class="line">$</div><div class="line">$ docker images</div><div class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             VIRTUAL SIZE</div><div class="line">$</div></pre></td></tr></table></figure></p>

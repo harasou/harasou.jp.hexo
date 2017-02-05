@@ -13,6 +13,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
+    
+    
+    
+    
     <meta name="description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="MySQL のトリガで mruby を実行する">
@@ -24,16 +34,6 @@
 <meta name="twitter:title" content="MySQL のトリガで mruby を実行する">
 <meta name="twitter:description" content="先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。">
 <meta name="twitter:creator" content="@harasou5">
-    
-    
-        
-    
-    
-        <meta property="og:image" content="https://www.gravatar.com/avatar/ae9a272994f212bdbddfa0f4367b0f3d?s=640"/>
-    
-    
-    
-    
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -219,7 +219,7 @@
         <div class="main-content-wrap">
             <p>先日会社で「mysql のテーブルと、プロセス上の共有メモリを連携させたい」って話が出たとき、トリガで外部プログラムが実行できればいけるのでは？と思ったので、調べてみた。</p>
 <a id="more"></a>
-<h2 id="MySQL-で外部コマンドを実行するには"><a href="#MySQL-で外部コマンドを実行するには" class="headerlink" title="MySQL で外部コマンドを実行するには"></a>MySQL で外部コマンドを実行するには</h2><p>mysql で外部コマンドを実行するには <code>system</code> が使える。</p>
+<h2 id="MySQL-で外部コマンドを実行するには"><a href="/2015/06/07/MySQL-trigger/#MySQL-で外部コマンドを実行するには" class="headerlink" title="MySQL で外部コマンドを実行するには"></a>MySQL で外部コマンドを実行するには</h2><p>mysql で外部コマンドを実行するには <code>system</code> が使える。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; system uname -a</div><div class="line">Linux cent6 2.6.32-504.16.2.el6.x86_64 #1 SMP Wed Apr 22 06:48:29 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux</div></pre></td></tr></table></figure>
 <p>ただ、これはターミナル上からとかでないと使えない。</p>
 <p>調べてみると、mysql には UDF(User Defined Function) という仕組みがあって、自作関数を作成することができるらしい。これは、C や C++ で書いて共有ライブラリ(.so)を作成し、mysql の plugindir に放り込めば使えるようになる。</p>
@@ -236,11 +236,11 @@
 <p>さすが、mattn さん。しかも、なんともう一つの方はわれらが CTO の kentaro さん。</p>
 <p>早速試してみる。kentaro さんのは、make 一発で mruby のコンパイルから plugin ディレクトリへのインストールまでやってくる便利設計。</p>
 <p>ただ、今回は mruby に他の mrbgem 組み込んだりする予定なので、mattn さんのを使わせていただいた。</p>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><ul>
+<h2 id="環境"><a href="/2015/06/07/MySQL-trigger/#環境" class="headerlink" title="環境"></a>環境</h2><ul>
 <li>CentOS6.6 (2.6.32-504.16.2.el6.x86_64)</li>
 <li>mruby 1.1.0 (2014-11-19)</li>
 </ul>
-<h2 id="準備"><a href="#準備" class="headerlink" title="準備"></a>準備</h2><ol>
+<h2 id="準備"><a href="/2015/06/07/MySQL-trigger/#準備" class="headerlink" title="準備"></a>準備</h2><ol>
 <li><p>mruby のコンパイル</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd</div><div class="line">git clone https://github.com/mruby/mruby.git</div><div class="line">cd mruby</div><div class="line">./minirake</div></pre></td></tr></table></figure>
 </li>
@@ -263,7 +263,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/mysqld restart</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="mrb-eval-を使ってみる"><a href="#mrb-eval-を使ってみる" class="headerlink" title="mrb_eval() を使ってみる"></a>mrb_eval() を使ってみる</h2><ol>
+<h2 id="mrb-eval-を使ってみる"><a href="/2015/06/07/MySQL-trigger/#mrb-eval-を使ってみる" class="headerlink" title="mrb_eval() を使ってみる"></a>mrb_eval() を使ってみる</h2><ol>
 <li><p>関数の作成</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql -uroot</div><div class="line">mysql&gt; create function mrb_eval returns string soname &apos;mrb_eval.so&apos;;</div></pre></td></tr></table></figure>
 </li>
@@ -272,8 +272,8 @@
 <p> おお、実行された。</p>
 </li>
 </ol>
-<h2 id="トリガとして使ってみる"><a href="#トリガとして使ってみる" class="headerlink" title="トリガとして使ってみる"></a>トリガとして使ってみる</h2><p>想定としては「テーブルのレコードが削除されたら、REST API 経由でアプリの共有メモリを削除する」というもの。</p>
-<h3 id="準備-1"><a href="#準備-1" class="headerlink" title="準備"></a>準備</h3><ol>
+<h2 id="トリガとして使ってみる"><a href="/2015/06/07/MySQL-trigger/#トリガとして使ってみる" class="headerlink" title="トリガとして使ってみる"></a>トリガとして使ってみる</h2><p>想定としては「テーブルのレコードが削除されたら、REST API 経由でアプリの共有メモリを削除する」というもの。</p>
+<h3 id="準備-1"><a href="/2015/06/07/MySQL-trigger/#準備-1" class="headerlink" title="準備"></a>準備</h3><ol>
 <li><p>mruby-simplehttp の組み込み<br> とりあえず API が叩ければよいので、http clinet の機能を mruby に組み込む。あと、<code>PIC</code> もデフォルトで有効にしておく。</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cd ~/mruby</div><div class="line">vim build_config     # 下記 diff を参照</div><div class="line">./minirake</div><div class="line">cd ~/mysql-mruby</div><div class="line">make</div><div class="line">cp -v mrb_eval.so $(mysql_config --plugindir)/mrb_eval.so</div><div class="line">/etc/init.d/mysql restart</div></pre></td></tr></table></figure>
  <figure class="highlight diff"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">diff --git a/build_config.rb b/build_config.rb</div><div class="line">index 3408f19..ee149e9 100644</div><div class="line"><span class="comment">--- a/build_config.rb</span></div><div class="line"><span class="comment">+++ b/build_config.rb</span></div><div class="line">@@ -18,6 +18,11 @@ MRuby::Build.new do |conf|</div><div class="line">   # conf.gem 'examples/mrbgems/c_and_ruby_extension_example'</div><div class="line">   # conf.gem :github =&gt; 'masuidrive/mrbgems-example', :checksum_hash =&gt; '76518e8aecd131d047378448ac8055fa29d974a9'</div><div class="line">   # conf.gem :git =&gt; 'git@github.com:masuidrive/mrbgems-example.git', :branch =&gt; 'master', :options =&gt; '-v'</div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-io'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-mtest'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-pack'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'iij/mruby-socket'</span></div><div class="line"><span class="addition">+  conf.gem :github =&gt; 'matsumoto-r/mruby-simplehttp'</span></div><div class="line"></div><div class="line">   # include the default GEMs</div><div class="line">   conf.gembox 'default'</div><div class="line">@@ -25,7 +30,7 @@ MRuby::Build.new do |conf|</div><div class="line">   # C compiler settings</div><div class="line">   # conf.cc do |cc|</div><div class="line">   #   cc.command = ENV['CC'] || 'gcc'</div><div class="line"><span class="deletion">-  #   cc.flags = [ENV['CFLAGS'] || %w()]</span></div><div class="line"><span class="addition">+  #   cc.flags = [ENV['CFLAGS'] || %w(-fPIC)]</span></div><div class="line">   #   cc.include_paths = ["#&#123;root&#125;/include"]</div><div class="line">   #   cc.defines = %w(DISABLE_GEMS)</div><div class="line">   #   cc.option_include_path = '-I%s'</div></pre></td></tr></table></figure>
@@ -285,7 +285,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">DELIMITER //</div><div class="line"></div><div class="line">CREATE TRIGGER delete_mrb_eval AFTER DELETE ON members</div><div class="line">FOR EACH ROW</div><div class="line">BEGIN</div><div class="line">  DECLARE result CHAR(255);</div><div class="line">  DECLARE script CHAR(255);</div><div class="line">  SET script = CONCAT(&apos;SimpleHttp.new(&quot;http&quot;,&quot;localhost&quot;).request(&quot;DELETE&quot;,&quot;/api/items/&apos;, OLD.id ,&apos;&quot;,&#123;&quot;User-Agent&quot; =&gt; &quot;mruby-simplehttp&quot;&#125;)&apos;);</div><div class="line">  SET result = mrb_eval(script);</div><div class="line">END //</div><div class="line"></div><div class="line">DELIMITER ;</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<h3 id="テスト"><a href="#テスト" class="headerlink" title="テスト"></a>テスト</h3><p>nginx を localhost で実行した状態で、members テーブルのレコードを削除してみる。</p>
+<h3 id="テスト"><a href="/2015/06/07/MySQL-trigger/#テスト" class="headerlink" title="テスト"></a>テスト</h3><p>nginx を localhost で実行した状態で、members テーブルのレコードを削除してみる。</p>
 <ol>
 <li><p>レコードを１行削除</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; delete from members where id = 2;</div><div class="line">Query OK, 1 row affected (0.02 sec)</div><div class="line">mysql&gt;</div><div class="line">mysql&gt; select * from members;</div><div class="line">+------+----------+</div><div class="line">| id   | name     |</div><div class="line">+------+----------+</div><div class="line">|    1 | harasou1 |</div><div class="line">|    3 | harasou3 |</div><div class="line">+------+----------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
@@ -295,7 +295,7 @@
 <p> API や共有メモリ周りの処理は何も入れていないので 405 になっているが、ちゃんとアクセスは来ている。</p>
 </li>
 </ol>
-<h2 id="まとめ"><a href="#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>トリガの細かい動きは調べられていないが、mysql のイベントを拾って mruby を実行することで、かなりいろんな処理ができそう。</p>
+<h2 id="まとめ"><a href="/2015/06/07/MySQL-trigger/#まとめ" class="headerlink" title="まとめ"></a>まとめ</h2><p>トリガの細かい動きは調べられていないが、mysql のイベントを拾って mruby を実行することで、かなりいろんな処理ができそう。</p>
 <p>mruby には、いろいろな package が公開されているので、がしがし使っていきたい。</p>
 <p><a href="http://www.mruby.org/libraries/" target="_blank" rel="external">http://www.mruby.org/libraries/</a></p>
 

@@ -13,19 +13,6 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <meta name="description" content="hexo とはhexo は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。">
-<meta property="og:type" content="blog">
-<meta property="og:title" content="hexo セットアップメモ">
-<meta property="og:url" content="https://harasou.jp/2015/04/28/hexo-setup/index.html">
-<meta property="og:site_name" content="harasou.jp">
-<meta property="og:description" content="hexo とはhexo は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。">
-<meta property="og:image" content="https://harasou.jp/hexo_io.png">
-<meta property="og:updated_time" content="2016-11-12T03:22:02.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo セットアップメモ">
-<meta name="twitter:description" content="hexo とはhexo は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。">
-<meta name="twitter:image" content="https://harasou.jp/hexo_io.png">
-<meta name="twitter:creator" content="@harasou5">
     
     
         
@@ -36,6 +23,19 @@
     
     
     
+    <meta name="description" content="hexo とはhexo は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="hexo セットアップメモ">
+<meta property="og:url" content="https://harasou.jp/2015/04/28/hexo-setup/index.html">
+<meta property="og:site_name" content="harasou.jp">
+<meta property="og:description" content="hexo とはhexo は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。">
+<meta property="og:image" content="https://harasou.jp/2015/04/28/hexo-setup/hexo_io.png">
+<meta property="og:updated_time" content="2016-11-12T03:22:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hexo セットアップメモ">
+<meta name="twitter:description" content="hexo とはhexo は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。">
+<meta name="twitter:image" content="https://harasou.jp/2015/04/28/hexo-setup/hexo_io.png">
+<meta name="twitter:creator" content="@harasou5">
     <!--STYLES-->
     <link rel="stylesheet" href="/assets/css/style-nuvue6sithwirecbhvw3dkaobiojqvtadsnhguwi7k04xklybw5djl1smadp.min.css">
     <link rel="stylesheet" href="/assets/style.css">
@@ -219,26 +219,26 @@
     
     <div class="post-content markdown" itemprop="articleBody">
         <div class="main-content-wrap">
-            <h2 id="hexo-とは"><a href="#hexo-とは" class="headerlink" title="hexo とは"></a>hexo とは</h2><p><a href="https://hexo.io" target="_blank" rel="external">hexo</a> は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。</p>
-<p><img src="hexo_io.png" alt="https://hexo.io/"></p>
+            <h2 id="hexo-とは"><a href="/2015/04/28/hexo-setup/#hexo-とは" class="headerlink" title="hexo とは"></a>hexo とは</h2><p><a href="https://hexo.io" target="_blank" rel="external">hexo</a> は、node.js で作成された静的サイトジェネレータ。blog の作成に特化していてコマンド一発で gh-pages などに blog を deploy できる。</p>
+<p><img src="/2015/04/28/hexo-setup/hexo_io.png" alt="https://hexo.io/"></p>
 <a id="more"></a>
-<h2 id="環境"><a href="#環境" class="headerlink" title="環境"></a>環境</h2><p>手元の MacBook に hexo をインストールする。node.js は ndenv、ndenv は anyenv で。</p>
+<h2 id="環境"><a href="/2015/04/28/hexo-setup/#環境" class="headerlink" title="環境"></a>環境</h2><p>手元の MacBook に hexo をインストールする。node.js は ndenv、ndenv は anyenv で。</p>
 <ul>
 <li>OS X Yosemite 10.10.3</li>
 <li>node 0.12.2</li>
 <li>hexo 3.0.1</li>
 </ul>
-<h2 id="hexo-実行環境の構築"><a href="#hexo-実行環境の構築" class="headerlink" title="hexo 実行環境の構築"></a>hexo 実行環境の構築</h2><figure class="highlight sh"><figcaption><span>anyanv</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/riywo/anyenv ~/.anyenv</div><div class="line">cat &lt;&lt;<span class="string">'EOD'</span>&gt;&gt; ~/.bash_profile</div><div class="line"></div><div class="line"><span class="comment"># anyenv</span></div><div class="line"><span class="keyword">if</span> [ -x <span class="string">"<span class="variable">$HOME</span>/.anyenv/bin/anyenv"</span> ] ; <span class="keyword">then</span></div><div class="line">  PATH=<span class="string">"<span class="variable">$HOME</span>/.anyenv/bin:<span class="variable">$PATH</span>"</span></div><div class="line">  <span class="built_in">eval</span> <span class="string">"<span class="variable">$(anyenv init -)</span>"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line">EOD</div><div class="line"><span class="built_in">exec</span> <span class="variable">$SHELL</span> <span class="_">-l</span></div></pre></td></tr></table></figure>
+<h2 id="hexo-実行環境の構築"><a href="/2015/04/28/hexo-setup/#hexo-実行環境の構築" class="headerlink" title="hexo 実行環境の構築"></a>hexo 実行環境の構築</h2><figure class="highlight sh"><figcaption><span>anyanv</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/riywo/anyenv ~/.anyenv</div><div class="line">cat &lt;&lt;<span class="string">'EOD'</span>&gt;&gt; ~/.bash_profile</div><div class="line"></div><div class="line"><span class="comment"># anyenv</span></div><div class="line"><span class="keyword">if</span> [ -x <span class="string">"<span class="variable">$HOME</span>/.anyenv/bin/anyenv"</span> ] ; <span class="keyword">then</span></div><div class="line">  PATH=<span class="string">"<span class="variable">$HOME</span>/.anyenv/bin:<span class="variable">$PATH</span>"</span></div><div class="line">  <span class="built_in">eval</span> <span class="string">"<span class="variable">$(anyenv init -)</span>"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line">EOD</div><div class="line"><span class="built_in">exec</span> <span class="variable">$SHELL</span> <span class="_">-l</span></div></pre></td></tr></table></figure>
 <figure class="highlight sh"><figcaption><span>node</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">anyenv install ndenv</div><div class="line"><span class="built_in">exec</span> <span class="variable">$SHELL</span> <span class="_">-l</span></div><div class="line">ndenv install v0.12.2</div><div class="line">ndenv global v0.12.2</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><figcaption><span>hexo</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install hexo-cli -g </div><div class="line">ndenv <span class="built_in">rehash</span></div></pre></td></tr></table></figure>
-<h2 id="blog-の作成"><a href="#blog-の作成" class="headerlink" title="blog の作成"></a>blog の作成</h2><p>blog を管理するディレクトリ「harasou.github.io」を作成し、初期設定およびテーマを変更。ローカルで動作確認を行う。</p>
+<h2 id="blog-の作成"><a href="/2015/04/28/hexo-setup/#blog-の作成" class="headerlink" title="blog の作成"></a>blog の作成</h2><p>blog を管理するディレクトリ「harasou.github.io」を作成し、初期設定およびテーマを変更。ローカルで動作確認を行う。</p>
 <figure class="highlight sh"><figcaption><span>hexo init</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">hexo init ~/src/github.com/harasou/harasou.github.io</div><div class="line"><span class="built_in">cd</span> <span class="variable">$_</span></div><div class="line">npm install</div><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><figcaption><span>hexo config</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">hexo config title harasou.github.io</div><div class="line">hexo config author harasou</div><div class="line">hexo config language ja</div><div class="line">hexo config timezone Asia/Tokyo</div><div class="line">hexo config url http://harasou.github.io/</div><div class="line">hexo config post_asset_folder <span class="literal">true</span></div><div class="line">hexo config deploy.type git</div><div class="line">hexo config deploy.repo git@github.com:harasou/harasou.github.io.git</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><figcaption><span>Theme を Light に変更</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/hexojs/hexo-theme-light.git themes/light</div><div class="line">rm -rf themes/light/.git</div><div class="line">cp themes/light/languages/default.yml themes/light/languages/ja.yml</div><div class="line">hexo config theme light</div></pre></td></tr></table></figure>
 <figure class="highlight sh"><figcaption><span>ローカルで動作確認</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo server</div><div class="line">open http://0.0.0.0:4000/</div></pre></td></tr></table></figure>
-<h2 id="gh-pages-で-blog-公開"><a href="#gh-pages-で-blog-公開" class="headerlink" title="gh-pages で blog 公開"></a>gh-pages で blog 公開</h2><p>事前に github.com でリポジトリ「harasou.github.io」を作成しておく。</p>
+<h2 id="gh-pages-で-blog-公開"><a href="/2015/04/28/hexo-setup/#gh-pages-で-blog-公開" class="headerlink" title="gh-pages で blog 公開"></a>gh-pages で blog 公開</h2><p>事前に github.com でリポジトリ「harasou.github.io」を作成しておく。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo deploy --generate</div><div class="line">open http://harasou.github.com/</div></pre></td></tr></table></figure>
-<h2 id="hexo-をリポジトリ管理"><a href="#hexo-をリポジトリ管理" class="headerlink" title="hexo をリポジトリ管理"></a>hexo をリポジトリ管理</h2><p>上記<code>hexo deploy --generate</code>では、静的なページが生成され該当リポジトリの<code>master</code>ブランチに push される。</p>
+<h2 id="hexo-をリポジトリ管理"><a href="/2015/04/28/hexo-setup/#hexo-をリポジトリ管理" class="headerlink" title="hexo をリポジトリ管理"></a>hexo をリポジトリ管理</h2><p>上記<code>hexo deploy --generate</code>では、静的なページが生成され該当リポジトリの<code>master</code>ブランチに push される。</p>
 <p>このため、hexo の設定（config.yml,theme 等）や markdown で記載した元記事は、別途<code>hexo</code>ブランチで管理するようにしておく。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/src/github.com/harasou/harasou.github.io</div><div class="line">git init</div><div class="line">git remote add origin git@github.com:harasou/harasou.github.io.git</div><div class="line">git checkout -b hexo</div><div class="line">git add .</div><div class="line">git commit -m <span class="string">"Initial commit"</span></div><div class="line">git push origin hexo</div></pre></td></tr></table></figure>
 
